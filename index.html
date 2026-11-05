@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joshua's Arsenal Hub</title>
+    <style>
+        body { font-family: system-ui, sans-serif; margin: 0; padding: 20px; background: #fafafa; color: #111; }
+        header { background: #EF0107; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+        h1 { margin: 0; }
+        .card { background: white; padding: 16px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); margin-bottom: 16px; }
+        .loading { color: #666; font-style: italic; }
+        .error { color: #b00020; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 8px; text-align: left; border-bottom: 1px solid #eee; }
+        th { background: #f0f0f0; }
+        .arsenal { font-weight: bold; color: #EF0107; }
+
+        /* Splash Screen Styles */
+        #splash {
+            position: fixed;
+            inset: 0;
+            background: #EF0107;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 1;
+            transition: opacity 1s ease;
+        }
+        #splash img {
+            max-width: 80vw;
+            max-height: 75vh;
+            border-radius: 12px;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+            animation: splash-zoom 3s ease-in-out forwards;
+        }
+        #splash.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+        @keyframes splash-zoom {
+            from { transform: scale(0.92); }
+            to   { transform: scale(1.02); }
+        }
+        
+        /* Button & App Fade */
+        #enter-btn {
+            margin-top: 20px; padding: 12px 24px; font-size: 18px; font-weight: bold;
+            background: white; color: #EF0107; border: none; border-radius: 30px;
+            cursor: pointer; transition: transform 0.2s;
+        }
+        #enter-btn:hover { transform: scale(1.05); }
+        
+        #app-content {
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+        #app-content.visible {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Splash Screen with Image and Button -->
+    <div id="splash">
+        <img src="joshua-hero.jpg" alt="Joshua in Arsenal kit">
+        <button id="enter-btn">Tap to Enter ⚽</button>
+    </div>
+
+    <!-- Main App Content -->
+    <div id="app-content">
+        <header>
+            <h1>⚽ Joshua's Arsenal Hub</h1>
+            <p>Up the Gunners!</p>
+        </header>
+
+        <div class="card">
+            <h2>Premier League Table</h2>
+            <div id="table-container" class="loading">Loading table...</div>
+        </div>
+
+        <div class="card">
+            <h2>Upcoming Fixtures</h2>
+            <div id="fixtures-container" class="loading">Loading fixtures...</div>
+        </div>
+
+        <div class="card">
+            <h2>Latest News</h2>
+            <div id="news-container" class="loading">Loading news...</div>
+        </div>
+    </div>
+
+    <script>
+        // --- Splash Screen Logic ---
+        document.getElementById('enter-btn').addEventListener('click', () => {
+            const splash = document.getElementById('splash');
+            const appContent = document.getElementById('app-content');
+            
+            // Fade out splash, fade in app
+            splash.classList.add('fade-out');
+            appContent.classList.add('visible');
+            
+            // Remove splash from page after fade completes
+            setTimeout(() => splash.remove(), 1000);
+        });
+
+        // --- Data Fetching Logic ---
+        // We will update this URL in Step 6!
+        const API_BASE = 'YOUR_WORKER_URL_HERE'; 
+
+        async function loadData(endpoint, containerId, renderer) {
+            const el = document.getElementById(containerId);
+            try {
+                const res = await fetch(`${API_BASE}/api/${endpoint}`);
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                const data = await res.json();
+                el.innerHTML = renderer(data);
+            } catch (err) {
+                el.innerHTML = `<span class="error">Could not load data: ${err.message}</span>`;
+            }
+        }
+
+        // Load Standings
+        loadData('standings', 'table-container', (data) => {
+            const rows = data.standings?.[0]?.table || data;
+            if (!rows || !rows.length) return 'No table data available.';
+            return `<table>
+                <tr><th>Pos</th><th>Team</th><th>P</th><th>Pts</th></tr>
+                ${rows.map(r => `
+                    <tr class="${r.team?.name?.includes('Arsenal') ? 'arsenal' : ''}">
+                        <td>${r.position}</td>
+                        <td>${r.team?.name || r.team_name || '—'}</td>
+                        <td>${r.playedGames || r.played || '—'}</td>
+                        <td>${r.points}</td>
+                    </tr>
+                `).join('')}
+            </table>`;
+        });
+
+        // Load Fixtures
+        loadData('fixtures', 'fixtures-container', (data) => {
+            const matches = data.matches || data;
+            if (!matches || !matches.length) return 'No upcoming fixtures found.';
+            return `<ul>${matches.map(m => `
+                <li>${new Date(m.utcDate || m.date).toLocaleDateString('en-GB')} — 
+                ${m.homeTeam?.name || m.home_team} vs ${m.awayTeam?.name || m.away_team}</li>
+            `).join('')}</ul>`;
+        });
+
+        // Load News
+        loadData('news', 'news-container', (data) => {
+            const items = data.items || data;
+            if (!items || !items.length) return 'No news right now.';
+            return `<ul>${items.slice(0, 8).map(n => `
+                <li><a href="${n.link}" target="_blank" rel="noopener">${n.title}</a></li>
+            `).join('')}</ul>`;
+        });
+    </script>
+</body>
+</html>
+
+
