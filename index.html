@@ -4,162 +4,243 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Joshua's Arsenal Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: system-ui, sans-serif; margin: 0; padding: 20px; background: #fafafa; color: #111; }
-        header { background: #EF0107; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
-        h1 { margin: 0; }
-        .card { background: white; padding: 16px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); margin-bottom: 16px; }
-        .loading { color: #666; font-style: italic; }
-        .error { color: #b00020; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 8px; text-align: left; border-bottom: 1px solid #eee; }
-        th { background: #f0f0f0; }
-        .arsenal { font-weight: bold; color: #EF0107; }
+        :root {
+            --arsenal-red: #EF0107;
+            --arsenal-navy: #063672;
+            --arsenal-gold: #9C824A;
+            --bg-color: #f4f4f4;
+        }
+        body { font-family: 'Montserrat', sans-serif; margin: 0; padding: 0; padding-bottom: 60px; background-color: var(--bg-color); color: #333; }
+        
+        /* Header & Banner */
+        header { background: linear-gradient(135deg, var(--arsenal-red) 0%, #b30005 100%); color: white; padding: 20px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+        .banner { width: 100%; height: 150px; background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Emirates_Stadium_Arsenal.jpg/1280px-Emirates_Stadium_Arsenal.jpg') center/cover; border-bottom: 4px solid var(--arsenal-gold); }
+        header h1 { margin: 0; font-weight: 900; font-size: 1.8rem; text-transform: uppercase; }
 
-        /* Splash Screen Styles */
-        #splash {
-            position: fixed;
-            inset: 0;
-            background: #EF0107;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            opacity: 1;
-            transition: opacity 1s ease;
-        }
-        #splash img {
-            max-width: 80vw;
-            max-height: 75vh;
-            border-radius: 12px;
-            box-shadow: 0 8px 40px rgba(0,0,0,0.4);
-            animation: splash-zoom 3s ease-in-out forwards;
-        }
-        #splash.fade-out {
-            opacity: 0;
-            pointer-events: none;
-        }
-        @keyframes splash-zoom {
-            from { transform: scale(0.92); }
-            to   { transform: scale(1.02); }
-        }
-        
-        /* Button & App Fade */
-        #enter-btn {
-            margin-top: 20px; padding: 12px 24px; font-size: 18px; font-weight: bold;
-            background: white; color: #EF0107; border: none; border-radius: 30px;
-            cursor: pointer; transition: transform 0.2s;
-        }
-        #enter-btn:hover { transform: scale(1.05); }
-        
-        #app-content {
-            opacity: 0;
-            transition: opacity 1s ease;
-        }
-        #app-content.visible {
-            opacity: 1;
-        }
+        /* Tabs Content */
+        .tab-content { display: none; padding: 15px; }
+        .tab-content.active { display: block; }
+        .card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; border-top: 5px solid var(--arsenal-red); }
+        .card h2 { margin-top: 0; color: var(--arsenal-navy); font-size: 1.2rem; text-transform: uppercase; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+
+        /* Ticker Tape */
+        .ticker-wrap { width: 100%; overflow: hidden; background-color: #111; color: var(--arsenal-gold); padding: 10px 0; border-top: 2px solid var(--arsenal-red); border-bottom: 2px solid var(--arsenal-red); margin-bottom: 15px; }
+        .ticker { display: inline-block; white-space: nowrap; padding-left: 100%; animation: ticker 25s linear infinite; font-weight: 700; font-size: 1.1rem; }
+        @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
+        .ticker-item { display: inline-block; padding: 0 20px; }
+
+        /* Navigation */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--arsenal-navy); display: flex; justify-content: space-around; padding: 10px 0; box-shadow: 0 -2px 10px rgba(0,0,0,0.2); z-index: 1000; }
+        .nav-btn { background: none; border: none; color: white; font-family: inherit; font-weight: 700; font-size: 0.8rem; cursor: pointer; text-transform: uppercase; }
+        .nav-btn.active { color: var(--arsenal-gold); border-bottom: 3px solid var(--arsenal-gold); }
+
+        /* Settings Toggle */
+        .settings-bar { display: flex; justify-content: flex-end; align-items: center; padding: 10px 15px; background: #fff; border-bottom: 1px solid #eee; }
+        .settings-bar label { font-weight: 700; margin-right: 10px; color: var(--arsenal-navy); font-size: 0.9rem; }
+        .switch { position: relative; display: inline-block; width: 40px; height: 20px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 20px; }
+        .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 2px; bottom: 2px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--arsenal-red); }
+        input:checked + .slider:before { transform: translateX(20px); }
+
+        /* Splash & Misc */
+        #splash { position: fixed; inset: 0; background: var(--arsenal-navy); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; transition: opacity 1s ease; }
+        #splash img { max-width: 85vw; max-height: 65vh; border-radius: 12px; border: 4px solid var(--arsenal-gold); }
+        #splash.fade-out { opacity: 0; pointer-events: none; }
+        #enter-btn { margin-top: 25px; padding: 15px 30px; font-size: 1.1rem; font-family: 'Montserrat', sans-serif; font-weight: 900; background: var(--arsenal-red); color: white; border: 2px solid var(--arsenal-gold); border-radius: 30px; cursor: pointer; }
+        .loading { color: #999; font-style: italic; }
+        a { color: var(--arsenal-red); text-decoration: none; font-weight: 700; }
+        li { padding: 10px 0; border-bottom: 1px solid #eee; }
+        iframe { width: 100%; height: 250px; border-radius: 8px; border: none; margin-top: 10px; }
     </style>
 </head>
 <body>
 
-    <!-- Splash Screen with Image and Button -->
     <div id="splash">
         <img src="joshua-hero.jpg.webp" alt="Joshua in Arsenal kit">
         <button id="enter-btn">Tap to Enter ⚽</button>
     </div>
 
-    <!-- Main App Content -->
-    <div id="app-content">
-        <header>
-            <h1>⚽ Joshua's Arsenal Hub</h1>
-            <p>Up the Gunners!</p>
-        </header>
+    <div id="app-content" style="opacity: 0; transition: opacity 1s ease;">
+        
+        <div class="banner"></div>
+        <header><h1>Joshua's Arsenal Hub</h1></header>
 
-        <div class="card">
-            <h2>Premier League Table</h2>
-            <div id="table-container" class="loading">Loading table...</div>
+        <div class="settings-bar">
+            <label for="soundToggle">Goal Sounds</label>
+            <div class="switch">
+                <input type="checkbox" id="soundToggle" checked>
+                <span class="slider"></span>
+            </div>
         </div>
 
-        <div class="card">
-            <h2>Upcoming Fixtures</h2>
-            <div id="fixtures-container" class="loading">Loading fixtures...</div>
+        <!-- HOME TAB -->
+        <div id="home" class="tab-content active">
+            <div class="card">
+                <h2>Next Match</h2>
+                <div id="home-fixture" class="loading">Loading...</div>
+            </div>
+            <div class="card">
+                <h2>League Position</h2>
+                <div id="home-table" class="loading">Loading...</div>
+            </div>
         </div>
 
-        <div class="card">
-            <h2>Latest News</h2>
-            <div id="news-container" class="loading">Loading news...</div>
+        <!-- NEWS TAB -->
+        <div id="news" class="tab-content">
+            <div class="ticker-wrap"><div class="ticker" id="news-ticker">Loading headlines...</div></div>
+            <div class="card">
+                <h2>Latest Arsenal News</h2>
+                <div id="news-list" class="loading">Loading news...</div>
+            </div>
+        </div>
+
+        <!-- LIVE TAB -->
+        <div id="live" class="tab-content">
+            <div class="ticker-wrap"><div class="ticker" id="live-ticker">Waiting for live match...</div></div>
+            <div class="card">
+                <h2>Match Highlights</h2>
+                <iframe src="https://www.youtube.com/embed?listType=user_uploads&list=UCpryVRk_VDudG8SHXgWcG0w" allowfullscreen></iframe>
+            </div>
+        </div>
+
+        <!-- STADIUM TAB -->
+        <div id="stadium" class="tab-content">
+            <div class="card">
+                <h2>Emirates Stadium & Training Ground</h2>
+                <div id="stadium-news" class="loading">Filtering stadium news...</div>
+            </div>
+        </div>
+
+        <!-- SOCIAL TAB -->
+        <div id="social" class="tab-content">
+            <div class="ticker-wrap"><div class="ticker" id="social-ticker">Loading social feed...</div></div>
+            <div class="card">
+                <h2>Arsenal Social Feed</h2>
+                <p>Live updates from around the club (Simulated for demo).</p>
+            </div>
+        </div>
+
+        <!-- SPOTIFY TAB -->
+        <div id="spotify" class="tab-content">
+            <div class="card">
+                <h2>Arsenal Chants & Songs</h2>
+                <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/37i9dQZF1DX4JQj5g6uT0F?utm_source=generator" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+            </div>
+        </div>
+
+        <!-- BOTTOM NAVIGATION -->
+        <div class="bottom-nav">
+            <button class="nav-btn active" onclick="switchTab('home', this)">Home</button>
+            <button class="nav-btn" onclick="switchTab('news', this)">News</button>
+            <button class="nav-btn" onclick="switchTab('live', this)">Live</button>
+            <button class="nav-btn" onclick="switchTab('stadium', this)">Stadium</button>
+            <button class="nav-btn" onclick="switchTab('social', this)">Social</button>
+            <button class="nav-btn" onclick="switchTab('spotify', this)">Spotify</button>
         </div>
     </div>
 
     <script>
-        // --- Splash Screen Logic ---
+        // --- Splash Screen ---
         document.getElementById('enter-btn').addEventListener('click', () => {
-            const splash = document.getElementById('splash');
-            const appContent = document.getElementById('app-content');
-            
-            // Fade out splash, fade in app
-            splash.classList.add('fade-out');
-            appContent.classList.add('visible');
-            
-            // Remove splash from page after fade completes
-            setTimeout(() => splash.remove(), 1000);
+            document.getElementById('splash').classList.add('fade-out');
+            document.getElementById('app-content').style.opacity = '1';
+            setTimeout(() => document.getElementById('splash').remove(), 1000);
         });
 
-        // --- Data Fetching Logic ---
-        // We will update this URL in Step 6!
-        const API_BASE = 'https://arsenal-hub-api.ray-irvine.workers.dev/'; 
+        // --- Tab Switching ---
+        function switchTab(tabId, btn) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            btn.classList.add('active');
+        }
 
-        async function loadData(endpoint, containerId, renderer) {
-            const el = document.getElementById(containerId);
+        // --- Audio & Settings ---
+        const goalSound = new Audio('https://www.myinstants.com/media/sounds/goal_1.mp3'); // Free goal sound
+        document.getElementById('soundToggle').addEventListener('change', (e) => {
+            console.log("Goal sounds enabled:", e.target.checked);
+        });
+
+        // --- API Configuration ---
+        const API_BASE = 'https://arsenal-hub-api.ray-irvine.workers.dev'; 
+        let lastScore = "";
+
+        async function loadData(endpoint) {
             try {
                 const res = await fetch(`${API_BASE}/api/${endpoint}`);
                 if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                const data = await res.json();
-                el.innerHTML = renderer(data);
+                return await res.json();
             } catch (err) {
-                el.innerHTML = `<span class="error">Could not load data: ${err.message}</span>`;
+                console.error(`Error loading ${endpoint}:`, err);
+                return null;
             }
         }
 
-        // Load Standings
-        loadData('standings', 'table-container', (data) => {
-            const rows = data.standings?.[0]?.table || data;
-            if (!rows || !rows.length) return 'No table data available.';
-            return `<table>
-                <tr><th>Pos</th><th>Team</th><th>P</th><th>Pts</th></tr>
-                ${rows.map(r => `
-                    <tr class="${r.team?.name?.includes('Arsenal') ? 'arsenal' : ''}">
-                        <td>${r.position}</td>
-                        <td>${r.team?.name || r.team_name || '—'}</td>
-                        <td>${r.playedGames || r.played || '—'}</td>
-                        <td>${r.points}</td>
-                    </tr>
-                `).join('')}
-            </table>`;
-        });
+        // --- Live Ticker & Goal Sound Logic ---
+        async function checkLiveMatch() {
+            const data = await loadData('live');
+            if (!data || !data.events || data.events.length === 0) {
+                document.getElementById('live-ticker').innerHTML = "No live match currently in progress.";
+                return;
+            }
 
-        // Load Fixtures
-        loadData('fixtures', 'fixtures-container', (data) => {
-            const matches = data.matches || data;
-            if (!matches || !matches.length) return 'No upcoming fixtures found.';
-            return `<ul>${matches.map(m => `
-                <li>${new Date(m.utcDate || m.date).toLocaleDateString('en-GB')} — 
-                ${m.homeTeam?.name || m.home_team} vs ${m.awayTeam?.name || m.away_team}</li>
-            `).join('')}</ul>`;
-        });
+            let tickerHtml = "";
+            let currentScore = "";
 
-        // Load News
-        loadData('news', 'news-container', (data) => {
-            const items = data.items || data;
-            if (!items || !items.length) return 'No news right now.';
-            return `<ul>${items.slice(0, 8).map(n => `
-                <li><a href="${n.link}" target="_blank" rel="noopener">${n.title}</a></li>
-            `).join('')}</ul>`;
-        });
+            data.events.forEach(event => {
+                tickerHtml += `<span class="ticker-item">${event.time.displayValue} - ${event.text}</span>`;
+                if (event.type.text === "Goal") {
+                    currentScore += event.scoringPlay ? "1" : "0";
+                }
+            });
+
+            document.getElementById('live-ticker').innerHTML = tickerHtml;
+
+            // Goal Detection
+            if (lastScore !== "" && currentScore !== lastScore && currentScore.length > lastScore.length) {
+                if (document.getElementById('soundToggle').checked) {
+                    goalSound.play().catch(e => console.log("Audio blocked:", e));
+                }
+                alert("GOOOOOAAAALLLL!!!");
+            }
+            lastScore = currentScore;
+        }
+
+        // --- Populate Home & News ---
+        async function initApp() {
+            const fixtures = await loadData('fixtures');
+            if (fixtures && fixtures.length > 0) {
+                const next = fixtures[0];
+                document.getElementById('home-fixture').innerHTML = `<strong>${new Date(next.date).toLocaleDateString('en-GB')}</strong><br>${next.home_team} vs ${next.away_team}`;
+            }
+
+            const standings = await loadData('standings');
+            if (standings) {
+                const arsenal = standings.find(t => t.team.name === 'Arsenal');
+                if (arsenal) document.getElementById('home-table').innerHTML = `<strong>Position: ${arsenal.position}</strong> | Points: ${arsenal.points}`;
+            }
+
+            const news = await loadData('news');
+            if (news) {
+                let html = "";
+                let tickerHtml = "";
+                news.slice(0, 5).forEach(item => {
+                    html += `<li><a href="${item.link}" target="_blank">${item.title}</a></li>`;
+                    tickerHtml += `<span class="ticker-item">⚽ ${item.title}</span>`;
+                });
+                document.getElementById('news-list').innerHTML = `<ul>${html}</ul>`;
+                document.getElementById('news-ticker').innerHTML = tickerHtml;
+                document.getElementById('stadium-news').innerHTML = `<ul>${html}</ul>`; // Simple copy for stadium demo
+            }
+        }
+
+        // Start App
+        initApp();
+        setInterval(checkLiveMatch, 60000); // Check live match every minute
     </script>
 </body>
 </html>
-
-
