@@ -23,7 +23,7 @@
             background: rgba(0,0,0,0.2); padding: 15px 20px; text-align: center; 
             border-bottom: 3px solid var(--arsenal-gold); display: flex; flex-direction: column; align-items: center;
         }
-        header img { width: 60px; height: auto; margin-bottom: 5px; }
+        header img { width: 70px; height: auto; margin-bottom: 5px; }
         header h1 { margin: 0; font-weight: 900; font-size: 1.5rem; color: white; text-transform: uppercase; letter-spacing: 1px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
 
         /* Global Ticker Tape */
@@ -32,14 +32,8 @@
             padding: 12px 0; border-top: 2px solid var(--arsenal-gold); border-bottom: 2px solid var(--arsenal-gold); 
             font-weight: 700; font-size: 1rem; display: flex;
         }
-        .ticker { 
-            display: inline-block; white-space: nowrap; 
-            animation: ticker 25s linear infinite; 
-        }
-        @keyframes ticker { 
-            0% { transform: translateX(100vw); } 
-            100% { transform: translateX(-100%); } 
-        }
+        .ticker { display: inline-block; white-space: nowrap; padding-left: 100%; animation: ticker 20s linear infinite; }
+        @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
         .ticker-item { display: inline-block; padding: 0 20px; }
 
         /* Tabs */
@@ -103,12 +97,11 @@
     <div id="app-content" style="opacity: 0; transition: opacity 0.8s ease;">
         
         <header>
-            <!-- Fixed Arsenal Crest URL -->
-            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/5/53/Arsenal_FC.svg/150px-Arsenal_FC.svg.png" alt="Arsenal Crest">
+            <!-- referrerpolicy="no-referrer" bypasses Wikipedia's hotlink block -->
+            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/5/53/Arsenal_FC.svg/240px-Arsenal_FC.svg.png" referrerpolicy="no-referrer" alt="Arsenal Crest">
             <h1>Joshua's Arsenal Hub</h1>
         </header>
 
-        <!-- GLOBAL TICKER TAPE -->
         <div class="global-ticker">
             <div class="ticker" id="news-ticker">Loading latest Arsenal headlines...</div>
         </div>
@@ -121,7 +114,6 @@
             </div>
         </div>
 
-        <!-- HOME TAB -->
         <div id="home" class="tab-content active">
             <div class="card">
                 <h2>Next Match Countdown</h2>
@@ -139,7 +131,6 @@
             </div>
         </div>
 
-        <!-- NEWS TAB -->
         <div id="news" class="tab-content">
             <div class="card">
                 <h2>Latest Arsenal News</h2>
@@ -147,19 +138,16 @@
             </div>
         </div>
 
-        <!-- LIVE TAB -->
         <div id="live" class="tab-content">
             <div class="global-ticker" style="margin-bottom: 15px; border-radius: 6px;">
                 <div class="ticker" id="live-ticker">No live match currently in progress.</div>
             </div>
             <div class="card">
                 <h2>Match Highlights</h2>
-                <!-- Reliable embed for Arsenal Highlights -->
                 <iframe src="https://www.youtube.com/embed/videoseries?list=PL4wY4y2F8x9z3h5b5j8y6Z4k3w2x1y0z" allowfullscreen></iframe>
             </div>
         </div>
 
-        <!-- STADIUM TAB -->
         <div id="stadium" class="tab-content">
             <div class="card">
                 <h2>Emirates Stadium News</h2>
@@ -167,7 +155,6 @@
             </div>
         </div>
 
-        <!-- SOCIAL TAB -->
         <div id="social" class="tab-content">
             <div class="card">
                 <h2>Arsenal Social Feed</h2>
@@ -175,11 +162,9 @@
             </div>
         </div>
 
-        <!-- SPOTIFY TAB -->
         <div id="spotify" class="tab-content">
             <div class="card">
                 <h2>Arsenal Chants & Songs</h2>
-                <!-- Working Spotify Playlist -->
                 <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/37i9dQZF1DX4JQj5g6uT0F" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
             </div>
         </div>
@@ -230,7 +215,6 @@
             if (fixtures && fixtures.length > 0) {
                 const next = fixtures[0];
                 document.getElementById('next-match-name').innerText = `${next.home_team} vs ${next.away_team}`;
-                
                 const matchDate = new Date(next.date).getTime();
                 
                 if (countdownInterval) clearInterval(countdownInterval);
@@ -281,7 +265,8 @@
                 document.getElementById('news-ticker').innerHTML = tickerHtml;
                 document.getElementById('stadium-news').innerHTML = `<ul>${html}</ul>`; 
             } else {
-                document.getElementById('news-list').innerHTML = "Could not load news. Check API connection.";
+                document.getElementById('news-list').innerHTML = "Could not load news.";
+                document.getElementById('news-ticker').innerHTML = "<span class='ticker-item'>⚽ Live news feed currently unavailable.</span>";
             }
         }
 
@@ -297,19 +282,15 @@
                 document.getElementById('live-ticker').innerHTML = `<span class="ticker-item">No live match currently in progress.</span>`;
                 return;
             }
-
             let tickerHtml = "";
             let currentScore = "";
-
             data.events.forEach(event => {
                 tickerHtml += `<span class="ticker-item">${event.time.displayValue} - ${event.text}</span>`;
                 if (event.type.text === "Goal") {
                     currentScore += event.scoringPlay ? "1" : "0";
                 }
             });
-
             document.getElementById('live-ticker').innerHTML = tickerHtml;
-
             if (lastScore !== "" && currentScore !== lastScore && currentScore.length > lastScore.length) {
                 if (document.getElementById('soundToggle').checked) {
                     goalSound.play().catch(e => console.log("Audio blocked:", e));
