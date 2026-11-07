@@ -5,11 +5,9 @@ export default {
     const cors = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };
 
     try {
-      // --- STANDINGS ---
       if (path === '/api/standings') {
         const res = await fetch('https://site.api.espn.com/apis/v2/sports/soccer/eng.1/standings');
         const data = await res.json();
-        // ESPN returns a complex object, we need to extract the entries
         const entries = data.children[0].standings.entries;
         
         const table = entries.map(e => {
@@ -24,9 +22,7 @@ export default {
         return new Response(JSON.stringify({ standings: [{ table: table }] }), { headers: cors });
       }
 
-      // --- FIXTURES ---
       if (path === '/api/fixtures') {
-        // Arsenal Team ID on ESPN is 359
         const res = await fetch('https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/teams/359/schedule');
         const data = await res.json();
         
@@ -42,7 +38,6 @@ export default {
         return new Response(JSON.stringify(futureMatches), { headers: cors });
       }
 
-      // --- NEWS (BBC Sport Arsenal) ---
       if (path === '/api/news') {
         const rssUrl = 'https://feeds.bbci.co.uk/sport/football/teams/arsenal/rss.xml';
         const bridge = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
@@ -51,7 +46,6 @@ export default {
         return new Response(JSON.stringify(data.items || []), { headers: cors });
       }
 
-      // --- LIVE MATCH ---
       if (path === '/api/live') {
         const res = await fetch('https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/scoreboard');
         const data = await res.json();
