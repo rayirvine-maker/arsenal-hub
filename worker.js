@@ -2,54 +2,65 @@ export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
     const path = url.pathname;
-
-    const cors = {
-      'Access-Control-Allow-Origin': '*',
-      'Content-Type': 'application/json',
-    };
+    const cors = { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' };
 
     try {
-      // FPL Standings
+      // --- STANDINGS ---
       if (path === '/api/standings') {
-        const res = await fetch('https://fantasy.premierleague.com/api/bootstrap-static/');
+        const res = await fetch('https://site.api.espn.com/apis/v2/sports/soccer/eng.1/standings');
         const data = await res.json();
-        const table = data.teams.sort((a, b) => a.position - b.position).map(t => ({
-            position: t.position, team: { name: t.name }, playedGames: t.played, points: t.points
-        }));
+        // ESPN returns a complex object, we need to extract the entries
+        const entries = data.children[0].standings.entries;
+        
+        const table = entries.map(e => {
+          const stats = e.stats.reduce((acc, s) => { acc[s.name] = s.value; return acc; }, {});
+          return {
+            position: stats.rank,
+            team: { name: e.team.name },
+            playedGames: stats.gamesPlayed,
+            points: stats.points
+          };
+        });
         return new Response(JSON.stringify({ standings: [{ table: table }] }), { headers: cors });
       }
 
-      // FPL Fixtures
+      // --- FIXTURES ---
       if (path === '/api/fixtures') {
-        const res = await fetch('https://fantasy.premierleague.com/api/fixtures/');
+        // Arsenal Team ID on ESPN is 359
+        const res = await fetch('https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/teams/359/schedule');
         const data = await res.json();
-        const arsenalFixtures = data.filter(f => (f.team_h === 1 || f.team_a === 1) && f.kickoff_time).filter(f => new Date(f.kickoff_time) > new Date()).slice(0, 5).map(f => ({
-            date: f.kickoff_time, home_team: f.team_h === 1 ? 'Arsenal' : `Team ${f.team_h}`, away_team: f.team_a === 1 ? 'Arsenal' : `Team ${f.team_a}`
-        }));
-        return new Response(JSON.stringify(arsenalFixtures), { headers: cors });
+        
+        const futureMatches = data.events
+          .filter(e => new Date(e.date) > new Date())
+          .map(e => ({
+            date: e.date,
+            home_team: e.competitions[0].competitors.find(c => c.homeAway === 'home').team.displayName,
+            away_team: e.competitions[0].competitors.find(c => c.homeAway === 'away').team.displayName
+          }))
+          .slice(0, 5);
+          
+        return new Response(JSON.stringify(futureMatches), { headers: cors });
       }
 
-      // RSS News
+      // --- NEWS (BBC Sport Arsenal) ---
       if (path === '/api/news') {
-        const rssUrl = 'https://feeds.arsenal.com/arsenal-news';
+        const rssUrl = 'https://feeds.bbci.co.uk/sport/football/teams/arsenal/rss.xml';
         const bridge = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
         const res = await fetch(bridge);
         const data = await res.json();
         return new Response(JSON.stringify(data.items || []), { headers: cors });
       }
 
-      // Live Scores (ESPN)
+      // --- LIVE MATCH ---
       if (path === '/api/live') {
         const res = await fetch('https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/scoreboard');
         const data = await res.json();
-        // Find Arsenal match (Team ID 359)
         const arsenalMatch = data.events?.find(e => e.competitions[0].competitors.some(c => c.team.id === "359"));
         
         if (arsenalMatch) {
              return new Response(JSON.stringify({ events: arsenalMatch.competitions[0].details || [] }), { headers: cors });
-        } else {
-             return new Response(JSON.stringify({ events: [] }), { headers: cors });
         }
+        return new Response(JSON.stringify({ events: [] }), { headers: cors });
       }
 
       return new Response('Not found', { status: 404 });
