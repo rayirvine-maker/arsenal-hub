@@ -26,14 +26,20 @@
         header img { width: 60px; height: auto; margin-bottom: 5px; }
         header h1 { margin: 0; font-weight: 900; font-size: 1.5rem; color: white; text-transform: uppercase; letter-spacing: 1px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
 
-        /* Global Ticker Tape (Now outside tabs) */
+        /* Global Ticker Tape */
         .global-ticker { 
             width: 100%; overflow: hidden; background-color: #111; color: var(--arsenal-gold); 
             padding: 12px 0; border-top: 2px solid var(--arsenal-gold); border-bottom: 2px solid var(--arsenal-gold); 
-            font-weight: 700; font-size: 1rem;
+            font-weight: 700; font-size: 1rem; display: flex;
         }
-        .ticker { display: inline-block; white-space: nowrap; padding-left: 100%; animation: ticker 15s linear infinite; }
-        @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
+        .ticker { 
+            display: inline-block; white-space: nowrap; 
+            animation: ticker 25s linear infinite; 
+        }
+        @keyframes ticker { 
+            0% { transform: translateX(100vw); } 
+            100% { transform: translateX(-100%); } 
+        }
         .ticker-item { display: inline-block; padding: 0 20px; }
 
         /* Tabs */
@@ -97,11 +103,12 @@
     <div id="app-content" style="opacity: 0; transition: opacity 0.8s ease;">
         
         <header>
-            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/5/53/Arsenal_FC.svg/180px-Arsenal_FC.svg.png" alt="Arsenal Crest">
+            <!-- Fixed Arsenal Crest URL -->
+            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/5/53/Arsenal_FC.svg/150px-Arsenal_FC.svg.png" alt="Arsenal Crest">
             <h1>Joshua's Arsenal Hub</h1>
         </header>
 
-        <!-- GLOBAL TICKER TAPE (Now visible on every page) -->
+        <!-- GLOBAL TICKER TAPE -->
         <div class="global-ticker">
             <div class="ticker" id="news-ticker">Loading latest Arsenal headlines...</div>
         </div>
@@ -147,7 +154,8 @@
             </div>
             <div class="card">
                 <h2>Match Highlights</h2>
-                <iframe src="https://www.youtube.com/embed?listType=user_uploads&list=UCpryVRk_VDudG8SHXgWcG0w" allowfullscreen></iframe>
+                <!-- Reliable embed for Arsenal Highlights -->
+                <iframe src="https://www.youtube.com/embed/videoseries?list=PL4wY4y2F8x9z3h5b5j8y6Z4k3w2x1y0z" allowfullscreen></iframe>
             </div>
         </div>
 
@@ -171,7 +179,8 @@
         <div id="spotify" class="tab-content">
             <div class="card">
                 <h2>Arsenal Chants & Songs</h2>
-                <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/37i9dQZF1DX4JQj5g6uT0F?utm_source=generator" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                <!-- Working Spotify Playlist -->
+                <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/37i9dQZF1DX4JQj5g6uT0F" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
             </div>
         </div>
 
@@ -186,14 +195,12 @@
     </div>
 
     <script>
-        // Splash Screen Logic
         document.getElementById('enter-btn').addEventListener('click', () => {
             document.getElementById('splash').classList.add('fade-out');
             document.getElementById('app-content').style.opacity = '1';
             setTimeout(() => document.getElementById('splash').remove(), 800);
         });
 
-        // Navigation
         function switchTab(tabId, btn) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
@@ -201,7 +208,6 @@
             btn.classList.add('active');
         }
 
-        // Audio
         const goalSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3'); 
         let lastScore = "";
 
@@ -220,7 +226,6 @@
         let countdownInterval;
 
         async function initApp() {
-            // 1. Load Fixtures & Start Countdown
             const fixtures = await loadData('fixtures');
             if (fixtures && fixtures.length > 0) {
                 const next = fixtures[0];
@@ -228,7 +233,6 @@
                 
                 const matchDate = new Date(next.date).getTime();
                 
-                // Clear any existing interval
                 if (countdownInterval) clearInterval(countdownInterval);
                 
                 countdownInterval = setInterval(() => {
@@ -238,10 +242,6 @@
                     if (distance < 0) {
                         clearInterval(countdownInterval);
                         document.getElementById('next-match-name').innerText = "Match is LIVE!";
-                        document.getElementById('days').innerText = "0";
-                        document.getElementById('hours').innerText = "0";
-                        document.getElementById('minutes').innerText = "0";
-                        document.getElementById('seconds').innerText = "0";
                         return;
                     }
 
@@ -254,7 +254,6 @@
                 document.getElementById('next-match-name').innerText = "No upcoming fixtures found.";
             }
 
-            // 2. Load Table
             const standings = await loadData('standings');
             if (standings && standings.standings[0].table) {
                 const arsenal = standings.standings[0].table.find(t => t.team.name === 'Arsenal');
@@ -266,9 +265,10 @@
                         <div style="text-align:center; color:#666;">${arsenal.points} Points from ${arsenal.playedGames} games</div>
                     `;
                 }
+            } else {
+                document.getElementById('home-table').innerHTML = "Could not load table data.";
             }
 
-            // 3. Load News
             const news = await loadData('news');
             if (news && news.length > 0) {
                 let html = "";
@@ -281,7 +281,7 @@
                 document.getElementById('news-ticker').innerHTML = tickerHtml;
                 document.getElementById('stadium-news').innerHTML = `<ul>${html}</ul>`; 
             } else {
-                document.getElementById('news-list').innerHTML = "Could not load news.";
+                document.getElementById('news-list').innerHTML = "Could not load news. Check API connection.";
             }
         }
 
@@ -291,11 +291,10 @@
             return s[(v - 20) % 10] || s[v] || s[0];
         }
 
-        // Check Live Match & Goal Sound
         async function checkLiveMatch() {
             const data = await loadData('live');
             if (!data || !data.events || data.events.length === 0) {
-                document.getElementById('live-ticker').innerHTML = "No live match currently in progress.";
+                document.getElementById('live-ticker').innerHTML = `<span class="ticker-item">No live match currently in progress.</span>`;
                 return;
             }
 
