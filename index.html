@@ -18,7 +18,6 @@
             background-color: var(--bg-dark); color: #fff; 
         }
         
-        /* Header & Crest */
         header { 
             background: linear-gradient(180deg, rgba(239,1,7,0.9) 0%, rgba(18,18,18,1) 100%);
             padding: 20px; text-align: center; border-bottom: 2px solid var(--arsenal-gold); 
@@ -28,21 +27,19 @@
         header img { width: 65px; height: auto; margin-bottom: 8px; filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.5)); }
         header h1 { margin: 0; font-weight: 900; font-size: 1.6rem; color: white; text-transform: uppercase; letter-spacing: 2px; }
 
-        /* Global Ticker Tape */
+        /* Faster Ticker Tape */
         .global-ticker { 
             width: 100%; overflow: hidden; background-color: #000; color: var(--arsenal-gold); 
             padding: 10px 0; border-bottom: 1px solid var(--arsenal-gold); font-weight: 600; font-size: 0.9rem; display: flex;
         }
-        .ticker { display: inline-block; white-space: nowrap; padding-left: 100%; animation: ticker 25s linear infinite; }
+        .ticker { display: inline-block; white-space: nowrap; padding-left: 100%; animation: ticker 15s linear infinite; }
         @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
         .ticker-item { display: inline-block; padding: 0 20px; }
 
-        /* Tabs */
         .tab-content { display: none; padding: 20px; max-width: 800px; margin: 0 auto; }
         .tab-content.active { display: block; animation: fadeIn 0.4s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* HD Cards */
         .card { 
             background: var(--card-bg); padding: 20px; border-radius: 16px; margin-bottom: 20px; 
             border: 1px solid #333;
@@ -74,7 +71,13 @@
         .time-box span { display: block; font-size: 1.8rem; font-weight: 900; color: var(--arsenal-red); }
         .time-box small { font-size: 0.7rem; text-transform: uppercase; color: var(--arsenal-gold); font-weight: 700;}
 
-        /* Settings Toggle */
+        /* Full League Table */
+        .league-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem; }
+        .league-table th { text-align: left; padding: 8px; border-bottom: 1px solid #444; color: #888; font-weight: 600; }
+        .league-table td { padding: 10px 8px; border-bottom: 1px solid #333; }
+        .league-table tr:hover { background: #2a2a2a; }
+        .arsenal-row { background: rgba(239, 1, 7, 0.15); font-weight: 800; color: var(--arsenal-red); border-left: 3px solid var(--arsenal-red); }
+
         .settings-bar { display: flex; justify-content: flex-end; align-items: center; padding: 10px 20px; background: #1a1a1a; }
         .settings-bar label { font-weight: 700; margin-right: 12px; color: #fff; font-size: 0.8rem; text-transform: uppercase;}
         .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
@@ -84,7 +87,6 @@
         input:checked + .slider { background-color: var(--arsenal-red); }
         input:checked + .slider:before { transform: translateX(20px); }
 
-        /* Navigation */
         .bottom-nav { 
             position: fixed; bottom: 0; left: 0; width: 100%; background: #000; 
             display: flex; justify-content: space-around; padding: 15px 0; 
@@ -93,15 +95,13 @@
         .nav-btn { background: none; border: none; color: #888; font-family: inherit; font-weight: 800; font-size: 0.7rem; cursor: pointer; text-transform: uppercase; transition: 0.2s; letter-spacing: 1px;}
         .nav-btn.active { color: var(--arsenal-gold); transform: translateY(-2px); }
 
-        /* Misc */
         #splash { position: fixed; inset: 0; background: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; transition: opacity 0.8s ease; }
         #splash img { max-width: 90vw; max-height: 65vh; border-radius: 16px; border: 2px solid var(--arsenal-gold); box-shadow: 0 0 50px rgba(239,1,7,0.3);}
         #splash.fade-out { opacity: 0; pointer-events: none; }
         #enter-btn { margin-top: 30px; padding: 16px 36px; font-size: 1rem; font-family: 'Montserrat', sans-serif; font-weight: 900; background: var(--arsenal-red); color: white; border: 2px solid var(--arsenal-gold); border-radius: 40px; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; box-shadow: 0 0 20px rgba(239,1,7,0.5); transition: 0.2s;}
         #enter-btn:hover { transform: scale(1.05); }
         .loading { color: #888; font-style: italic; }
-        iframe { width: 100%; height: 250px; border-radius: 12px; border: none; margin-top: 10px; box-shadow: 0 8px 20px rgba(0,0,0,0.6);}
-        .pos-highlight { color: var(--arsenal-red); font-size: 3rem; font-weight: 900; line-height: 1; }
+        iframe { width: 100%; height: 380px; border-radius: 12px; border: none; margin-top: 10px; box-shadow: 0 8px 20px rgba(0,0,0,0.6);}
     </style>
 </head>
 <body>
@@ -114,7 +114,6 @@
     <div id="app-content" style="opacity: 0; transition: opacity 0.8s ease;">
         
         <header>
-            <!-- The official PL CDN Crest, routed via Cloudflare proxy just in case -->
             <img src="https://arsenal-hub-api.ray-irvine.workers.dev/api/crest" alt="Arsenal Crest" onerror="this.src='https://resources.premierleague.com/premierleague/badges/70/t3.png'">
             <h1>Joshua's Arsenal Hub</h1>
         </header>
@@ -143,8 +142,8 @@
                 </div>
             </div>
             <div class="card">
-                <h2>League Position</h2>
-                <div id="home-table" class="loading">Loading...</div>
+                <h2>Premier League Table</h2>
+                <div id="home-table" class="loading">Loading table...</div>
             </div>
         </div>
 
@@ -161,7 +160,6 @@
             </div>
             <div class="card">
                 <h2>Match Highlights & Songs</h2>
-                <!-- Your requested YouTube Playlist -->
                 <iframe src="https://www.youtube.com/embed/videoseries?list=PLRdP_uqk1u7x-d7Dhxcq1sguAmWOnzQk6" allowfullscreen></iframe>
             </div>
         </div>
@@ -169,21 +167,22 @@
         <div id="stadium" class="tab-content">
             <div class="card">
                 <h2>Emirates Stadium News</h2>
-                <div id="stadium-news" class="loading">Filtering stadium news...</div>
+                <div id="stadium-news" class="loading">Loading news...</div>
             </div>
         </div>
 
         <div id="social" class="tab-content">
             <div class="card">
                 <h2>Arsenal Social Feed</h2>
-                <p style="text-align:center; font-weight:700; color:#888;">Live updates from around the club</p>
+                <div id="social-news" class="loading">Loading updates...</div>
             </div>
         </div>
 
         <div id="spotify" class="tab-content">
             <div class="card">
                 <h2>Arsenal Chants & Songs</h2>
-                <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/37i9dQZF1DX4JQj5g6uT0F" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                <!-- New working Spotify Playlist -->
+                <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/1g8aCpG3pIzKnwcemzWh6Q?utm_source=generator" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
             </div>
         </div>
 
@@ -229,11 +228,11 @@
         let countdownInterval;
 
         async function initApp() {
-            // Countdown
+            // Fixtures
             const fixtures = await loadData('fixtures');
             if (fixtures && fixtures.length > 0) {
                 const next = fixtures[0];
-                document.getElementById('next-match-name').innerText = `${next.home_team} vs ${next.away_team}`;
+                document.getElementById('next-match-name').innerText = `${next.home_team} vs ${next.away_team} (${next.league})`;
                 const matchDate = new Date(next.date).getTime();
                 
                 if (countdownInterval) clearInterval(countdownInterval);
@@ -257,35 +256,43 @@
                 document.getElementById('next-match-name').innerText = "No upcoming fixtures found.";
             }
 
-            // Standings
+            // Full League Table
             const standings = await loadData('standings');
             if (standings && standings.standings[0].table) {
-                const arsenal = standings.standings[0].table.find(t => t.team.name === 'Arsenal');
-                if (arsenal) {
-                    document.getElementById('home-table').innerHTML = `
-                        <div style="text-align:center; padding: 10px;">
-                            <div class="pos-highlight">${arsenal.position}<sup style="font-size:1.2rem; color:#fff;">${getOrdinal(arsenal.position)}</sup></div>
-                            <div style="color:var(--arsenal-gold); font-weight:800; text-transform:uppercase; margin-top:10px;">Place</div>
-                            <div style="color:#aaa; margin-top:5px; font-size:0.9rem;">${arsenal.points} Points • ${arsenal.playedGames} Played</div>
-                        </div>
-                    `;
-                }
+                const table = standings.standings[0].table;
+                let tableHtml = `<table class="league-table">
+                    <tr><th>Pos</th><th>Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>Pts</th></tr>`;
+                
+                table.forEach(row => {
+                    const isArsenal = row.team.name.includes('Arsenal');
+                    tableHtml += `<tr class="${isArsenal ? 'arsenal-row' : ''}">
+                        <td>${row.position}</td>
+                        <td>${row.team.name}</td>
+                        <td>${row.playedGames}</td>
+                        <td>${row.wins}</td>
+                        <td>${row.draws}</td>
+                        <td>${row.losses}</td>
+                        <td>${row.points}</td>
+                    </tr>`;
+                });
+                tableHtml += `</table>`;
+                document.getElementById('home-table').innerHTML = tableHtml;
             } else {
                 document.getElementById('home-table').innerHTML = "<div style='text-align:center; color:#888;'>Could not load table data.</div>";
             }
 
-            // News
+            // News (Now 30 items)
             const news = await loadData('news');
             if (news && news.length > 0) {
                 let newsHtml = "";
                 let tickerHtml = "";
                 
-                news.slice(0, 10).forEach(item => {
+                news.forEach(item => {
                     const dateObj = new Date(item.pubDate);
                     const dateStr = dateObj.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
                     const timeStr = dateObj.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
                     
-                    newsHtml += `
+                    const itemHtml = `
                         <div class="news-item">
                             <a href="${item.link}" target="_blank">${item.title}</a>
                             <div class="news-meta">
@@ -295,21 +302,17 @@
                         </div>
                     `;
                     
-                    tickerHtml += `<span class="ticker-item">⚽ ${item.title}</span>`;
+                    newsHtml += itemHtml;
+                    tickerHtml += `<span class="ticker-item">⚽ ${item.title} (${item.author})</span>`;
                 });
 
                 document.getElementById('news-list').innerHTML = newsHtml;
                 document.getElementById('news-ticker').innerHTML = tickerHtml;
-                document.getElementById('stadium-news').innerHTML = newsHtml; 
+                document.getElementById('stadium-news').innerHTML = newsHtml; // Sharing the feed for now
+                document.getElementById('social-news').innerHTML = newsHtml; // Sharing the feed for now
             } else {
                 document.getElementById('news-list').innerHTML = "<div style='color:#888;'>Could not load news.</div>";
             }
-        }
-
-        function getOrdinal(n) {
-            const s = ["th", "st", "nd", "rd"];
-            const v = n % 100;
-            return s[(v - 20) % 10] || s[v] || s[0];
         }
 
         async function checkLiveMatch() {
