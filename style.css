@@ -29,46 +29,27 @@ header { padding: 15px 5px; display: flex; flex-direction: column; align-items: 
 .player-wall.left { justify-content: flex-end; padding-right: 10px; }
 .player-wall.right { justify-content: flex-start; padding-left: 10px; }
 
-/* THE PLAYER CARDS - No overlap, fixed sizing */
+/* THE PLAYER CARDS - Clean, no numbers overlapping */
 .p-card { 
     position: relative; 
-    width: 40px; 
-    height: 55px; 
+    width: 45px; 
+    height: 65px; 
     border-radius: 6px;
     border: 1px solid var(--arsenal-gold);
-    background: rgba(239, 1, 7, 0.9); /* Red background for fallback */
+    background: rgba(239, 1, 7, 0.9);
     overflow: hidden;
     transition: transform 0.3s; 
-    margin: 0 2px; /* Spacing between cards */
+    margin: 0 3px; 
     box-shadow: 0 4px 6px rgba(0,0,0,0.6);
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 .p-card:hover { transform: translateY(-5px) scale(1.1); z-index: 10; border-color: #fff; }
 
 .p-card img { 
-    position: absolute;
-    top: 0;
-    left: 0;
     width: 100%; 
     height: 100%; 
     object-fit: cover; 
     object-position: top; 
-    z-index: 2;
-}
-
-.p-card span { 
-    position: relative;
-    z-index: 3;
-    background: var(--arsenal-gold); 
-    color: black; 
-    font-size: 0.65rem; 
-    font-weight: 900; 
-    padding: 1px 4px; 
-    border-radius: 3px; 
-    border: 1px solid black; 
-    box-shadow: 0 2px 4px rgba(0,0,0,0.8); 
+    display: block;
 }
 
 /* CENTER LOGO */
@@ -153,9 +134,8 @@ iframe { width: 100%; height: 300px; border-radius: 8px; border: none; margin-to
     .player-grid { grid-template-columns: 1fr; }
     .time-box span { font-size: 1.2rem; }
     .card { padding: 20px 0; }
-    .p-card { width: 28px; height: 40px; margin: 0 1px; }
+    .p-card { width: 32px; height: 48px; margin: 0 2px; }
     .center-logo h1 { font-size: 0.9rem; white-space: normal; max-width: 100px; }
     .center-logo img { width: 45px; }
-    .p-card span { font-size: 0.5rem; padding: 0 2px; }
     .goal-frame { height: 160px; }
 }
