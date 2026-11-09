@@ -11,107 +11,105 @@
         :root {
             --arsenal-red: #EF0107;
             --arsenal-gold: #D4AF37;
-            --bg-dark: #121212;
         }
+        
+        /* Seamless Red to Stadium Morphed Background */
         body { 
-            font-family: 'Montserrat', sans-serif; margin: 0; padding: 0; padding-bottom: 70px; 
+            font-family: 'Montserrat', sans-serif; 
+            margin: 0; 
+            padding: 0; 
+            padding-bottom: 70px; 
             color: #fff; 
             background-image: 
-                linear-gradient(rgba(18, 18, 18, 0.5), rgba(18, 18, 18, 0.8)), 
+                linear-gradient(180deg, rgba(239, 1, 7, 0.95) 0%, rgba(200, 0, 5, 0.85) 20%, rgba(18, 18, 18, 0.9) 60%, rgba(18, 18, 18, 1) 100%),
                 url('https://images.unsplash.com/photo-1522778119026-d647f0596c20?q=80&w=2000&auto=format&fit=crop');
             background-size: cover;
-            background-position: center;
+            background-position: center top;
             background-attachment: fixed;
-            background-color: var(--bg-dark);
+            background-color: #121212;
             -webkit-tap-highlight-color: transparent;
+            overflow-x: hidden;
         }
         
-        /* DELUXE HEADER */
+        /* Seamless Header */
         header { 
-            background: linear-gradient(180deg, rgba(239,1,7,1) 0%, rgba(18,18,18,0.95) 100%);
-            padding: 10px 5px; text-align: center; border-bottom: 4px solid var(--arsenal-gold); 
-            position: sticky; top: 0; z-index: 900;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.95);
-            backdrop-filter: blur(10px);
-            overflow: hidden; 
+            padding: 20px 15px 15px 15px; 
+            text-align: center; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center;
         }
-        
-        .header-top {
-            display: flex; justify-content: center; align-items: center; max-width: 800px; margin: 0 auto; gap: 10px;
-        }
-        
-        .player-row { display: flex; gap: 5px; align-items: flex-end; }
-        
-        .player-img { 
-            width: 45px; height: 60px; 
-            object-fit: contain;
-            mix-blend-mode: multiply;
-            filter: contrast(1.2) drop-shadow(0 4px 4px rgba(0,0,0,0.6));
-            margin-bottom: -5px;
-        }
-        .player-img.legend { transform: scale(1.15); margin-bottom: -2px;}
+        header img { width: 65px; height: auto; margin-bottom: 5px; filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.5)); }
+        header h1 { margin: 0; font-weight: 900; font-size: 1.5rem; color: white; text-transform: uppercase; letter-spacing: 1px; text-shadow: 2px 2px 4px rgba(0,0,0,0.7); }
 
-        .crest-container { display: flex; flex-direction: column; align-items: center; z-index: 10; }
-        .crest-container img { width: 55px; height: auto; filter: drop-shadow(0 0 10px rgba(212,175,55,0.8)); }
-        .crest-container h1 { margin: 5px 0 0 0; font-weight: 900; font-size: 1.1rem; color: white; text-transform: uppercase; letter-spacing: 1px; text-shadow: 2px 2px 4px rgba(0,0,0,0.9); }
-
+        /* Ticker */
         .global-ticker { 
-            width: 100%; overflow: hidden; background-color: rgba(0, 0, 0, 0.95); color: var(--arsenal-gold); 
-            padding: 8px 0; border-bottom: 1px solid var(--arsenal-gold); font-weight: 600; font-size: 0.8rem; display: flex;
+            width: 100%; overflow: hidden; background-color: rgba(0, 0, 0, 0.7); color: var(--arsenal-gold); 
+            padding: 8px 0; border-top: 1px solid rgba(212, 175, 55, 0.3);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3); font-weight: 600; font-size: 0.8rem; display: flex;
         }
         .ticker { display: inline-block; white-space: nowrap; animation: ticker 300s linear infinite; }
         @keyframes ticker { 0% { transform: translateX(100vw); } 100% { transform: translateX(-100%); } }
         a.ticker-item { display: inline-block; padding: 0 20px; color: var(--arsenal-gold); text-decoration: none; }
         a.ticker-item:hover { color: #fff; text-decoration: underline; }
 
-        .tab-content { display: none; padding: 15px; max-width: 800px; margin: 0 auto; }
+        /* Tab Content */
+        .tab-content { display: none; padding: 10px 20px; max-width: 800px; margin: 0 auto; }
         .tab-content.active { display: block; animation: fadeIn 0.4s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* AGGRESSIVELY REMOVED BOXES - Flush Sections */
         .card { 
-            background: linear-gradient(145deg, rgba(40,40,40,0.98), rgba(15,15,15,0.98));
-            padding: 18px; 
-            border-radius: 24px; 
-            margin-bottom: 20px; 
-            border: 2px solid var(--arsenal-gold);
-            border-top: 6px solid var(--arsenal-red);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.95), 0 8px 15px rgba(0,0,0,0.8), inset 0 2px 3px rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            transition: transform 0.2s ease;
+            background: none !important; 
+            box-shadow: none !important;
+            padding: 25px 0; 
+            border: none !important;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.4) !important; 
         }
-        .card:hover { transform: translateY(-2px); }
+        .card:last-child { border-bottom: none !important; }
         
-        .card h2 { margin-top: 0; color: var(--arsenal-gold); font-size: 1rem; text-transform: uppercase; border-bottom: 1px solid rgba(212, 175, 55, 0.3); padding-bottom: 10px; font-weight: 800; letter-spacing: 1px;}
+        .card h2 { 
+            margin-top: 0; color: var(--arsenal-gold); font-size: 1.1rem; 
+            text-transform: uppercase; font-weight: 900; letter-spacing: 1px; 
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.9); margin-bottom: 15px;
+        }
 
-        .league-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.85rem; }
-        .league-table th { text-align: left; padding: 6px; border-bottom: 1px solid #444; color: #aaa; font-weight: 600; }
-        .league-table td { padding: 8px 6px; border-bottom: 1px solid #333; color: #e0e0e0; font-weight: 500; }
-        .league-table tr:hover { background: rgba(255,255,255,0.05); }
-        .arsenal-row td { background: rgba(239, 1, 7, 0.2); font-weight: 800; color: #fff; border-left: 3px solid var(--arsenal-red); }
+        /* Table */
+        .league-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        .league-table th { text-align: left; padding: 8px 6px; border-bottom: 1px solid rgba(255,255,255,0.3); color: #ddd; font-weight: 600; }
+        .league-table td { padding: 10px 6px; border-bottom: 1px solid rgba(255,255,255,0.1); color: #fff; font-weight: 500; text-shadow: 1px 1px 2px black;}
+        .arsenal-row td { background: rgba(239, 1, 7, 0.4); font-weight: 900; color: var(--arsenal-gold); border-left: 3px solid var(--arsenal-gold); text-shadow: 1px 1px 2px black;}
 
-        .lineup-match { margin-bottom: 15px; border-bottom: 1px dashed #444; padding-bottom: 10px; }
-        .lineup-match h3 { font-size: 0.9rem; color: #fff; margin: 0 0 5px 0; }
-        .lineup-formation { font-size: 0.75rem; color: var(--arsenal-gold); margin-bottom: 8px; font-weight: bold; }
+        /* Lineups */
+        .lineup-match { margin-bottom: 20px; }
+        .lineup-match h3 { font-size: 0.95rem; color: #fff; margin: 0 0 5px 0; }
+        .lineup-formation { font-size: 0.75rem; color: var(--arsenal-gold); margin-bottom: 10px; font-weight: bold; }
         .player-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .player-item { background: rgba(0,0,0,0.6); padding: 6px 8px; border-radius: 8px; font-size: 0.75rem; display: flex; align-items: center; gap: 5px; border: 1px solid #333;}
-        .player-pos { color: var(--arsenal-gold); font-weight: 800; font-size: 0.7rem; min-width: 25px; text-align: center; border-right: 1px solid #444; padding-right: 5px;}
+        .player-item { background: rgba(0,0,0,0.5); padding: 6px 10px; border-radius: 4px; font-size: 0.8rem; display: flex; align-items: center; gap: 8px; border: 1px solid rgba(255,255,255,0.1);}
+        .player-pos { color: var(--arsenal-gold); font-weight: 800; font-size: 0.7rem; min-width: 25px; text-align: center; border-right: 1px solid rgba(255,255,255,0.2); padding-right: 6px;}
 
+        /* Countdown */
         #countdown { display: flex; justify-content: space-between; text-align: center; margin-top: 15px; }
-        .time-box { background: rgba(10, 10, 10, 0.95); color: white; padding: 12px 5px; border-radius: 12px; flex: 1; margin: 0 4px; border: 1px solid var(--arsenal-gold); box-shadow: inset 0 4px 10px rgba(0,0,0,0.8); }
-        .time-box span { display: block; font-size: 1.3rem; font-weight: 900; color: var(--arsenal-red); }
+        .time-box { background: rgba(0, 0, 0, 0.6); color: white; padding: 12px 5px; border-radius: 8px; flex: 1; margin: 0 4px; border: 1px solid rgba(212, 175, 55, 0.5); }
+        .time-box span { display: block; font-size: 1.5rem; font-weight: 900; color: #fff; text-shadow: 0 0 10px rgba(239,1,7,0.8); }
         .time-box small { font-size: 0.6rem; text-transform: uppercase; color: var(--arsenal-gold); font-weight: 700;}
 
+        /* News Items */
         .news-item {
-            background: rgba(15, 15, 15, 0.95);
+            background: rgba(0, 0, 0, 0.6);
             border-left: 4px solid var(--arsenal-red);
-            padding: 12px; margin-bottom: 12px; border-radius: 12px;
-            border: 1px solid #333; border-left-width: 4px;
+            padding: 12px; margin-bottom: 12px; border-radius: 4px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            border-right: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
         .news-item a { font-size: 0.95rem; font-weight: 700; color: #fff; text-decoration: none; display: block; margin-bottom: 10px; line-height: 1.3; }
-        .news-meta { display: flex; justify-content: space-between; font-size: 0.65rem; color: #aaa; font-weight: 600; text-transform: uppercase; flex-wrap: wrap; gap: 5px;}
-        .news-meta span { background: #222; padding: 3px 6px; border-radius: 4px; border: 1px solid #444; }
+        .news-item a:hover { color: var(--arsenal-gold); }
+        .news-meta { display: flex; justify-content: space-between; font-size: 0.65rem; color: #bbb; font-weight: 600; text-transform: uppercase; flex-wrap: wrap; gap: 5px;}
+        .news-meta span { background: rgba(0,0,0,0.8); padding: 3px 6px; border-radius: 4px; }
 
-        .settings-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; background: rgba(26,26,26,0.9); backdrop-filter: blur(10px); flex-wrap: wrap; gap: 10px;}
+        /* Settings Bar */
+        .settings-bar { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: rgba(0,0,0,0.6); border-bottom: 1px solid rgba(212, 175, 55, 0.3); flex-wrap: wrap; gap: 10px;}
         .settings-bar label { font-weight: 700; margin-right: 10px; color: #fff; font-size: 0.75rem; text-transform: uppercase;}
         .switch { position: relative; display: inline-block; width: 40px; height: 22px; }
         .switch input { opacity: 0; width: 0; height: 0; }
@@ -120,87 +118,44 @@
         input:checked + .slider { background-color: var(--arsenal-red); }
         input:checked + .slider:before { transform: translateX(18px); }
 
+        /* Bottom Nav */
         .bottom-nav { 
             position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(0,0,0,0.98); 
             display: flex; justify-content: space-around; padding: 12px 0; 
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.9); z-index: 1000; border-top: 1px solid #333;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.9); z-index: 1000; border-top: 2px solid var(--arsenal-red);
             backdrop-filter: blur(10px);
         }
         .nav-btn { background: none; border: none; color: #888; font-family: inherit; font-weight: 800; font-size: 0.65rem; cursor: pointer; text-transform: uppercase; transition: 0.2s; letter-spacing: 0.5px;}
         .nav-btn.active { color: var(--arsenal-gold); transform: translateY(-2px); }
 
-        /* NEW RED SPLASH SCREEN */
-        #splash { 
-            position: fixed; inset: 0; 
-            background: radial-gradient(circle at center, #EF0107 0%, #7a0004 100%); /* Deep Arsenal Red Gradient */
-            display: flex; flex-direction: column; align-items: center; justify-content: center; 
-            z-index: 9999; transition: opacity 0.8s ease; 
-        }
-        .massive-crest {
-            width: 160px; height: auto; margin-bottom: 20px;
-            filter: drop-shadow(0 0 30px rgba(212,175,55,0.9));
-            animation: pulse 2s infinite alternate;
-        }
-        @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.05); } }
-        
-        #splash img.joshua-pic { 
-            max-width: 85vw; max-height: 50vh; border-radius: 20px; 
-            border: 4px solid var(--arsenal-gold); 
-            box-shadow: 0 15px 50px rgba(0,0,0,0.9); 
-        }
+        /* Splash */
+        #splash { position: fixed; inset: 0; background: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; transition: opacity 0.8s ease; }
+        #splash img { max-width: 90vw; max-height: 60vh; border-radius: 12px; border: 2px solid var(--arsenal-gold); box-shadow: 0 0 40px rgba(239,1,7,0.4);}
         #splash.fade-out { opacity: 0; pointer-events: none; }
-        
-        #enter-btn { 
-            margin-top: 30px; padding: 15px 40px; font-size: 1rem; font-family: 'Montserrat', sans-serif; 
-            font-weight: 900; background: rgba(0,0,0,0.8); color: var(--arsenal-gold); 
-            border: 2px solid var(--arsenal-gold); border-radius: 40px; cursor: pointer; 
-            text-transform: uppercase; letter-spacing: 2px; box-shadow: 0 0 20px rgba(0,0,0,0.5); 
-            transition: 0.2s;
-        }
-        #enter-btn:hover { transform: scale(1.05); background: #000; box-shadow: 0 0 30px rgba(212,175,55,0.8); }
-
-        .loading { color: #888; font-style: italic; font-size: 0.9rem;}
-        iframe { width: 100%; height: 250px; border-radius: 12px; border: 2px solid var(--arsenal-gold); margin-top: 10px; }
+        #enter-btn { margin-top: 25px; padding: 14px 30px; font-size: 0.9rem; font-family: 'Montserrat', sans-serif; font-weight: 900; background: var(--arsenal-red); color: white; border: 2px solid var(--arsenal-gold); border-radius: 30px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 0 15px rgba(239,1,7,0.6); }
+        .loading { color: #ccc; font-style: italic; font-size: 0.9rem; text-shadow: 1px 1px 2px black;}
+        iframe { width: 100%; height: 300px; border-radius: 8px; border: none; margin-top: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.8);}
 
         @media (max-width: 600px) {
             .player-grid { grid-template-columns: 1fr; }
-            .crest-container h1 { font-size: 0.85rem; }
-            .player-img { width: 30px; height: 45px; }
-            .crest-container img { width: 45px; }
-            .time-box span { font-size: 1.1rem; }
-            .card { padding: 15px; border-radius: 16px; }
+            header h1 { font-size: 1.3rem; }
+            .time-box span { font-size: 1.2rem; }
+            .card { padding: 20px 0; }
         }
     </style>
 </head>
 <body>
 
-    <!-- RED SPLASH SCREEN -->
     <div id="splash">
-        <img src="https://arsenal-hub-api.ray-irvine.workers.dev/api/crest" class="massive-crest" alt="Arsenal Crest" onerror="this.src='https://resources.premierleague.com/premierleague/badges/70/t3.png'">
-        <img src="joshua-hero.jpg.webp" class="joshua-pic" alt="Joshua in Arsenal kit">
+        <img src="joshua-hero.jpg.webp" alt="Joshua in Arsenal kit">
         <button id="enter-btn">Tap to Enter ⚽</button>
     </div>
 
     <div id="app-content" style="opacity: 0; transition: opacity 0.8s ease;">
         
-        <!-- DELUXE HEADER WITH PLAYERS -->
         <header>
-            <div class="header-top">
-                <div class="player-row">
-                    <img src="https://resources.premierleague.com/premierleague/photos/players/110x140/p3736.png" class="player-img legend" alt="Thierry Henry" title="Thierry Henry #14">
-                    <img src="https://resources.premierleague.com/premierleague/photos/players/110x140/p215174.png" class="player-img" alt="Declan Rice" title="Declan Rice">
-                </div>
-                
-                <div class="crest-container">
-                    <img src="https://arsenal-hub-api.ray-irvine.workers.dev/api/crest" alt="Arsenal Crest" onerror="this.src='https://resources.premierleague.com/premierleague/badges/70/t3.png'">
-                    <h1>Joshua's Arsenal Hub</h1>
-                </div>
-                
-                <div class="player-row">
-                    <img src="https://resources.premierleague.com/premierleague/photos/players/110x140/p223340.png" class="player-img" alt="Bukayo Saka" title="Bukayo Saka">
-                    <img src="https://resources.premierleague.com/premierleague/photos/players/110x140/p184029.png" class="player-img" alt="Martin Odegaard" title="Martin Odegaard">
-                </div>
-            </div>
+            <img src="https://arsenal-hub-api.ray-irvine.workers.dev/api/crest" alt="Arsenal Crest" onerror="this.src='https://resources.premierleague.com/premierleague/badges/70/t3.png'">
+            <h1>Joshua's Arsenal Hub</h1>
         </header>
 
         <div class="global-ticker">
@@ -208,7 +163,7 @@
         </div>
 
         <div class="settings-bar">
-            <button id="notify-btn" style="background: var(--arsenal-red); color: white; border: 1px solid var(--arsenal-gold); padding: 5px 10px; border-radius: 4px; font-weight: bold; font-size: 0.7rem; cursor: pointer;">Alerts Off 🔔</button>
+            <button id="notify-btn" style="background: var(--arsenal-gold); color: #000; border: none; padding: 6px 12px; border-radius: 4px; font-weight: 900; font-size: 0.7rem; cursor: pointer;">Alerts Off 🔔</button>
             <div style="display: flex; align-items: center;">
                 <label for="soundToggle">Goal Sounds</label>
                 <div class="switch">
@@ -248,35 +203,28 @@
         </div>
 
         <div id="news" class="tab-content">
-            <div class="card">
+            <div class="card" style="border-bottom:none;">
                 <h2>Latest Arsenal News</h2>
                 <div id="news-list" class="loading">Loading news...</div>
             </div>
         </div>
 
         <div id="live" class="tab-content">
-            <div class="global-ticker" style="margin-bottom: 15px; border-radius: 12px; border: 1px solid var(--arsenal-gold);">
-                <div class="ticker" id="live-ticker">No live match currently in progress.</div>
-            </div>
-            <div class="card">
+            <div class="card" style="border-bottom:none;">
                 <h2>Match Highlights & Songs</h2>
                 <iframe src="https://www.youtube.com/embed/videoseries?list=PLRdP_uqk1u7x-d7Dhxcq1sguAmWOnzQk6" allowfullscreen></iframe>
             </div>
         </div>
 
         <div id="social" class="tab-content">
-            <div class="card">
+            <div class="card" style="border-bottom:none;">
                 <h2>Arsenal Media & Interviews</h2>
                 <div id="social-news" class="loading">Loading videos...</div>
-            </div>
-            <div class="card">
-                <h2>Player & Manager Talk</h2>
-                <div id="player-talk" class="loading">Loading player news...</div>
             </div>
         </div>
 
         <div id="spotify" class="tab-content">
-            <div class="card">
+            <div class="card" style="border-bottom:none;">
                 <h2>Arsenal Chants & Songs</h2>
                 <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/1g8aCpG3pIzKnwcemzWh6Q?utm_source=generator" height="300" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
             </div>
@@ -371,7 +319,7 @@
                 let lineupsHtml = "";
                 lineups.forEach(match => {
                     const dateStr = new Date(match.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
-                    lineupsHtml += `<div class="lineup-match"><h3>${match.matchName} <span style="color:#888; font-size:0.7rem;">(${dateStr})</span></h3><div class="lineup-formation">Formation: ${match.formation}</div><div class="player-grid">`;
+                    lineupsHtml += `<div class="lineup-match"><h3>${match.matchName} <span style="color:#aaa; font-size:0.7rem;">(${dateStr})</span></h3><div class="lineup-formation">Formation: ${match.formation}</div><div class="player-grid">`;
                     match.starters.forEach(p => {
                         lineupsHtml += `<div class="player-item"><span class="player-pos">${p.position}</span> ${p.name}</div>`;
                     });
@@ -379,14 +327,14 @@
                 });
                 document.getElementById('lineups-container').innerHTML = lineupsHtml;
             } else {
-                document.getElementById('lineups-container').innerHTML = "<div style='color:#888; font-size:0.9rem;'>Lineup data unavailable.</div>";
+                document.getElementById('lineups-container').innerHTML = "<div style='color:#ccc; font-size:0.9rem;'>Lineup data unavailable.</div>";
             }
 
             if (fixtures && fixtures.length > 0) {
                 let fixHtml = `<ul style="list-style-type:none; padding:0; margin:0;">`;
                 fixtures.forEach(f => {
                     const d = new Date(f.date).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
-                    fixHtml += `<li style="padding: 8px 0; border-bottom: 1px solid #333; font-size:0.85rem;"><strong>${d}</strong> - ${f.home_team} vs ${f.away_team} <span style="color:var(--arsenal-gold); font-size:0.7rem;">(${f.league})</span></li>`;
+                    fixHtml += `<li style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1); font-size:0.85rem;"><strong>${d}</strong> - ${f.home_team} vs ${f.away_team} <span style="color:var(--arsenal-gold); font-size:0.7rem;">(${f.league})</span></li>`;
                 });
                 fixHtml += `</ul>`;
                 document.getElementById('fixtures-list').innerHTML = fixHtml;
@@ -414,22 +362,11 @@
                     const dateObj = new Date(item.pubDate);
                     const dateStr = dateObj.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
                     const timeStr = dateObj.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
-                    socialHtml += `<div class="news-item" style="border-left-color: var(--arsenal-red);"><a href="${item.link}" target="_blank">▶️ ${item.title}</a><div class="news-meta"><span>📺 ${item.author}</span><span>🕒 ${dateStr} • ${timeStr}</span></div></div>`;
+                    socialHtml += `<div class="news-item" style="border-left-color: var(--arsenal-gold);"><a href="${item.link}" target="_blank">▶️ ${item.title}</a><div class="news-meta"><span>📺 ${item.author}</span><span>🕒 ${dateStr} • ${timeStr}</span></div></div>`;
                 });
                 document.getElementById('social-news').innerHTML = socialHtml;
-            }
-
-            const playerTalk = await loadData('players');
-            if (playerTalk && playerTalk.length > 0) {
-                let playerHtml = "";
-                playerTalk.forEach(item => {
-                    const dateObj = new Date(item.pubDate);
-                    const dateStr = dateObj.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
-                    playerHtml += `<div class="news-item" style="border-left-color: var(--arsenal-gold);"><a href="${item.link}" target="_blank">💬 ${item.title}</a><div class="news-meta"><span>📰 ${item.author}</span><span>🕒 ${dateStr}</span></div></div>`;
-                });
-                document.getElementById('player-talk').innerHTML = playerHtml;
             } else {
-                document.getElementById('player-talk').innerHTML = "<div style='color:#888; font-size:0.9rem;'>No recent player news found.</div>";
+                document.getElementById('social-news').innerHTML = "<div style='color:#ccc; font-size:0.9rem;'>Could not load media feed.</div>";
             }
         }
 
@@ -445,6 +382,7 @@
                         const btn = document.getElementById('notify-btn');
                         btn.innerText = "Alerts On ✅";
                         btn.style.background = "#063672";
+                        btn.style.color = "#fff";
                         new Notification("Arsenal Hub", { body: "Goal alerts are now active!" });
                     }
                 });
@@ -455,21 +393,18 @@
             const btn = document.getElementById('notify-btn');
             btn.innerText = "Alerts On ✅";
             btn.style.background = "#063672";
+            btn.style.color = "#fff";
         }
 
         async function checkLiveMatch() {
             const data = await loadData('live');
             if (!data || !data.events || data.events.length === 0) {
-                document.getElementById('live-ticker').innerHTML = `<span class="ticker-item">No live match currently in progress.</span>`;
                 return;
             }
-            let tickerHtml = "";
             let currentScore = "";
             data.events.forEach(event => {
-                tickerHtml += `<span class="ticker-item">${event.time.displayValue} - ${event.text}</span>`;
                 if (event.type.text === "Goal") currentScore += event.scoringPlay ? "1" : "0";
             });
-            document.getElementById('live-ticker').innerHTML = tickerHtml;
             
             if (lastScore !== "" && currentScore !== lastScore && currentScore.length > lastScore.length) {
                 if (document.getElementById('soundToggle').checked) goalSound.play().catch(e => console.log("Audio blocked:", e));
