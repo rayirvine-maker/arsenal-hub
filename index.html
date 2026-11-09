@@ -234,7 +234,6 @@
             const fixtures = await loadData('fixtures');
             
             if (fixtures && fixtures.length > 0) {
-                // Build Next 5 Fixtures List
                 let fixturesHtml = "";
                 fixtures.forEach(f => {
                     const d = new Date(f.date);
@@ -249,7 +248,6 @@
                 });
                 document.getElementById('fixtures-list').innerHTML = fixturesHtml;
 
-                // Setup Countdown for the FIRST match
                 const next = fixtures[0];
                 document.getElementById('next-match-name').innerText = `${next.home_team} vs ${next.away_team} (${next.league})`;
                 
@@ -339,17 +337,15 @@
                 document.getElementById('news-list').innerHTML = newsHtml;
                 document.getElementById('news-ticker').innerHTML = tickerHtml;
             }
-        }
 
-        // 4. INSTAGRAM IMAGE CYCLER
-        const galleryImages = [
-            'https://images.unsplash.com/photo-1522778119026-d647f0596c20?q=80&w=1000&auto=format&fit=crop', // Stadium
-            'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=1000&auto=format&fit=crop', // Fans
-            'https://images.unsplash.com/photo-1574629810360-7efbb6e6d91f?q=80&w=1000&auto=format&fit=crop', // Pitch
-            'https://images.unsplash.com/photo-1518605368461-1e1e38ce55cd?q=80&w=1000&auto=format&fit=crop'  // Ball
-        ];
+            // 4. INSTAGRAM IMAGE CYCLER
+            const galleryImages = [
+                'https://images.unsplash.com/photo-1522778119026-d647f0596c20?q=80&w=1000&auto=format&fit=crop',
+                'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=1000&auto=format&fit=crop',
+                'https://images.unsplash.com/photo-1574629810360-7efbb6e6d91f?q=80&w=1000&auto=format&fit=crop',
+                'https://images.unsplash.com/photo-1518605368461-1e1e38ce55cd?q=80&w=1000&auto=format&fit=crop'
+            ];
 
-        function startGallery() {
             const gallery = document.getElementById('insta-gallery');
             galleryImages.forEach((src, index) => {
                 const img = document.createElement('img');
@@ -361,10 +357,12 @@
             let currentIndex = 0;
             setInterval(() => {
                 const imgs = gallery.querySelectorAll('img');
-                imgs[currentIndex].classList.remove('active');
-                currentIndex = (currentIndex + 1) % galleryImages.length;
-                imgs[currentIndex].classList.add('active');
-            }, 3000); // Changes every 3 seconds
+                if(imgs.length > 0) {
+                    imgs[currentIndex].classList.remove('active');
+                    currentIndex = (currentIndex + 1) % galleryImages.length;
+                    imgs[currentIndex].classList.add('active');
+                }
+            }, 3000);
         }
 
         async function checkLiveMatch() {
@@ -377,4 +375,22 @@
             let currentScore = "";
             data.events.forEach(event => {
                 tickerHtml += `<span class="ticker-item">${event.time.displayValue} - ${event.text}</span>`;
-                if (
+                if (event.type.text === "Goal") {
+                    currentScore += event.scoringPlay ? "1" : "0";
+                }
+            });
+            document.getElementById('live-ticker').innerHTML = tickerHtml;
+            if (lastScore !== "" && currentScore !== lastScore && currentScore.length > lastScore.length) {
+                if (document.getElementById('soundToggle').checked) {
+                    goalSound.play().catch(e => console.log("Audio blocked:", e));
+                }
+                alert("GOOOOOAAAALLLL!!!");
+            }
+            lastScore = currentScore;
+        }
+
+        initApp();
+        setInterval(checkLiveMatch, 60000);
+    </script>
+</body>
+</html>
