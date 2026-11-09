@@ -12,21 +12,32 @@
             --bg-dark: #121212;
         }
         body { 
-            font-family: 'Montserrat', sans-serif; margin: 0; padding: 0; padding-bottom: 70px; color: #fff; 
-            background-image: linear-gradient(rgba(18, 18, 18, 0.4), rgba(18, 18, 18, 0.7)), url('https://images.unsplash.com/photo-1522778119026-d647f0596c20?q=80&w=2000&auto=format&fit=crop');
-            background-size: cover; background-position: center; background-attachment: fixed; background-color: var(--bg-dark);
+            font-family: 'Montserrat', sans-serif; margin: 0; padding: 0; padding-bottom: 70px; 
+            color: #fff; 
+            background-image: 
+                linear-gradient(rgba(18, 18, 18, 0.4), rgba(18, 18, 18, 0.7)), 
+                url('https://images.unsplash.com/photo-1522778119026-d647f0596c20?q=80&w=2000&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-color: var(--bg-dark);
         }
         
         header { 
             background: linear-gradient(180deg, rgba(239,1,7,0.9) 0%, rgba(18,18,18,0.8) 100%);
             padding: 20px; text-align: center; border-bottom: 3px solid var(--arsenal-gold); 
             display: flex; flex-direction: column; align-items: center;
-            position: sticky; top: 0; z-index: 900; box-shadow: 0 15px 35px rgba(0,0,0,0.9); backdrop-filter: blur(10px);
+            position: sticky; top: 0; z-index: 900;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.9);
+            backdrop-filter: blur(10px);
         }
         header img { width: 65px; height: auto; margin-bottom: 8px; filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.5)); }
         header h1 { margin: 0; font-weight: 900; font-size: 1.6rem; color: white; text-transform: uppercase; letter-spacing: 2px; }
 
-        .global-ticker { width: 100%; overflow: hidden; background-color: rgba(0, 0, 0, 0.95); color: var(--arsenal-gold); padding: 10px 0; border-bottom: 1px solid var(--arsenal-gold); font-weight: 600; font-size: 0.9rem; display: flex; }
+        .global-ticker { 
+            width: 100%; overflow: hidden; background-color: rgba(0, 0, 0, 0.95); color: var(--arsenal-gold); 
+            padding: 10px 0; border-bottom: 1px solid var(--arsenal-gold); font-weight: 600; font-size: 0.9rem; display: flex;
+        }
         .ticker { display: inline-block; white-space: nowrap; animation: ticker 300s linear infinite; }
         @keyframes ticker { 0% { transform: translateX(100vw); } 100% { transform: translateX(-100%); } }
         a.ticker-item { display: inline-block; padding: 0 30px; color: var(--arsenal-gold); text-decoration: none; transition: color 0.2s; }
@@ -36,17 +47,29 @@
         .tab-content.active { display: block; animation: fadeIn 0.4s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* MASSIVE 3D EMBOSSED CARDS */
         .card { 
             background: linear-gradient(145deg, rgba(45,45,45,0.98), rgba(20,20,20,0.98));
             padding: 20px; border-radius: 16px; margin-bottom: 25px; 
-            border: 2px solid var(--arsenal-gold); border-top: 6px solid var(--arsenal-red);
+            border: 2px solid var(--arsenal-gold);
+            border-top: 6px solid var(--arsenal-red);
             box-shadow: 0 25px 50px rgba(0,0,0,0.95), 0 10px 20px rgba(0,0,0,0.8), inset 0 2px 2px rgba(255,255,255,0.2), inset 0 -4px 10px rgba(0,0,0,0.6);
-            backdrop-filter: blur(10px); transform: translateY(0); transition: transform 0.2s ease, box-shadow 0.2s ease;
+            backdrop-filter: blur(10px);
+            transform: translateY(0);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
-        .card:hover { transform: translateY(-2px); box-shadow: 0 30px 60px rgba(0,0,0,1), 0 15px 25px rgba(0,0,0,0.9), inset 0 2px 2px rgba(255,255,255,0.2), inset 0 -4px 10px rgba(0,0,0,0.6); }
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 30px 60px rgba(0,0,0,1), 0 15px 25px rgba(0,0,0,0.9), inset 0 2px 2px rgba(255,255,255,0.2), inset 0 -4px 10px rgba(0,0,0,0.6);
+        }
+        
         .card h2 { margin-top: 0; color: var(--arsenal-gold); font-size: 1.1rem; text-transform: uppercase; border-bottom: 1px solid #444; padding-bottom: 12px; font-weight: 800; letter-spacing: 1px;}
 
-        .news-item { background: rgba(15, 15, 15, 0.95); border-left: 4px solid var(--arsenal-red); padding: 16px; margin-bottom: 15px; border-radius: 8px; transition: transform 0.2s; box-shadow: 0 6px 15px rgba(0,0,0,0.7); }
+        .news-item {
+            background: rgba(15, 15, 15, 0.95);
+            border-left: 4px solid var(--arsenal-red);
+            padding: 16px; margin-bottom: 15px; border-radius: 8px; transition: transform 0.2s; box-shadow: 0 6px 15px rgba(0,0,0,0.7);
+        }
         .news-item:hover { transform: scale(1.02); border-left-color: var(--arsenal-gold); background: rgba(30, 30, 30, 0.98); }
         .news-item a { font-size: 1.05rem; font-weight: 700; color: #fff; text-decoration: none; display: block; margin-bottom: 12px; line-height: 1.4; }
         .news-item a:hover { color: var(--arsenal-red); }
@@ -73,7 +96,12 @@
         input:checked + .slider { background-color: var(--arsenal-red); }
         input:checked + .slider:before { transform: translateX(20px); }
 
-        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(0,0,0,0.98); display: flex; justify-content: space-around; padding: 15px 0; box-shadow: 0 -10px 30px rgba(0,0,0,0.9); z-index: 1000; border-top: 1px solid #333; backdrop-filter: blur(10px); }
+        .bottom-nav { 
+            position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(0,0,0,0.98); 
+            display: flex; justify-content: space-around; padding: 15px 0; 
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.9); z-index: 1000; border-top: 1px solid #333;
+            backdrop-filter: blur(10px);
+        }
         .nav-btn { background: none; border: none; color: #888; font-family: inherit; font-weight: 800; font-size: 0.7rem; cursor: pointer; text-transform: uppercase; transition: 0.2s; letter-spacing: 1px;}
         .nav-btn.active { color: var(--arsenal-gold); transform: translateY(-3px) scale(1.05); text-shadow: 0 0 10px rgba(212,175,55,0.5); }
 
@@ -84,15 +112,6 @@
         #enter-btn:hover { transform: scale(1.05); }
         .loading { color: #888; font-style: italic; }
         iframe { width: 100%; height: 380px; border-radius: 12px; border: none; margin-top: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.8);}
-
-        /* Social Buttons & Image Gallery */
-        .social-btn { display: block; background: #222; color: #fff; text-decoration: none; padding: 15px; border-radius: 8px; margin-bottom: 10px; font-weight: 700; text-align: center; border: 1px solid #444; transition: 0.2s;}
-        .social-btn:hover { background: var(--arsenal-red); border-color: var(--arsenal-gold); }
-        
-        .insta-gallery { position: relative; width: 100%; height: 300px; border-radius: 12px; overflow: hidden; border: 2px solid var(--arsenal-gold); margin-bottom: 15px;}
-        .insta-gallery img { position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1s ease-in-out; }
-        .insta-gallery img.active { opacity: 1; }
-        .insta-overlay { position: absolute; bottom: 0; left: 0; width: 100%; padding: 15px; background: linear-gradient(transparent, rgba(0,0,0,0.9)); text-align: center; font-weight: 800; color: var(--arsenal-gold); z-index: 10; }
     </style>
 </head>
 <body>
@@ -133,12 +152,6 @@
                     <div class="time-box"><span id="seconds">0</span><small>Secs</small></div>
                 </div>
             </div>
-            
-            <div class="card">
-                <h2>Next 5 Fixtures</h2>
-                <div id="fixtures-list" class="loading">Loading fixtures...</div>
-            </div>
-
             <div class="card">
                 <h2>Premier League Table</h2>
                 <div id="home-table" class="loading">Loading table...</div>
@@ -164,21 +177,8 @@
 
         <div id="social" class="tab-content">
             <div class="card">
-                <h2>Arsenal on Instagram</h2>
-                <a href="https://www.instagram.com/arsenal/" target="_blank" style="text-decoration:none;">
-                    <div class="insta-gallery" id="insta-gallery">
-                        <div class="insta-overlay">Click to view on Instagram 📸</div>
-                    </div>
-                </a>
-            </div>
-
-            <div class="card">
-                <h2>Official Club Channels</h2>
-                <a href="https://www.arsenal.com/app" target="_blank" class="social-btn">📱 The Arsenal: Official App</a>
-                <a href="https://www.arsenal.com" target="_blank" class="social-btn">🌐 Arsenal.com (Website)</a>
-                <a href="https://x.com/arsenal" target="_blank" class="social-btn">🐦 X / Twitter (@arsenal)</a>
-                <a href="https://www.tiktok.com/@arsenal" target="_blank" class="social-btn">🎵 TikTok (@arsenal)</a>
-                <a href="https://www.facebook.com/Arsenal" target="_blank" class="social-btn">📘 Facebook (@arsenal)</a>
+                <h2>Arsenal Social Feed</h2>
+                <div id="social-news" class="loading">Loading updates...</div>
             </div>
         </div>
 
@@ -230,24 +230,9 @@
         let countdownInterval;
 
         async function initApp() {
-            // 1. FIXTURES & COUNTDOWN
+            // 1. COUNTDOWN
             const fixtures = await loadData('fixtures');
-            
-            if (fixtures && fixtures.length > 0) {
-                let fixturesHtml = "";
-                fixtures.forEach(f => {
-                    const d = new Date(f.date);
-                    const dateStr = d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
-                    const timeStr = d.toLocaleTimeString('en-GB', { timeZone: 'UTC', hour: '2-digit', minute: '2-digit' });
-                    fixturesHtml += `
-                        <div style="padding: 10px 0; border-bottom: 1px solid #444; display: flex; justify-content: space-between;">
-                            <span>${f.home_team} vs ${f.away_team}</span>
-                            <span style="color: var(--arsenal-gold); font-weight: bold;">${dateStr} - ${timeStr}</span>
-                        </div>
-                    `;
-                });
-                document.getElementById('fixtures-list').innerHTML = fixturesHtml;
-
+            if (fixtures && fixtures.length > 0 && fixtures[0].date) {
                 const next = fixtures[0];
                 document.getElementById('next-match-name').innerText = `${next.home_team} vs ${next.away_team} (${next.league})`;
                 
@@ -284,7 +269,7 @@
                 }
             } else {
                 document.getElementById('next-match-name').innerText = "No upcoming fixtures found.";
-                document.getElementById('fixtures-list').innerHTML = "Could not load fixtures.";
+                document.getElementById('match-time-gmt').innerText = "Check back soon for the next match.";
             }
 
             // 2. LEAGUE TABLE
@@ -338,31 +323,29 @@
                 document.getElementById('news-ticker').innerHTML = tickerHtml;
             }
 
-            // 4. INSTAGRAM IMAGE CYCLER
-            const galleryImages = [
-                'https://images.unsplash.com/photo-1522778119026-d647f0596c20?q=80&w=1000&auto=format&fit=crop',
-                'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=1000&auto=format&fit=crop',
-                'https://images.unsplash.com/photo-1574629810360-7efbb6e6d91f?q=80&w=1000&auto=format&fit=crop',
-                'https://images.unsplash.com/photo-1518605368461-1e1e38ce55cd?q=80&w=1000&auto=format&fit=crop'
-            ];
-
-            const gallery = document.getElementById('insta-gallery');
-            galleryImages.forEach((src, index) => {
-                const img = document.createElement('img');
-                img.src = src;
-                if (index === 0) img.classList.add('active');
-                gallery.appendChild(img);
-            });
-
-            let currentIndex = 0;
-            setInterval(() => {
-                const imgs = gallery.querySelectorAll('img');
-                if(imgs.length > 0) {
-                    imgs[currentIndex].classList.remove('active');
-                    currentIndex = (currentIndex + 1) % galleryImages.length;
-                    imgs[currentIndex].classList.add('active');
-                }
-            }, 3000);
+            // 4. SOCIAL FEED
+            const socialData = await loadData('social');
+            if (socialData && socialData.length > 0) {
+                let socialHtml = "";
+                socialData.forEach(item => {
+                    const dateObj = new Date(item.pubDate);
+                    const dateStr = dateObj.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+                    const timeStr = dateObj.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+                    
+                    socialHtml += `
+                        <div class="news-item" style="border-left-color: #1DA1F2;">
+                            <a href="${item.link}" target="_blank">${item.title}</a>
+                            <div class="news-meta">
+                                <span>🐦 ${item.author}</span>
+                                <span>🕒 ${dateStr} • ${timeStr}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+                document.getElementById('social-news').innerHTML = socialHtml;
+            } else {
+                document.getElementById('social-news').innerHTML = "<div style='color:#888;'>Could not load social updates.</div>";
+            }
         }
 
         async function checkLiveMatch() {
