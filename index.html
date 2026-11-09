@@ -112,8 +112,8 @@
             z-index: 9999; transition: opacity 0.8s ease; 
         }
         .massive-crest {
-            width: 150px; height: auto; margin-bottom: 20px;
-            filter: drop-shadow(0 0 25px rgba(239,1,7,0.6));
+            width: 140px; height: auto; margin-bottom: 20px;
+            filter: drop-shadow(0 0 30px rgba(239,1,7,0.8));
             animation: pulse 2s infinite alternate;
         }
         @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.05); } }
@@ -126,14 +126,14 @@
         #splash.fade-out { opacity: 0; pointer-events: none; }
         
         #enter-btn { 
-            margin-top: 30px; padding: 15px 40px; font-size: 1.1rem; font-family: 'Montserrat', sans-serif; 
+            margin-top: 30px; padding: 15px 40px; font-size: 1rem; font-family: 'Montserrat', sans-serif; 
             font-weight: 900; background: var(--arsenal-red); color: white; 
             border: 2px solid var(--arsenal-gold); border-radius: 40px; cursor: pointer; 
             text-transform: uppercase; letter-spacing: 2px; box-shadow: 0 0 20px rgba(239,1,7,0.8); 
             transition: 0.2s;
         }
         #enter-btn:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(239,1,7,1); }
-        
+
         .loading { color: #888; font-style: italic; font-size: 0.9rem;}
         iframe { width: 100%; height: 250px; border-radius: 8px; border: none; margin-top: 10px; }
 
@@ -147,7 +147,7 @@
 </head>
 <body>
 
-    <!-- NEW SPLASH SCREEN -->
+    <!-- SPLASH SCREEN -->
     <div id="splash">
         <img src="https://arsenal-hub-api.ray-irvine.workers.dev/api/crest" class="massive-crest" alt="Arsenal Crest" onerror="this.src='https://resources.premierleague.com/premierleague/badges/70/t3.png'">
         <img src="joshua-hero.jpg.webp" class="joshua-pic" alt="Joshua in Arsenal kit">
@@ -328,4 +328,122 @@
             const lineups = await loadData('lineups');
             if (lineups && lineups.length > 0) {
                 let lineupsHtml = "";
-                lineups.forEach(match =>
+                lineups.forEach(match => {
+                    const dateStr = new Date(match.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+                    lineupsHtml += `<div class="lineup-match"><h3>${match.matchName} <span style="color:#888; font-size:0.7rem;">(${dateStr})</span></h3><div class="lineup-formation">Formation: ${match.formation}</div><div class="player-grid">`;
+                    match.starters.forEach(p => {
+                        lineupsHtml += `<div class="player-item"><span class="player-pos">${p.position}</span> ${p.name}</div>`;
+                    });
+                    lineupsHtml += `</div></div>`;
+                });
+                document.getElementById('lineups-container').innerHTML = lineupsHtml;
+            } else {
+                document.getElementById('lineups-container').innerHTML = "<div style='color:#888; font-size:0.9rem;'>Lineup data unavailable.</div>";
+            }
+
+            if (fixtures && fixtures.length > 0) {
+                let fixHtml = `<ul style="list-style-type:none; padding:0; margin:0;">`;
+                fixtures.forEach(f => {
+                    const d = new Date(f.date).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+                    fixHtml += `<li style="padding: 8px 0; border-bottom: 1px solid #333; font-size:0.85rem;"><strong>${d}</strong> - ${f.home_team} vs ${f.away_team} <span style="color:var(--arsenal-gold); font-size:0.7rem;">(${f.league})</span></li>`;
+                });
+                fixHtml += `</ul>`;
+                document.getElementById('fixtures-list').innerHTML = fixHtml;
+            }
+
+            const news = await loadData('news');
+            if (news && news.length > 0) {
+                let newsHtml = "";
+                let tickerHtml = "";
+                news.forEach(item => {
+                    const dateObj = new Date(item.pubDate);
+                    const dateStr = dateObj.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+                    const timeStr = dateObj.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+                    newsHtml += `<div class="news-item"><a href="${item.link}" target="_blank">${item.title}</a><div class="news-meta"><span>📰 ${item.author}</span><span>🕒 ${dateStr} • ${timeStr}</span></div></div>`;
+                    tickerHtml += `<a href="${item.link}" target="_blank" class="ticker-item">⚽ ${item.title} (${item.author})</a>`;
+                });
+                document.getElementById('news-list').innerHTML = newsHtml;
+                document.getElementById('news-ticker').innerHTML = tickerHtml;
+            }
+
+            const socialData = await loadData('social');
+            if (socialData && socialData.length > 0) {
+                let socialHtml = "";
+                socialData.forEach(item => {
+                    const dateObj = new Date(item.pubDate);
+                    const dateStr = dateObj.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+                    const timeStr = dateObj.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+                    socialHtml += `<div class="news-item" style="border-left-color: var(--arsenal-red);"><a href="${item.link}" target="_blank">▶️ ${item.title}</a><div class="news-meta"><span>📺 ${item.author}</span><span>🕒 ${dateStr} • ${timeStr}</span></div></div>`;
+                });
+                document.getElementById('social-news').innerHTML = socialHtml;
+            }
+
+            const playerTalk = await loadData('players');
+            if (playerTalk && playerTalk.length > 0) {
+                let playerHtml = "";
+                playerTalk.forEach(item => {
+                    const dateObj = new Date(item.pubDate);
+                    const dateStr = dateObj.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+                    playerHtml += `<div class="news-item" style="border-left-color: var(--arsenal-gold);"><a href="${item.link}" target="_blank">💬 ${item.title}</a><div class="news-meta"><span>📰 ${item.author}</span><span>🕒 ${dateStr}</span></div></div>`;
+                });
+                document.getElementById('player-talk').innerHTML = playerHtml;
+            } else {
+                document.getElementById('player-talk').innerHTML = "<div style='color:#888; font-size:0.9rem;'>No recent player news found.</div>";
+            }
+        }
+
+        // BROWSER NOTIFICATIONS
+        document.getElementById('notify-btn').addEventListener('click', () => {
+            if (!("Notification" in window)) {
+                alert("This browser does not support desktop notification");
+            } else if (Notification.permission === "granted") {
+                alert("Notifications are already enabled!");
+            } else if (Notification.permission !== "denied") {
+                Notification.requestPermission().then(function (permission) {
+                    if (permission === "granted") {
+                        const btn = document.getElementById('notify-btn');
+                        btn.innerText = "Alerts On ✅";
+                        btn.style.background = "#063672";
+                        new Notification("Arsenal Hub", { body: "Goal alerts are now active!" });
+                    }
+                });
+            }
+        });
+
+        if ("Notification" in window && Notification.permission === "granted") {
+            const btn = document.getElementById('notify-btn');
+            btn.innerText = "Alerts On ✅";
+            btn.style.background = "#063672";
+        }
+
+        async function checkLiveMatch() {
+            const data = await loadData('live');
+            if (!data || !data.events || data.events.length === 0) {
+                document.getElementById('live-ticker').innerHTML = `<span class="ticker-item">No live match currently in progress.</span>`;
+                return;
+            }
+            let tickerHtml = "";
+            let currentScore = "";
+            data.events.forEach(event => {
+                tickerHtml += `<span class="ticker-item">${event.time.displayValue} - ${event.text}</span>`;
+                if (event.type.text === "Goal") currentScore += event.scoringPlay ? "1" : "0";
+            });
+            document.getElementById('live-ticker').innerHTML = tickerHtml;
+            
+            if (lastScore !== "" && currentScore !== lastScore && currentScore.length > lastScore.length) {
+                if (document.getElementById('soundToggle').checked) goalSound.play().catch(e => console.log("Audio blocked:", e));
+                
+                if ("Notification" in window && Notification.permission === "granted") {
+                    new Notification("⚽ GOOOOOAAAALLLL!", { body: "Arsenal have scored! Check the Live tab for details." });
+                } else {
+                    alert("GOOOOOAAAALLLL!!!");
+                }
+            }
+            lastScore = currentScore;
+        }
+
+        initApp();
+        setInterval(checkLiveMatch, 60000);
+    </script>
+</body>
+</html>
