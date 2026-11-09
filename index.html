@@ -35,16 +35,17 @@
         
         .header-row { display: flex; justify-content: center; align-items: center; width: 100%; max-width: 1000px; }
 
-        .player-wall { display: flex; align-items: center; flex: 1; z-index: 1; gap: 2px; }
-        .player-wall.left { justify-content: flex-end; padding-right: 10px; }
-        .player-wall.right { justify-content: flex-start; padding-left: 10px; }
+        .player-wall { display: flex; align-items: center; flex: 1; z-index: 1; gap: 4px; }
+        .player-wall.left { justify-content: flex-end; padding-right: 15px; }
+        .player-wall.right { justify-content: flex-start; padding-left: 15px; }
         
+        /* INCREASED SIZES HERE */
         .p-card {
             position: relative;
-            width: 38px; 
-            height: 50px;
+            width: 50px; 
+            height: 65px;
             background: rgba(0,0,0,0.5);
-            border: 1px solid rgba(212, 175, 55, 0.3);
+            border: 1px solid rgba(212, 175, 55, 0.5);
             border-radius: 6px;
             overflow: hidden;
             transition: transform 0.3s;
@@ -64,17 +65,17 @@
             right: 2px;
             background: var(--arsenal-gold);
             color: black;
-            font-size: 0.5rem;
+            font-size: 0.65rem;
             font-weight: 900;
-            padding: 1px 3px;
+            padding: 1px 4px;
             border-radius: 3px;
             border: 1px solid black;
             z-index: 10;
         }
 
-        .center-logo { display: flex; flex-direction: column; align-items: center; z-index: 20; margin: 0 10px; }
-        .center-logo img { width: 60px; margin-bottom: 5px; filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.6)); }
-        .center-logo h1 { margin: 0; font-weight: 900; font-size: 1.3rem; color: white; text-transform: uppercase; letter-spacing: 1px; text-shadow: 2px 2px 4px rgba(0,0,0,0.9); text-align: center; white-space: nowrap; }
+        .center-logo { display: flex; flex-direction: column; align-items: center; z-index: 20; margin: 0 15px; }
+        .center-logo img { width: 75px; margin-bottom: 5px; filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.6)); }
+        .center-logo h1 { margin: 0; font-weight: 900; font-size: 1.6rem; color: white; text-transform: uppercase; letter-spacing: 1px; text-shadow: 2px 2px 4px rgba(0,0,0,0.9); text-align: center; white-space: nowrap; }
 
         .global-ticker { width: 100%; overflow: hidden; background-color: rgba(0, 0, 0, 0.6); color: var(--arsenal-gold); padding: 8px 0; font-weight: 600; font-size: 0.8rem; display: flex; border-bottom: 1px solid rgba(212, 175, 55, 0.3); }
         .ticker { display: inline-block; white-space: nowrap; animation: ticker 300s linear infinite; }
@@ -129,14 +130,17 @@
         .loading { color: #ccc; font-style: italic; font-size: 0.9rem; text-shadow: 1px 1px 2px black;}
         iframe { width: 100%; height: 300px; border-radius: 8px; border: none; margin-top: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.8);}
 
+        /* Adjusting for mobile so they don't overflow */
         @media (max-width: 600px) {
             .player-grid { grid-template-columns: 1fr; }
             .time-box span { font-size: 1.2rem; }
             .card { padding: 20px 0; }
-            .p-card { width: 30px; height: 40px; }
-            .center-logo h1 { font-size: 0.9rem; white-space: normal; max-width: 90px; }
-            .center-logo img { width: 45px; }
-            .p-card span { font-size: 0.4rem; padding: 0 2px; }
+            .p-card { width: 35px; height: 45px; }
+            .center-logo h1 { font-size: 1rem; white-space: normal; max-width: 100px; }
+            .center-logo img { width: 55px; }
+            .p-card span { font-size: 0.5rem; padding: 0 2px; }
+            .player-wall.left { padding-right: 5px; }
+            .player-wall.right { padding-left: 5px; }
         }
     </style>
 </head>
@@ -152,7 +156,7 @@
         
         <header>
             <div class="header-row">
-                <!-- Left Wall (Direct Raw GitHub Links) -->
+                <!-- Left Wall -->
                 <div class="player-wall left">
                     <div class="p-card"><img src="https://raw.githubusercontent.com/rayirvine-maker/arsenal-hub/main/09_12_Jurrien_Timber.png"><span>12</span></div>
                     <div class="p-card"><img src="https://raw.githubusercontent.com/rayirvine-maker/arsenal-hub/main/10_33_Riccardo_Calafiori.png"><span>33</span></div>
@@ -169,7 +173,7 @@
                     <h1>Joshua's Arsenal Hub</h1>
                 </div>
 
-                <!-- Right Wall (Direct Raw GitHub Links) -->
+                <!-- Right Wall -->
                 <div class="player-wall right">
                     <div class="p-card"><img src="https://raw.githubusercontent.com/rayirvine-maker/arsenal-hub/main/16_39_Bruno_Guimaraes.png"><span>39</span></div>
                     <div class="p-card"><img src="https://raw.githubusercontent.com/rayirvine-maker/arsenal-hub/main/17_41_Declan_Rice.png"><span>41</span></div>
