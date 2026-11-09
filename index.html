@@ -149,7 +149,7 @@
             btn.classList.add('active');
         }
 
-        // 3. DYNAMIC PLAYERS (Exact filenames from your GitHub + Fallback)
+        // 3. DYNAMIC PLAYERS (Exact filenames from your screenshot)
         const playerData = [
             { file: '24_29_Kai_Havertz.png', num: '29' },
             { file: '26_10_Dennis_Bergkamp.png', num: '10' },
@@ -170,11 +170,10 @@
             const rightWall = document.getElementById('wall-right');
             leftWall.innerHTML = ''; rightWall.innerHTML = '';
             
-            // If the image fails to load, it hides the img tag and shows the red number box instead
             const buildCard = (p) => `
-                <div class="p-card" style="background: rgba(239,1,7,0.8); display:flex; justify-content:center; align-items:center; border:1px solid #D4AF37; border-radius:4px;">
-                    <img src="${p.file}" style="position:absolute; width:100%; height:100%; object-fit:cover; z-index:2;" onerror="this.style.display='none';">
-                    <span style="z-index:3; font-size:1rem;">${p.num}</span>
+                <div class="p-card">
+                    <img src="${p.file}" onerror="this.style.display='none';">
+                    <span>${p.num}</span>
                 </div>
             `;
 
