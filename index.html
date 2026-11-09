@@ -1,13 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Joshua's Arsenal Hub</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#EF0107">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --arsenal-red: #EF0107;
+            --arsenal-gold: #D4AF37;
+            --bg-dark: #121212;
+        }
+        body { 
+            font-family: 'Montserrat', sans-serif; margin: 0; padding: 0; padding-bottom: 70px; 
+            color: #fff; 
+            background-image: 
+                linear-gradient(rgba(18, 18, 18, 0.4), rgba(18, 18, 18, 0.7)), 
+                url('https://images.unsplash.com/photo-1522778119026-d647f0596c20?q=80&w=2000&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-color: var(--bg-dark);
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        header { 
+            background: linear-gradient(180deg, rgba(239,1,7,0.9) 0%, rgba(18,18,18,0.8) 100%);
+            padding: 15px; text-align: center; border-bottom: 3px solid var(--arsenal-gold); 
+            display: flex; flex-direction: column; align-items: center;
+            position: sticky; top: 0; z-index: 900;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.9);
+            backdrop-filter: blur(10px);
+        }
+        header img { width: 55px; height: auto; margin-bottom: 5px; filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.5)); }
+        header h1 { margin: 0; font-weight: 900; font-size: 1.4rem; color: white; text-transform: uppercase; letter-spacing: 1px; }
+
+        .global-ticker { 
+            width: 100%; overflow: hidden; background-color: rgba(0, 0, 0, 0.95); color: var(--arsenal-gold); 
+            padding: 8px 0; border-bottom: 1px solid var(--arsenal-gold); font-weight: 600; font-size: 0.8rem; display: flex;
+        }
+        .ticker { display: inline-block; white-space: nowrap; animation: ticker 300s linear infinite; }
+        @keyframes ticker { 0% { transform: translateX(100vw); } 100% { transform: translateX(-100%); } }
+        a.ticker-item { display: inline-block; padding: 0 20px; color: var(--arsenal-gold); text-decoration: none; }
+        a.ticker-item:hover { color: #fff; text-decoration: underline; }
+
+        .tab-content { display: none; padding: 15px; max-width: 800px; margin: 0 auto; }
+        .tab-content.active { display: block; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .card { 
+            background: linear-gradient(145deg, rgba(45,45,45,0.98), rgba(20,20,20,0.98));
+            padding: 15px; border-radius: 12px; margin-bottom: 20px; 
+            border: 2px solid var(--arsenal-gold);
+            border-top: 5px solid var(--arsenal-red);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.95), 0 5px 15px rgba(0,0,0,0.8), inset 0 2px 2px rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+        }
+        .card h2 { margin-top: 0; color: var(--arsenal-gold); font-size: 1rem; text-transform: uppercase; border-bottom: 1px solid #444; padding-bottom: 10px; font-weight: 800; letter-spacing: 1px;}
+
+        .league-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.85rem; }
+        .league-table th { text-align: left; padding: 6px; border-bottom: 1px solid #444; color: #aaa; font-weight: 600; }
+        .league-table td { padding: 8px 6px; border-bottom: 1px solid #333; color: #e0e0e0; font-weight: 500; }
+        .league-table tr:hover { background: rgba(255,255,255,0.05); }
+        .arsenal-row td { background: rgba(239, 1, 7, 0.2); font-weight: 800; color: #fff; border-left: 3px solid var(--arsenal-red); }
+
+        .lineup-match { margin-bottom: 15px; border-bottom: 1px dashed #444; padding-bottom: 10px; }
+        .lineup-match h3 { font-size: 0.9rem; color: #fff; margin: 0 0 5px 0; }
+        .lineup-formation { font-size: 0.75rem; color: var(--arsenal-gold); margin-bottom: 8px; font-weight: bold; }
+        .player-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+        .player-item { background: rgba(0,0,0,0.5); padding: 5px 8px; border-radius: 4px; font-size: 0.75rem; display: flex; align-items: center; gap: 5px;}
+        .player-pos { color: var(--arsenal-gold); font-weight: 800; font-size: 0.7rem; min-width: 25px; text-align: center; border-right: 1px solid #444; padding-right: 5px;}
+
+        #countdown { display: flex; justify-content: space-between; text-align: center; margin-top: 15px; }
+        .time-box { background: rgba(10, 10, 10, 0.95); color: white; padding: 10px 5px; border-radius: 8px; flex: 1; margin: 0 3px; border: 1px solid #444; box-shadow: inset 0 4px 10px rgba(0,0,0,0.8); }
+        .time-box span { display: block; font-size: 1.3rem; font-weight: 900; color: var(--arsenal-red); }
+        .time-box small { font-size: 0.6rem; text-transform: uppercase; color: var(--arsenal-gold); font-weight: 700;}
+
+        .news-item {
+            background: rgba(15, 15, 15, 0.95);
+            border-left: 4px solid var(--arsenal-red);
+            padding: 12px; margin-bottom: 12px; border-radius: 6px;
+        }
+        .news-item a { font-size: 0.95rem; font-weight: 700; color: #fff; text-decoration: none; display: block; margin-bottom: 10px; line-height: 1.3; }
+        .news-meta { display: flex; justify-content: space-between; font-size: 0.65rem; color: #aaa; font-weight: 600; text-transform: uppercase; flex-wrap: wrap; gap: 5px;}
+        .news-meta span { background: #222; padding: 3px 6px; border-radius: 4px; border: 1px solid #444; }
+
+        .settings-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; background: rgba(26,26,26,0.9); backdrop-filter: blur(10px); flex-wrap: wrap; gap: 10px;}
+        .settings-bar label { font-weight: 700; margin-right: 10px; color: #fff; font-size: 0.75rem; text-transform: uppercase;}
+        .switch { position: relative; display: inline-block; width: 40px; height: 22px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #444; transition: .4s; border-radius: 22px; }
+        .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--arsenal-red); }
+        input:checked + .slider:before { transform: translateX(18px); }
+
+        .bottom-nav { 
+            position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(0,0,0,0.98); 
+            display: flex; justify-content: space-around; padding: 12px 0; 
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.9); z-index: 1000; border-top: 1px solid #333;
+            backdrop-filter: blur(10px);
+        }
+        .nav-btn { background: none; border: none; color: #888; font-family: inherit; font-weight: 800; font-size: 0.65rem; cursor: pointer; text-transform: uppercase; transition: 0.2s; letter-spacing: 0.5px;}
+        .nav-btn.active { color: var(--arsenal-gold); transform: translateY(-2px); }
+
+        #splash { position: fixed; inset: 0; background: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; transition: opacity 0.8s ease; }
+        #splash img { max-width: 90vw; max-height: 60vh; border-radius: 12px; border: 2px solid var(--arsenal-gold); box-shadow: 0 0 40px rgba(239,1,7,0.4);}
+        #splash.fade-out { opacity: 0; pointer-events: none; }
+        #enter-btn { margin-top: 25px; padding: 14px 30px; font-size: 0.9rem; font-family: 'Montserrat', sans-serif; font-weight: 900; background: var(--arsenal-red); color: white; border: 2px solid var(--arsenal-gold); border-radius: 30px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 0 15px rgba(239,1,7,0.6); }
+        .loading { color: #888; font-style: italic; font-size: 0.9rem;}
+        iframe { width: 100%; height: 250px; border-radius: 8px; border: none; margin-top: 10px; }
+
+        @media (max-width: 600px) {
+            .player-grid { grid-template-columns: 1fr; }
+            header h1 { font-size: 1.2rem; }
+            .time-box span { font-size: 1.1rem; }
+            .card { padding: 12px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="splash">
+        <img src="joshua-hero.jpg.webp" alt="Joshua in Arsenal kit">
+        <button id="enter-btn">Tap to Enter ⚽</button>
+    </div>
+
+    <div id="app-content" style="opacity: 0; transition: opacity 0.8s ease;">
+        
+        <header>
+            <img src="https://arsenal-hub-api.ray-irvine.workers.dev/api/crest" alt="Arsenal Crest" onerror="this.src='https://resources.premierleague.com/premierleague/badges/70/t3.png'">
+            <h1>Joshua's Arsenal Hub</h1>
+        </header>
+
+        <div class="global-ticker">
+            <div class="ticker" id="news-ticker">Loading latest Arsenal headlines...</div>
+        </div>
+
+        <div class="settings-bar">
+            <button id="notify-btn" style="background: var(--arsenal-red); color: white; border: 1px solid var(--arsenal-gold); padding: 5px 10px; border-radius: 4px; font-weight: bold; font-size: 0.7rem; cursor: pointer;">Alerts Off 🔔</button>
+            <div style="display: flex; align-items: center;">
+                <label for="soundToggle">Goal Sounds</label>
+                <div class="switch">
+                    <input type="checkbox" id="soundToggle" checked>
+                    <span class="slider"></span>
+                </div>
+            </div>
+        </div>
+
+        <div id="home" class="tab-content active">
+            <div class="card">
+                <h2>Next Match Countdown</h2>
+                <div id="next-match-name" style="text-align:center; font-weight:800; font-size:1rem; margin-bottom:5px; color:#fff;">Loading...</div>
+                <div id="match-time-gmt" style="text-align:center; font-weight:600; font-size:0.8rem; color:var(--arsenal-gold); margin-bottom:10px;"></div>
+                <div id="countdown">
+                    <div class="time-box"><span id="days">0</span><small>Days</small></div>
+                    <div class="time-box"><span id="hours">0</span><small>Hrs</small></div>
+                    <div class="time-box"><span id="minutes">0</span><small>Mins</small></div>
+                    <div class="time-box"><span id="seconds">0</span><small>Secs</small></div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Premier League Table</h2>
+                <div id="home-table" class="loading">Loading table...</div>
+            </div>
+            
+            <div class="card">
+                <h2>Last 3 Match Lineups</h2>
+                <div id="lineups-container" class="loading">Loading recent lineups...</div>
+            </div>
+            
+            <div class="card">
+                <h2>Next 5 Fixtures</h2>
+                <div id="fixtures-list" class="loading">Loading fixtures...</div>
+            </div>
+        </div>
+
+        <div id="news" class="tab-content">
+            <div class="card">
+                <h2>Latest Arsenal News</h2>
+                <div id="news-list" class="loading">Loading news...</div>
+            </div>
+        </div>
+
+        <div id="live" class="tab-content">
+            <div class="global-ticker" style="margin-bottom: 15px; border-radius: 6px; border: 1px solid var(--arsenal-gold);">
+                <div class="ticker" id="live-ticker">No live match currently in progress.</div>
+            </div>
+            <div class="card">
+                <h2>Match Highlights & Songs</h2>
+                <iframe src="https://www.youtube.com/embed/videoseries?list=PLRdP_uqk1u7x-d7Dhxcq1sguAmWOnzQk6" allowfullscreen></iframe>
+            </div>
+        </div>
+
         <div id="social" class="tab-content">
             <div class="card">
                 <h2>Arsenal Social Feed</h2>
-                <!-- Official X Embed for @Arsenal -->
+                <!-- Official X Embed -->
                 <a class="twitter-timeline" 
                    data-theme="dark" 
                    data-tweet-limit="5" 
+                   data-chrome="noheader nofooter transparent"
                    href="https://twitter.com/Arsenal?ref_src=twsrc%5Etfw">
                    Tweets by @Arsenal
                 </a>
                 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
             </div>
         </div>
+
+        <div id="spotify" class="tab-content">
+            <div class="card">
+                <h2>Arsenal Chants & Songs</h2>
+                <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/1g8aCpG3pIzKnwcemzWh6Q?utm_source=generator" height="300" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+            </div>
+        </div>
+
+        <div class="bottom-nav">
+            <button class="nav-btn active" onclick="switchTab('home', this)">Home</button>
+            <button class="nav-btn" onclick="switchTab('news', this)">News</button>
+            <button class="nav-btn" onclick="switchTab('live', this)">Live</button>
+            <button class="nav-btn" onclick="switchTab('social', this)">Social</button>
+            <button class="nav-btn" onclick="switchTab('spotify', this)">Spotify</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('enter-btn').addEventListener('click', () => {
+            document.getElementById('splash').classList.add('fade-out');
+            document.getElementById('app-content').style.opacity = '1';
+            setTimeout(() => document.getElementById('splash').remove(), 800);
+        });
+
+        function switchTab(tabId, btn) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            btn.classList.add('active');
+        }
+
+        const goalSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3'); 
+        let lastScore = "";
+
+        async function loadData(endpoint) {
+            const API_BASE = 'https://arsenal-hub-api.ray-irvine.workers.dev'; 
+            try {
+                const res = await fetch(`${API_BASE}/api/${endpoint}`);
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                return await res.json();
+            } catch (err) {
+                console.error(`Error loading ${endpoint}:`, err);
+                return null;
+            }
+        }
+
+        let countdownInterval;
+
+        async function initApp() {
+            const fixtures = await loadData('fixtures');
+            if (fixtures && fixtures.length > 0 && fixtures[0].date) {
+                const next = fixtures[0];
+                document.getElementById('next-match-name').innerText = `${next.home_team} vs ${next.away_team} (${next.league})`;
+                const matchDate = new Date(next.date).getTime();
+                
+                if (!isNaN(matchDate)) {
+                    const matchDateObj = new Date(next.date);
+                    const gmtTimeString = matchDateObj.toLocaleTimeString('en-GB', { timeZone: 'UTC', hour: '2-digit', minute: '2-digit' });
+                    const gmtDateString = matchDateObj.toLocaleDateString('en-GB', { timeZone: 'UTC', weekday: 'short', day: 'numeric', month: 'short' });
+                    document.getElementById('match-time-gmt').innerText = `Kick-off: ${gmtDateString} at ${gmtTimeString} GMT`;
+
+                    if (countdownInterval) clearInterval(countdownInterval);
+                    countdownInterval = setInterval(() => {
+                        const now = new Date().getTime();
+                        const distance = matchDate - now;
+                        if (distance < 0) {
+                            clearInterval(countdownInterval);
+                            document.getElementById('next-match-name').innerText = "MATCH IS LIVE!";
+                            return;
+                        }
+                        document.getElementById('days').innerText = Math.floor(distance / (1000 * 60 * 60 * 24));
+                        document.getElementById('hours').innerText = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
+                        document.getElementById('minutes').innerText = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+                        document.getElementById('seconds').innerText = Math.floor((distance % (1000 * 60)) / 1000).toString().padStart(2, '0');
+                    }, 1000);
+                }
+            } else {
+                document.getElementById('next-match-name').innerText = "No upcoming fixtures found.";
+            }
+
+            const standings = await loadData('standings');
+            if (standings && standings.standings[0].table) {
+                const table = standings.standings[0].table;
+                let tableHtml = `<table class="league-table"><tr><th>Pos</th><th>Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>Pts</th></tr>`;
+                table.forEach(row => {
+                    const isArsenal = row.team.name.includes('Arsenal');
+                    tableHtml += `<tr class="${isArsenal ? 'arsenal-row' : ''}"><td>${row.position}</td><td>${row.team.name}</td><td>${row.playedGames}</td><td>${row.wins}</td><td>${row.draws}</td><td>${row.losses}</td><td>${row.points}</td></tr>`;
+                });
+                tableHtml += `</table>`;
+                document.getElementById('home-table').innerHTML = tableHtml;
+            }
+
+            const lineups = await loadData('lineups');
+            if (lineups && lineups.length > 0) {
+                let lineupsHtml = "";
+                lineups.forEach(match => {
+                    const dateStr = new Date(match.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+                    lineupsHtml += `<div class="lineup-match"><h3>${match.matchName} <span style="color:#888; font-size:0.7rem;">(${dateStr})</span></h3><div class="lineup-formation">Formation: ${match.formation}</div><div class="player-grid">`;
+                    match.starters.forEach(p => {
+                        lineupsHtml += `<div class="player-item"><span class="player-pos">${p.position}</span> ${p.name}</div>`;
+                    });
+                    lineupsHtml += `</div></div>`;
+                });
+                document.getElementById('lineups-container').innerHTML = lineupsHtml;
+            } else {
+                document.getElementById('lineups-container').innerHTML = "<div style='color:#888; font-size:0.9rem;'>Lineup data unavailable.</div>";
+            }
+
+            if (fixtures && fixtures.length > 0) {
+                let fixHtml = `<ul style="list-style-type:none; padding:0; margin:0;">`;
+                fixtures.forEach(f => {
+                    const d = new Date(f.date).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+                    fixHtml += `<li style="padding: 8px 0; border-bottom: 1px solid #333; font-size:0.85rem;"><strong>${d}</strong> - ${f.home_team} vs ${f.away_team} <span style="color:var(--arsenal-gold); font-size:0.7rem;">(${f.league})</span></li>`;
+                });
+                fixHtml += `</ul>`;
+                document.getElementById('fixtures-list').innerHTML = fixHtml;
+            }
+
+            const news = await loadData('news');
+            if (news && news.length > 0) {
+                let newsHtml = "";
+                let tickerHtml = "";
+                news.forEach(item => {
+                    const dateObj = new Date(item.pubDate);
+                    const dateStr = dateObj.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+                    const timeStr = dateObj.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+                    newsHtml += `<div class="news-item"><a href="${item.link}" target="_blank">${item.title}</a><div class="news-meta"><span>📰 ${item.author}</span><span>🕒 ${dateStr} • ${timeStr}</span></div></div>`;
+                    tickerHtml += `<a href="${item.link}" target="_blank" class="ticker-item">⚽ ${item.title} (${item.author})</a>`;
+                });
+                document.getElementById('news-list').innerHTML = newsHtml;
+                document.getElementById('news-ticker').innerHTML = tickerHtml;
+            }
+        }
+
+        // BROWSER NOTIFICATIONS
+        document.getElementById('notify-btn').addEventListener('click', () => {
+            if (!("Notification" in window)) {
+                alert("This browser does not support desktop notification");
+            } else if (Notification.permission === "granted") {
+                alert("Notifications are already enabled!");
+            } else if (Notification.permission !== "denied") {
+                Notification.requestPermission().then(function (permission) {
+                    if (permission === "granted") {
+                        const btn = document.getElementById('notify-btn');
+                        btn.innerText = "Alerts On ✅";
+                        btn.style.background = "#063672";
+                        new Notification("Arsenal Hub", { body: "Goal alerts are now active!" });
+                    }
+                });
+            }
+        });
+
+        if ("Notification" in window && Notification.permission === "granted") {
+            const btn = document.getElementById('notify-btn');
+            btn.innerText = "Alerts On ✅";
+            btn.style.background = "#063672";
+        }
+
+        async function checkLiveMatch() {
+            const data = await loadData('live');
+            if (!data || !data.events || data.events.length === 0) {
+                document.getElementById('live-ticker').innerHTML = `<span class="ticker-item">No live match currently in progress.</span>`;
+                return;
+            }
+            let tickerHtml = "";
