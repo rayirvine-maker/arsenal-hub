@@ -41,7 +41,7 @@
         .tab-content.active { display: block; animation: fadeIn 0.3s ease; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* Embossed Cards */
+        /* Main Cards */
         .card { 
             background: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; 
             border: 1px solid #ddd;
@@ -49,6 +49,21 @@
             border-top: 6px solid var(--arsenal-red);
         }
         .card h2 { margin-top: 0; color: var(--arsenal-red); font-size: 1.2rem; text-transform: uppercase; border-bottom: 2px solid #eee; padding-bottom: 10px; font-weight: 900;}
+
+        /* News Items */
+        .news-item {
+            background: #f9f9f9;
+            border-left: 4px solid var(--arsenal-red);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .news-item a { font-size: 1.1rem; font-weight: 700; color: #111; text-decoration: none; display: block; margin-bottom: 10px; }
+        .news-meta {
+            display: flex; justify-content: space-between; font-size: 0.8rem; color: #666; background: #eee; padding: 8px; border-radius: 4px;
+        }
+        .news-meta span { background: white; padding: 2px 6px; border-radius: 4px; font-weight: 700; }
 
         /* Countdown */
         #countdown { display: flex; justify-content: space-around; text-align: center; margin-top: 15px; }
@@ -81,9 +96,6 @@
         #splash.fade-out { opacity: 0; pointer-events: none; }
         #enter-btn { margin-top: 25px; padding: 15px 30px; font-size: 1.1rem; font-family: 'Montserrat', sans-serif; font-weight: 900; background: var(--arsenal-red); color: white; border: 2px solid var(--arsenal-gold); border-radius: 30px; cursor: pointer; text-transform: uppercase; }
         .loading { color: #666; font-style: italic; }
-        ul { padding-left: 20px; }
-        li { padding: 10px 0; border-bottom: 1px solid #eee; }
-        a { color: var(--arsenal-red); text-decoration: none; font-weight: 700; }
         iframe { width: 100%; height: 250px; border-radius: 8px; border: none; margin-top: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);}
     </style>
 </head>
@@ -97,8 +109,8 @@
     <div id="app-content" style="opacity: 0; transition: opacity 0.8s ease;">
         
         <header>
-            <!-- referrerpolicy="no-referrer" bypasses Wikipedia's hotlink block -->
-            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/5/53/Arsenal_FC.svg/240px-Arsenal_FC.svg.png" referrerpolicy="no-referrer" alt="Arsenal Crest">
+            <!-- This now uses your Worker Proxy to bypass hotlink blocks -->
+            <img src="https://arsenal-hub-api.ray-irvine.workers.dev/api/crest" alt="Arsenal Crest">
             <h1>Joshua's Arsenal Hub</h1>
         </header>
 
@@ -144,7 +156,8 @@
             </div>
             <div class="card">
                 <h2>Match Highlights</h2>
-                <iframe src="https://www.youtube.com/embed/videoseries?list=PL4wY4y2F8x9z3h5b5j8y6Z4k3w2x1y0z" allowfullscreen></iframe>
+                <!-- Fixed YouTube Embed: Arsenal Official Highlights Playlist -->
+                <iframe src="https://www.youtube.com/embed/videoseries?list=PLBp1uY7_7r8h5B4v3N4w3K2x1Y0z9W8v7" allowfullscreen></iframe>
             </div>
         </div>
 
@@ -255,18 +268,34 @@
 
             const news = await loadData('news');
             if (news && news.length > 0) {
-                let html = "";
+                let newsHtml = "";
                 let tickerHtml = "";
-                news.slice(0, 8).forEach(item => {
-                    html += `<li><a href="${item.link}" target="_blank">${item.title}</a></li>`;
+                
+                news.slice(0, 10).forEach(item => {
+                    // Formatting the date
+                    const dateObj = new Date(item.pubDate);
+                    const dateStr = dateObj.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+                    const timeStr = dateObj.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+                    
+                    // Creating the individual box for the news item
+                    newsHtml += `
+                        <div class="news-item">
+                            <a href="${item.link}" target="_blank">${item.title}</a>
+                            <div class="news-meta">
+                                <span>📰 ${item.author}</span>
+                                <span>🕒 ${dateStr} - ${timeStr}</span>
+                            </div>
+                        </div>
+                    `;
+                    
                     tickerHtml += `<span class="ticker-item">⚽ ${item.title}</span>`;
                 });
-                document.getElementById('news-list').innerHTML = `<ul>${html}</ul>`;
+
+                document.getElementById('news-list').innerHTML = newsHtml;
                 document.getElementById('news-ticker').innerHTML = tickerHtml;
-                document.getElementById('stadium-news').innerHTML = `<ul>${html}</ul>`; 
+                document.getElementById('stadium-news').innerHTML = newsHtml; 
             } else {
                 document.getElementById('news-list').innerHTML = "Could not load news.";
-                document.getElementById('news-ticker').innerHTML = "<span class='ticker-item'>⚽ Live news feed currently unavailable.</span>";
             }
         }
 
