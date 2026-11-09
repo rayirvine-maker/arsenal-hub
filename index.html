@@ -15,7 +15,6 @@
         body { 
             font-family: 'Montserrat', sans-serif; margin: 0; padding: 0; padding-bottom: 70px; 
             color: #fff; 
-            /* Emirates Stadium Backdrop with Dark Overlay for readability */
             background-image: 
                 linear-gradient(rgba(18, 18, 18, 0.85), rgba(18, 18, 18, 0.95)),
                 url('https://images.unsplash.com/photo-1522778119026-d647f0596c20?q=80&w=2000&auto=format&fit=crop');
@@ -36,7 +35,7 @@
         header img { width: 65px; height: auto; margin-bottom: 8px; filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.5)); }
         header h1 { margin: 0; font-weight: 900; font-size: 1.6rem; color: white; text-transform: uppercase; letter-spacing: 2px; }
 
-        /* BULLETPROOF SLOW TICKER (5 Minutes per loop) */
+        /* SLOW CLICKABLE TICKER */
         .global-ticker { 
             width: 100%; overflow: hidden; background-color: rgba(0, 0, 0, 0.9); color: var(--arsenal-gold); 
             padding: 10px 0; border-bottom: 1px solid var(--arsenal-gold); font-weight: 600; font-size: 0.9rem; display: flex;
@@ -50,7 +49,18 @@
             0% { transform: translateX(100vw); } 
             100% { transform: translateX(-100%); } 
         }
-        .ticker-item { display: inline-block; padding: 0 30px; }
+        /* Make ticker items clickable */
+        a.ticker-item { 
+            display: inline-block; 
+            padding: 0 30px; 
+            color: var(--arsenal-gold); 
+            text-decoration: none; 
+            transition: color 0.2s;
+        }
+        a.ticker-item:hover {
+            color: #fff;
+            text-decoration: underline;
+        }
 
         .tab-content { display: none; padding: 20px; max-width: 800px; margin: 0 auto; }
         .tab-content.active { display: block; animation: fadeIn 0.4s ease; }
@@ -232,43 +242,52 @@
 
         async function initApp() {
             const fixtures = await loadData('fixtures');
-            if (fixtures && fixtures.length > 0) {
+            
+            // Robust Countdown Logic
+            if (fixtures && fixtures.length > 0 && fixtures[0].date) {
                 const next = fixtures[0];
                 document.getElementById('next-match-name').innerText = `${next.home_team} vs ${next.away_team} (${next.league})`;
                 
                 const matchDate = new Date(next.date).getTime();
                 
-                const matchDateObj = new Date(next.date);
-                const gmtTimeString = matchDateObj.toLocaleTimeString('en-GB', { timeZone: 'UTC', hour: '2-digit', minute: '2-digit' });
-                const gmtDateString = matchDateObj.toLocaleDateString('en-GB', { timeZone: 'UTC', weekday: 'short', day: 'numeric', month: 'short' });
-                document.getElementById('match-time-gmt').innerText = `Kick-off: ${gmtDateString} at ${gmtTimeString} GMT`;
+                // Check if date is valid before doing math
+                if (!isNaN(matchDate)) {
+                    const matchDateObj = new Date(next.date);
+                    const gmtTimeString = matchDateObj.toLocaleTimeString('en-GB', { timeZone: 'UTC', hour: '2-digit', minute: '2-digit' });
+                    const gmtDateString = matchDateObj.toLocaleDateString('en-GB', { timeZone: 'UTC', weekday: 'short', day: 'numeric', month: 'short' });
+                    document.getElementById('match-time-gmt').innerText = `Kick-off: ${gmtDateString} at ${gmtTimeString} GMT`;
 
-                if (countdownInterval) clearInterval(countdownInterval);
-                
-                countdownInterval = setInterval(() => {
-                    const now = new Date().getTime();
-                    const distance = matchDate - now;
+                    if (countdownInterval) clearInterval(countdownInterval);
+                    
+                    countdownInterval = setInterval(() => {
+                        const now = new Date().getTime();
+                        const distance = matchDate - now;
 
-                    if (distance < 0) {
-                        clearInterval(countdownInterval);
-                        document.getElementById('next-match-name').innerText = "MATCH IS LIVE!";
-                        return;
-                    }
+                        if (distance < 0) {
+                            clearInterval(countdownInterval);
+                            document.getElementById('next-match-name').innerText = "MATCH IS LIVE!";
+                            return;
+                        }
 
-                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-                    document.getElementById('days').innerText = days;
-                    document.getElementById('hours').innerText = hours.toString().padStart(2, '0');
-                    document.getElementById('minutes').innerText = minutes.toString().padStart(2, '0');
-                    document.getElementById('seconds').innerText = seconds.toString().padStart(2, '0');
-                }, 1000);
+                        document.getElementById('days').innerText = days;
+                        document.getElementById('hours').innerText = hours.toString().padStart(2, '0');
+                        document.getElementById('minutes').innerText = minutes.toString().padStart(2, '0');
+                        document.getElementById('seconds').innerText = seconds.toString().padStart(2, '0');
+                    }, 1000);
+                } else {
+                    document.getElementById('next-match-name').innerText = "Fixture date unavailable.";
+                }
             } else {
                 document.getElementById('next-match-name').innerText = "No upcoming fixtures found.";
+                document.getElementById('match-time-gmt').innerText = "Check back soon for the next match.";
             }
 
+            // League Table
             const standings = await loadData('standings');
             if (standings && standings.standings[0].table) {
                 const table = standings.standings[0].table;
@@ -293,6 +312,7 @@
                 document.getElementById('home-table').innerHTML = "<div style='text-align:center; color:#888;'>Could not load table data.</div>";
             }
 
+            // News & Clickable Ticker
             const news = await loadData('news');
             if (news && news.length > 0) {
                 let newsHtml = "";
@@ -313,7 +333,9 @@
                         </div>
                     `;
                     newsHtml += itemHtml;
-                    tickerHtml += `<span class="ticker-item">⚽ ${item.title} (${item.author})</span>`;
+                    
+                    // Here is the clickable ticker link!
+                    tickerHtml += `<a href="${item.link}" target="_blank" class="ticker-item">⚽ ${item.title} (${item.author})</a>`;
                 });
 
                 document.getElementById('news-list').innerHTML = newsHtml;
