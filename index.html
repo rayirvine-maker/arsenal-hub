@@ -200,6 +200,10 @@
                 <h2>Arsenal Media & Interviews</h2>
                 <div id="social-news" class="loading">Loading videos...</div>
             </div>
+            <div class="card">
+                <h2>Player & Manager Talk</h2>
+                <div id="player-talk" class="loading">Loading player news...</div>
+            </div>
         </div>
 
         <div id="spotify" class="tab-content">
@@ -313,94 +317,4 @@
                 let fixHtml = `<ul style="list-style-type:none; padding:0; margin:0;">`;
                 fixtures.forEach(f => {
                     const d = new Date(f.date).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
-                    fixHtml += `<li style="padding: 8px 0; border-bottom: 1px solid #333; font-size:0.85rem;"><strong>${d}</strong> - ${f.home_team} vs ${f.away_team} <span style="color:var(--arsenal-gold); font-size:0.7rem;">(${f.league})</span></li>`;
-                });
-                fixHtml += `</ul>`;
-                document.getElementById('fixtures-list').innerHTML = fixHtml;
-            }
-
-            const news = await loadData('news');
-            if (news && news.length > 0) {
-                let newsHtml = "";
-                let tickerHtml = "";
-                news.forEach(item => {
-                    const dateObj = new Date(item.pubDate);
-                    const dateStr = dateObj.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
-                    const timeStr = dateObj.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
-                    newsHtml += `<div class="news-item"><a href="${item.link}" target="_blank">${item.title}</a><div class="news-meta"><span>📰 ${item.author}</span><span>🕒 ${dateStr} • ${timeStr}</span></div></div>`;
-                    tickerHtml += `<a href="${item.link}" target="_blank" class="ticker-item">⚽ ${item.title} (${item.author})</a>`;
-                });
-                document.getElementById('news-list').innerHTML = newsHtml;
-                document.getElementById('news-ticker').innerHTML = tickerHtml;
-            }
-
-            const socialData = await loadData('social');
-            if (socialData && socialData.length > 0) {
-                let socialHtml = "";
-                socialData.forEach(item => {
-                    const dateObj = new Date(item.pubDate);
-                    const dateStr = dateObj.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
-                    const timeStr = dateObj.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
-                    socialHtml += `<div class="news-item" style="border-left-color: var(--arsenal-red);"><a href="${item.link}" target="_blank">▶️ ${item.title}</a><div class="news-meta"><span>📺 ${item.author}</span><span>🕒 ${dateStr} • ${timeStr}</span></div></div>`;
-                });
-                document.getElementById('social-news').innerHTML = socialHtml;
-            } else {
-                document.getElementById('social-news').innerHTML = "<div style='color:#888; font-size:0.9rem;'>Could not load media feed.</div>";
-            }
-        }
-
-        // BROWSER NOTIFICATIONS
-        document.getElementById('notify-btn').addEventListener('click', () => {
-            if (!("Notification" in window)) {
-                alert("This browser does not support desktop notification");
-            } else if (Notification.permission === "granted") {
-                alert("Notifications are already enabled!");
-            } else if (Notification.permission !== "denied") {
-                Notification.requestPermission().then(function (permission) {
-                    if (permission === "granted") {
-                        const btn = document.getElementById('notify-btn');
-                        btn.innerText = "Alerts On ✅";
-                        btn.style.background = "#063672";
-                        new Notification("Arsenal Hub", { body: "Goal alerts are now active!" });
-                    }
-                });
-            }
-        });
-
-        if ("Notification" in window && Notification.permission === "granted") {
-            const btn = document.getElementById('notify-btn');
-            btn.innerText = "Alerts On ✅";
-            btn.style.background = "#063672";
-        }
-
-        async function checkLiveMatch() {
-            const data = await loadData('live');
-            if (!data || !data.events || data.events.length === 0) {
-                document.getElementById('live-ticker').innerHTML = `<span class="ticker-item">No live match currently in progress.</span>`;
-                return;
-            }
-            let tickerHtml = "";
-            let currentScore = "";
-            data.events.forEach(event => {
-                tickerHtml += `<span class="ticker-item">${event.time.displayValue} - ${event.text}</span>`;
-                if (event.type.text === "Goal") currentScore += event.scoringPlay ? "1" : "0";
-            });
-            document.getElementById('live-ticker').innerHTML = tickerHtml;
-            
-            if (lastScore !== "" && currentScore !== lastScore && currentScore.length > lastScore.length) {
-                if (document.getElementById('soundToggle').checked) goalSound.play().catch(e => console.log("Audio blocked:", e));
-                
-                if ("Notification" in window && Notification.permission === "granted") {
-                    new Notification("⚽ GOOOOOAAAALLLL!", { body: "Arsenal have scored! Check the Live tab for details." });
-                } else {
-                    alert("GOOOOOAAAALLLL!!!");
-                }
-            }
-            lastScore = currentScore;
-        }
-
-        initApp();
-        setInterval(checkLiveMatch, 60000);
-    </script>
-</body>
-</html>
+                    fixHtml += `<li style="padding: 8px 0; border-bottom: 1px solid #333
