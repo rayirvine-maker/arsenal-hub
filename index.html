@@ -12,11 +12,12 @@
             --arsenal-red: #EF0107;
             --arsenal-gold: #D4AF37;
             --arsenal-navy: #063672;
+            --pitch-green: #2e7d32;
         }
         
         body { 
-            font-family: 'Montserrat', sans-serif; 
-            margin: 0; padding: 0; padding-bottom: 70px; color: #fff; 
+            font-family: 'Montserrat', sans-serif; margin: 0; padding: 0; padding-bottom: 70px; 
+            color: #fff; 
             background-image: 
                 linear-gradient(180deg, rgba(239, 1, 7, 1) 0%, rgba(200, 0, 5, 0.9) 25%, rgba(18, 18, 18, 0.95) 65%, rgba(18, 18, 18, 1) 100%),
                 url('https://images.unsplash.com/photo-1522778119026-d647f0596c20?q=80&w=2000&auto=format&fit=crop');
@@ -26,65 +27,32 @@
         
         #splash { position: fixed; inset: 0; background: var(--arsenal-red); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; transition: opacity 0.8s ease; }
         #splash .splash-crest { width: 90px; margin-bottom: 15px; filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.6)); }
-        #splash .splash-photo { max-width: 85vw; max-height: 50vh; border-radius: 16px; border: 3px solid var(--arsenal-gold); box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+        #splash .splash-photo { max-width: 85vw; max-height: 50vh; border-radius: 12px; border: 3px solid var(--arsenal-gold); box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
         #splash.fade-out { opacity: 0; pointer-events: none; }
         #enter-btn { margin-top: 25px; padding: 14px 30px; font-size: 0.9rem; font-family: 'Montserrat', sans-serif; font-weight: 900; background: var(--arsenal-navy); color: white; border: 2px solid var(--arsenal-gold); border-radius: 30px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 0 15px rgba(0,0,0,0.5); }
 
-        /* Header with Player Walls */
+        /* Header */
         header { padding: 15px 5px; display: flex; flex-direction: column; align-items: center; border-bottom: 2px solid rgba(212, 175, 55, 0.5); }
-        
         .header-row { display: flex; justify-content: center; align-items: center; width: 100%; max-width: 1000px; }
-
-        .player-wall { display: flex; align-items: center; flex: 1; z-index: 1; gap: 6px; }
+        .player-wall { display: flex; align-items: flex-end; flex: 1; z-index: 1; gap: 2px; }
         .player-wall.left { justify-content: flex-end; padding-right: 15px; }
         .player-wall.right { justify-content: flex-start; padding-left: 15px; }
-        
-        /* SMOOTHER EMBOSSED PLAYER CARDS */
-        .p-card {
-            position: relative;
-            width: 50px; 
-            height: 65px;
-            background: linear-gradient(145deg, #2a2a2a, #111);
-            border: 1px solid rgba(212, 175, 55, 0.6);
-            border-radius: 12px; /* Smoother corners */
-            overflow: hidden;
-            transition: transform 0.3s;
-            box-shadow: 0 6px 12px rgba(0,0,0,0.8), inset 0 1px 2px rgba(255,255,255,0.2);
-        }
-        .p-card:hover { transform: translateY(-5px); z-index: 10; border-color: var(--arsenal-gold); }
-        
-        .p-card img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.8));
-        }
-        
-        .p-card span {
-            position: absolute;
-            bottom: 4px;
-            right: 4px;
-            background: var(--arsenal-gold);
-            color: black;
-            font-size: 0.65rem;
-            font-weight: 900;
-            padding: 1px 4px;
-            border-radius: 6px;
-            border: 1px solid black;
-            z-index: 10;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.5);
-        }
+        .p-card { position: relative; width: 45px; height: 60px; transition: transform 0.3s; display: flex; justify-content: center; align-items: flex-end; }
+        .p-card:hover { transform: translateY(-5px) scale(1.1); z-index: 10; }
+        .p-card img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.8)); mask-image: linear-gradient(to top, transparent 0%, black 25%); -webkit-mask-image: linear-gradient(to top, transparent 0%, black 25%); }
+        .p-card span { position: absolute; bottom: 5px; right: -2px; background: var(--arsenal-gold); color: black; font-size: 0.55rem; font-weight: 900; padding: 1px 4px; border-radius: 3px; border: 1px solid black; z-index: 10; box-shadow: 0 2px 4px rgba(0,0,0,0.8); }
+        .center-logo { display: flex; flex-direction: column; align-items: center; z-index: 20; }
+        .center-logo img { width: 60px; margin-bottom: 5px; filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.6)); }
+        .center-logo h1 { margin: 0; font-weight: 900; font-size: 1.3rem; color: white; text-transform: uppercase; letter-spacing: 1px; text-shadow: 2px 2px 4px rgba(0,0,0,0.9); text-align: center; white-space: nowrap; }
 
-        .center-logo { display: flex; flex-direction: column; align-items: center; z-index: 20; margin: 0 15px; }
-        .center-logo img { width: 75px; margin-bottom: 5px; filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.6)); }
-        .center-logo h1 { margin: 0; font-weight: 900; font-size: 1.6rem; color: white; text-transform: uppercase; letter-spacing: 1px; text-shadow: 2px 2px 4px rgba(0,0,0,0.9); text-align: center; white-space: nowrap; }
-
+        /* Ticker */
         .global-ticker { width: 100%; overflow: hidden; background-color: rgba(0, 0, 0, 0.6); color: var(--arsenal-gold); padding: 8px 0; font-weight: 600; font-size: 0.8rem; display: flex; border-bottom: 1px solid rgba(212, 175, 55, 0.3); }
         .ticker { display: inline-block; white-space: nowrap; animation: ticker 300s linear infinite; }
         @keyframes ticker { 0% { transform: translateX(100vw); } 100% { transform: translateX(-100%); } }
         a.ticker-item { display: inline-block; padding: 0 20px; color: var(--arsenal-gold); text-decoration: none; }
         a.ticker-item:hover { color: #fff; text-decoration: underline; }
 
+        /* Tab Content */
         .tab-content { display: none; padding: 10px 20px; max-width: 800px; margin: 0 auto; }
         .tab-content.active { display: block; animation: fadeIn 0.4s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -93,71 +61,35 @@
         .card:last-child { border-bottom: none !important; }
         .card h2 { margin-top: 0; color: var(--arsenal-gold); font-size: 1.1rem; text-transform: uppercase; font-weight: 900; letter-spacing: 1px; text-shadow: 2px 2px 4px rgba(0,0,0,0.9); margin-bottom: 15px; }
 
-        /* EMBOSSED TABLE */
-        .table-container {
-            border-radius: 14px;
-            overflow: hidden;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.8), inset 0 1px 2px rgba(255,255,255,0.1);
-            border: 1px solid rgba(212, 175, 55, 0.4);
-            background: linear-gradient(145deg, rgba(30,30,30,0.9), rgba(10,10,10,0.9));
-        }
         .league-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-        .league-table th { text-align: left; padding: 12px 8px; background: rgba(239, 1, 7, 0.6); color: #fff; font-weight: 800; border-bottom: 2px solid var(--arsenal-gold); }
-        .league-table td { padding: 12px 8px; border-bottom: 1px solid rgba(255,255,255,0.05); color: #fff; font-weight: 500; text-shadow: 1px 1px 2px black;}
-        .arsenal-row td { background: rgba(239, 1, 7, 0.4); font-weight: 900; color: var(--arsenal-gold); border-left: 3px solid var(--arsenal-gold); text-shadow: 1px 1px 2px black;}
+        .league-table th { text-align: left; padding: 8px 6px; border-bottom: 1px solid rgba(255,255,255,0.3); color: #ddd; font-weight: 600; }
+        .league-table td { padding: 10px 6px; border-bottom: 1px solid rgba(255,255,255,0.1); color: #fff; font-weight: 500; text-shadow: 1px 1px 2px black;}
+        .arsenal-row td { background: rgba(239, 1, 7, 0.5); font-weight: 900; color: var(--arsenal-gold); border-left: 3px solid var(--arsenal-gold); text-shadow: 1px 1px 2px black;}
 
-        /* LINEUPS */
         .lineup-match { margin-bottom: 20px; }
         .lineup-match h3 { font-size: 0.95rem; color: #fff; margin: 0 0 5px 0; }
         .lineup-formation { font-size: 0.75rem; color: var(--arsenal-gold); margin-bottom: 10px; font-weight: bold; }
         .player-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .player-item { 
-            background: linear-gradient(145deg, rgba(40,40,40,0.8), rgba(10,10,10,0.9)); 
-            padding: 8px 12px; 
-            border-radius: 10px; 
-            font-size: 0.8rem; 
-            display: flex; align-items: center; gap: 8px; 
-            border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.6);
-        }
+        .player-item { background: rgba(0,0,0,0.5); padding: 6px 10px; border-radius: 4px; font-size: 0.8rem; display: flex; align-items: center; gap: 8px; border: 1px solid rgba(255,255,255,0.1);}
         .player-pos { color: var(--arsenal-gold); font-weight: 800; font-size: 0.7rem; min-width: 25px; text-align: center; border-right: 1px solid rgba(255,255,255,0.2); padding-right: 6px;}
 
-        /* EMBOSSED COUNTDOWN BOXES */
         #countdown { display: flex; justify-content: space-between; text-align: center; margin-top: 15px; }
-        .time-box { 
-            background: linear-gradient(145deg, #222, #050505);
-            color: white; 
-            padding: 15px 5px; 
-            border-radius: 16px; 
-            flex: 1; margin: 0 5px; 
-            border: 1px solid rgba(212, 175, 55, 0.6); 
-            box-shadow: 0 8px 16px rgba(0,0,0,0.8), inset 0 2px 4px rgba(255,255,255,0.15);
-        }
-        .time-box span { display: block; font-size: 1.6rem; font-weight: 900; color: #fff; text-shadow: 0 0 10px rgba(239,1,7,0.8); }
+        .time-box { background: rgba(0, 0, 0, 0.6); color: white; padding: 12px 5px; border-radius: 8px; flex: 1; margin: 0 4px; border: 1px solid rgba(212, 175, 55, 0.5); }
+        .time-box span { display: block; font-size: 1.5rem; font-weight: 900; color: #fff; text-shadow: 0 0 10px rgba(239,1,7,0.8); }
         .time-box small { font-size: 0.6rem; text-transform: uppercase; color: var(--arsenal-gold); font-weight: 700;}
 
-        /* EMBOSSED NEWS CARDS */
-        .news-item { 
-            background: linear-gradient(145deg, rgba(40,40,40,0.9), rgba(10,10,10,0.9)); 
-            border-left: 4px solid var(--arsenal-red); 
-            padding: 15px; 
-            margin-bottom: 15px; 
-            border-radius: 12px; 
-            box-shadow: 0 8px 16px rgba(0,0,0,0.6), inset 0 1px 1px rgba(255,255,255,0.1);
-            transition: transform 0.2s;
-        }
-        .news-item:hover { transform: scale(1.01); border-left-color: var(--arsenal-gold); }
+        .news-item { background: rgba(0, 0, 0, 0.6); border-left: 4px solid var(--arsenal-red); padding: 12px; margin-bottom: 12px; border-radius: 4px; border-top: 1px solid rgba(255,255,255,0.05); border-right: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05); }
         .news-item a { font-size: 0.95rem; font-weight: 700; color: #fff; text-decoration: none; display: block; margin-bottom: 10px; line-height: 1.3; }
         .news-item a:hover { color: var(--arsenal-gold); }
         .news-meta { display: flex; justify-content: space-between; font-size: 0.65rem; color: #bbb; font-weight: 600; text-transform: uppercase; flex-wrap: wrap; gap: 5px;}
-        .news-meta span { background: rgba(0,0,0,0.8); padding: 3px 6px; border-radius: 6px; border: 1px solid #333;}
+        .news-meta span { background: rgba(0,0,0,0.8); padding: 3px 6px; border-radius: 4px; }
 
         .settings-bar { display: flex; justify-content: flex-end; align-items: center; padding: 15px 20px; background: rgba(0,0,0,0.6); border-bottom: 1px solid rgba(212, 175, 55, 0.3); }
         .settings-bar label { font-weight: 700; margin-right: 10px; color: #fff; font-size: 0.75rem; text-transform: uppercase;}
         .switch { position: relative; display: inline-block; width: 40px; height: 22px; }
         .switch input { opacity: 0; width: 0; height: 0; }
-        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #444; transition: .4s; border-radius: 22px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.6); }
-        .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #444; transition: .4s; border-radius: 22px; }
+        .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
         input:checked + .slider { background-color: var(--arsenal-red); }
         input:checked + .slider:before { transform: translateX(18px); }
 
@@ -166,19 +98,82 @@
         .nav-btn.active { color: var(--arsenal-gold); transform: translateY(-2px); }
 
         .loading { color: #ccc; font-style: italic; font-size: 0.9rem; text-shadow: 1px 1px 2px black;}
-        iframe { width: 100%; height: 300px; border-radius: 12px; border: none; margin-top: 10px; box-shadow: 0 8px 20px rgba(0,0,0,0.8);}
+        iframe { width: 100%; height: 300px; border-radius: 8px; border: none; margin-top: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.8);}
+
+        /* =========================================
+           PENALTY GAME STYLES
+           ========================================= */
+        .game-container {
+            display: flex; flex-direction: column; align-items: center;
+            background: var(--pitch-green);
+            border-radius: 12px; padding: 20px 10px; margin-top: 10px;
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.5);
+            position: relative; overflow: hidden;
+        }
+        
+        .goal-frame {
+            width: 100%; max-width: 320px; height: 200px;
+            border: 8px solid #fff; border-bottom: none;
+            position: relative;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: 1fr 1fr 1fr;
+            gap: 2px;
+            background: rgba(255,255,255,0.1); /* Slight net look */
+            background-image: 
+                linear-gradient(45deg, transparent 45%, #fff 45%, #fff 55%, transparent 55%),
+                linear-gradient(-45deg, transparent 45%, #fff 45%, #fff 55%, transparent 55%);
+            background-size: 20px 20px;
+            z-index: 2;
+        }
+
+        .goal-zone {
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .goal-zone:hover, .goal-zone:active { background: rgba(212, 175, 55, 0.4); }
+
+        /* Goalkeeper */
+        .keeper {
+            position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+            font-size: 3rem; line-height: 1;
+            transition: all 0.3s ease-out;
+            z-index: 3;
+        }
+        
+        /* The Ball */
+        .ball {
+            font-size: 1.5rem; position: absolute; bottom: 20px; left: 50%;
+            transform: translateX(-50%);
+            transition: all 0.4s ease-in;
+            z-index: 4;
+        }
+
+        .game-message {
+            font-size: 1.5rem; font-weight: 900; text-transform: uppercase;
+            margin-top: 15px; text-shadow: 2px 2px 4px black;
+            height: 30px; text-align: center;
+        }
+        
+        .game-score {
+            font-size: 1rem; font-weight: 700; margin-top: 5px; color: var(--arsenal-gold);
+        }
+
+        .btn-reset {
+            margin-top: 15px; padding: 10px 20px; font-family: inherit; font-weight: 900;
+            background: var(--arsenal-red); color: white; border: 2px solid var(--arsenal-gold);
+            border-radius: 20px; cursor: pointer; display: none;
+        }
 
         @media (max-width: 600px) {
             .player-grid { grid-template-columns: 1fr; }
-            .time-box span { font-size: 1.3rem; }
-            .time-box { padding: 12px 2px; border-radius: 12px; }
+            .time-box span { font-size: 1.2rem; }
             .card { padding: 20px 0; }
-            .p-card { width: 35px; height: 45px; border-radius: 8px; }
-            .center-logo h1 { font-size: 1rem; white-space: normal; max-width: 100px; }
-            .center-logo img { width: 55px; }
-            .p-card span { font-size: 0.5rem; padding: 0 2px; border-radius: 4px; }
-            .player-wall.left { padding-right: 5px; gap: 2px; }
-            .player-wall.right { padding-left: 5px; gap: 2px; }
+            .p-card { width: 32px; height: 45px; }
+            .center-logo h1 { font-size: 0.9rem; white-space: normal; max-width: 100px; }
+            .center-logo img { width: 45px; }
+            .p-card span { right: -4px; padding: 0px 2px; font-size: 0.45rem; }
+            .goal-frame { height: 160px; }
         }
     </style>
 </head>
@@ -194,33 +189,12 @@
         
         <header>
             <div class="header-row">
-                <!-- Left Wall -->
-                <div class="player-wall left">
-                    <div class="p-card"><img src="https://raw.githubusercontent.com/rayirvine-maker/arsenal-hub/main/09_12_Jurrien_Timber.png"><span>12</span></div>
-                    <div class="p-card"><img src="https://raw.githubusercontent.com/rayirvine-maker/arsenal-hub/main/10_33_Riccardo_Calafiori.png"><span>33</span></div>
-                    <div class="p-card"><img src="https://raw.githubusercontent.com/rayirvine-maker/arsenal-hub/main/11_49_Myles_Lewis_Skelly.png"><span>49</span></div>
-                    <div class="p-card"><img src="https://raw.githubusercontent.com/rayirvine-maker/arsenal-hub/main/12_8_Martin_Odegaard.png"><span>8</span></div>
-                    <div class="p-card"><img src="https://raw.githubusercontent.com/rayirvine-maker/arsenal-hub/main/13_10_Eberechi_Eze.png"><span>10</span></div>
-                    <div class="p-card"><img src="https://raw.githubusercontent.com/rayirvine-maker/arsenal-hub/main/14_23_Mikel_Merino.png"><span>23</span></div>
-                    <div class="p-card"><img src="https://raw.githubusercontent.com/rayirvine-maker/arsenal-hub/main/15_36_Martin_Zubimendi.png"><span>36</span></div>
-                </div>
-
-                <!-- Center Logo -->
+                <div class="player-wall left" id="wall-left"></div>
                 <div class="center-logo">
                     <img src="https://arsenal-hub-api.ray-irvine.workers.dev/api/crest" alt="Arsenal Crest" onerror="this.src='https://resources.premierleague.com/premierleague/badges/70/t3.png'">
                     <h1>Joshua's Arsenal Hub</h1>
                 </div>
-
-                <!-- Right Wall -->
-                <div class="player-wall right">
-                    <div class="p-card"><img src="https://raw.githubusercontent.com/rayirvine-maker/arsenal-hub/main/16_39_Bruno_Guimaraes.png"><span>39</span></div>
-                    <div class="p-card"><img src="https://raw.githubusercontent.com/rayirvine-maker/arsenal-hub/main/17_41_Declan_Rice.png"><span>41</span></div>
-                    <div class="p-card"><img src="https://raw.githubusercontent.com/rayirvine-maker/arsenal-hub/main/18_7_Bukayo_Saka.png"><span>7</span></div>
-                    <div class="p-card"><img src="https://raw.githubusercontent.com/rayirvine-maker/arsenal-hub/main/19_9_Gabriel_Jesus.png"><span>9</span></div>
-                    <div class="p-card"><img src="https://raw.githubusercontent.com/rayirvine-maker/arsenal-hub/main/20_11_Gabriel_Martinelli.png"><span>11</span></div>
-                    <div class="p-card"><img src="https://raw.githubusercontent.com/rayirvine-maker/arsenal-hub/main/21_14_Viktor_Gyokeres.png"><span>14</span></div>
-                    <div class="p-card"><img src="https://raw.githubusercontent.com/rayirvine-maker/arsenal-hub/main/22_17_Christos_Tzolis.png"><span>17</span></div>
-                </div>
+                <div class="player-wall right" id="wall-right"></div>
             </div>
         </header>
 
@@ -251,9 +225,7 @@
             
             <div class="card">
                 <h2>Premier League Table</h2>
-                <div class="table-container">
-                    <div id="home-table" class="loading" style="padding: 20px;">Loading table...</div>
-                </div>
+                <div id="home-table" class="loading">Loading table...</div>
             </div>
             
             <div class="card">
@@ -295,16 +267,158 @@
             </div>
         </div>
 
+        <!-- NEW PENALTY GAME TAB -->
+        <div id="game" class="tab-content">
+            <div class="card" style="border-bottom:none;">
+                <h2>Penalty Shootout</h2>
+                <div class="game-container">
+                    <div class="goal-frame" id="goal-frame">
+                        <!-- 9 clickable zones -->
+                        <div class="goal-zone" onclick="shoot(1)"></div>
+                        <div class="goal-zone" onclick="shoot(2)"></div>
+                        <div class="goal-zone" onclick="shoot(3)"></div>
+                        <div class="goal-zone" onclick="shoot(4)"></div>
+                        <div class="goal-zone" onclick="shoot(5)"></div>
+                        <div class="goal-zone" onclick="shoot(6)"></div>
+                        <div class="goal-zone" onclick="shoot(7)"></div>
+                        <div class="goal-zone" onclick="shoot(8)"></div>
+                        <div class="goal-zone" onclick="shoot(9)"></div>
+                        
+                        <!-- Goalkeeper emoji -->
+                        <div class="keeper" id="keeper">🧍‍♂️</div>
+                    </div>
+                    
+                    <!-- Ball emoji -->
+                    <div class="ball" id="ball">⚽</div>
+                    
+                    <div class="game-message" id="game-msg">Tap the net to shoot!</div>
+                    <div class="game-score" id="game-score">Shots: 0/5 | Goals: 0</div>
+                    
+                    <button class="btn-reset" id="btn-reset" onclick="resetGame()">Play Again</button>
+                </div>
+            </div>
+        </div>
+
         <div class="bottom-nav">
             <button class="nav-btn active" onclick="switchTab('home', this)">Home</button>
             <button class="nav-btn" onclick="switchTab('news', this)">News</button>
             <button class="nav-btn" onclick="switchTab('live', this)">Live</button>
             <button class="nav-btn" onclick="switchTab('social', this)">Social</button>
             <button class="nav-btn" onclick="switchTab('spotify', this)">Spotify</button>
+            <button class="nav-btn" onclick="switchTab('game', this)">Game</button>
         </div>
     </div>
 
     <script>
+        // --- DYNAMIC PLAYER ROTATION ---
+        const imageExtension = '.png'; 
+        const imagePrefix = ''; 
+        const shirtNumbers = [1, 2, 4, 5, 6, 7, 8, 9, 11, 12, 19, 29, 41, 22]; 
+
+        function loadPlayers() {
+            const players = [];
+            for(let i = 1; i <= 14; i++) {
+                players.push({ img: `${imagePrefix}${i}${imageExtension}`, num: shirtNumbers[i-1] || "?" });
+            }
+            players.sort(() => Math.random() - 0.5);
+            const leftWall = document.getElementById('wall-left');
+            const rightWall = document.getElementById('wall-right');
+            leftWall.innerHTML = ''; rightWall.innerHTML = '';
+            players.slice(0, 7).forEach(p => { leftWall.innerHTML += `<div class="p-card"><img src="${p.img}"><span>${p.num}</span></div>`; });
+            players.slice(7, 14).forEach(p => { rightWall.innerHTML += `<div class="p-card"><img src="${p.img}"><span>${p.num}</span></div>`; });
+        }
+        loadPlayers();
+
+        // --- PENALTY GAME LOGIC ---
+        let shotsTaken = 0;
+        let goalsScored = 0;
+        let isAnimating = false;
+        const maxShots = 5;
+
+        // Exact coordinates for the ball to land in the 9 zones
+        const zoneCoords = {
+            1: { x: '-80px', y: '-140px' }, // Top Left
+            2: { x: '0px',   y: '-150px' }, // Top Center
+            3: { x: '80px',  y: '-140px' }, // Top Right
+            4: { x: '-80px', y: '-90px'  }, // Mid Left
+            5: { x: '0px',   y: '-100px' }, // Mid Center
+            6: { x: '80px',  y: '-90px'  }, // Mid Right
+            7: { x: '-80px', y: '-40px'  }, // Bottom Left
+            8: { x: '0px',   y: '-50px'  }, // Bottom Center
+            9: { x: '80px',  y: '-40px'  }  // Bottom Right
+        };
+
+        function shoot(zone) {
+            if (isAnimating || shotsTaken >= maxShots) return;
+            isAnimating = true;
+            
+            const ball = document.getElementById('ball');
+            const keeper = document.getElementById('keeper');
+            const msg = document.getElementById('game-msg');
+            
+            msg.innerText = "";
+            
+            // 1. Move the ball to the chosen zone
+            const coords = zoneCoords[zone];
+            ball.style.transform = `translateX(calc(-50% + ${coords.x})) translateY(${coords.y}) scale(0.6)`;
+            
+            // 2. Keeper picks a random zone to dive to
+            const keeperZone = Math.floor(Math.random() * 9) + 1;
+            
+            // Map keeper dive to a physical movement
+            setTimeout(() => {
+                if (keeperZone === zone) {
+                    // SAVE
+                    const kCoords = zoneCoords[keeperZone];
+                    keeper.style.transform = `translateX(calc(-50% + ${kCoords.x})) translateY(${kCoords.y}) scale(1.5)`;
+                    msg.innerText = "SAVED!";
+                    msg.style.color = "#fff";
+                } else {
+                    // GOAL
+                    // Keeper dives the wrong way
+                    const kCoords = zoneCoords[keeperZone];
+                    keeper.style.transform = `translateX(calc(-50% + ${kCoords.x})) translateY(${kCoords.y}) scale(1.5) rotate(${keeperZone < 5 ? '-45deg' : '45deg'})`;
+                    msg.innerText = "GOAL!";
+                    msg.style.color = "var(--arsenal-gold)";
+                    goalsScored++;
+                    
+                    // Play sound
+                    if (document.getElementById('soundToggle').checked) {
+                        goalSound.play().catch(e => console.log("Audio blocked"));
+                    }
+                }
+                
+                shotsTaken++;
+                document.getElementById('game-score').innerText = `Shots: ${shotsTaken}/${maxShots} | Goals: ${goalsScored}`;
+                
+                // Reset for next shot
+                setTimeout(() => {
+                    ball.style.transform = `translateX(-50%) translateY(0) scale(1)`;
+                    keeper.style.transform = `translateX(-50%) translateY(0) scale(1) rotate(0deg)`;
+                    msg.innerText = "";
+                    isAnimating = false;
+                    
+                    if (shotsTaken >= maxShots) {
+                        msg.innerText = goalsScored >= 3 ? "ARSENAL WIN!" : "YOU LOST!";
+                        msg.style.color = goalsScored >= 3 ? "var(--arsenal-gold)" : "var(--arsenal-red)";
+                        document.getElementById('btn-reset').style.display = "inline-block";
+                    }
+                }, 1500);
+                
+            }, 400); // Keeper reacts slightly after ball is hit
+        }
+
+        function resetGame() {
+            shotsTaken = 0;
+            goalsScored = 0;
+            isAnimating = false;
+            document.getElementById('game-score').innerText = `Shots: 0/5 | Goals: 0`;
+            document.getElementById('game-msg').innerText = "Tap the net to shoot!";
+            document.getElementById('game-msg').style.color = "#fff";
+            document.getElementById('btn-reset').style.display = "none";
+        }
+
+        // --- APP LOGIC ---
         document.getElementById('enter-btn').addEventListener('click', () => {
             document.getElementById('splash').classList.add('fade-out');
             document.getElementById('app-content').style.opacity = '1';
@@ -373,92 +487,4 @@
                 let tableHtml = `<table class="league-table"><tr><th>Pos</th><th>Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>Pts</th></tr>`;
                 table.forEach(row => {
                     const isArsenal = row.team.name.includes('Arsenal');
-                    tableHtml += `<tr class="${isArsenal ? 'arsenal-row' : ''}"><td>${row.position}</td><td>${row.team.name}</td><td>${row.playedGames}</td><td>${row.wins}</td><td>${row.draws}</td><td>${row.losses}</td><td>${row.points}</td></tr>`;
-                });
-                tableHtml += `</table>`;
-                document.getElementById('home-table').innerHTML = tableHtml;
-            }
-
-            const lineups = await loadData('lineups');
-            if (lineups && lineups.length > 0) {
-                let lineupsHtml = "";
-                lineups.forEach(match => {
-                    const dateStr = new Date(match.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
-                    lineupsHtml += `<div class="lineup-match"><h3>${match.matchName} <span style="color:#aaa; font-size:0.7rem;">(${dateStr})</span></h3><div class="lineup-formation">Formation: ${match.formation}</div><div class="player-grid">`;
-                    match.starters.forEach(p => {
-                        lineupsHtml += `<div class="player-item"><span class="player-pos">${p.position}</span> ${p.name}</div>`;
-                    });
-                    lineupsHtml += `</div></div>`;
-                });
-                document.getElementById('lineups-container').innerHTML = lineupsHtml;
-            } else {
-                document.getElementById('lineups-container').innerHTML = "<div style='color:#ccc; font-size:0.9rem;'>Lineup data unavailable.</div>";
-            }
-
-            if (fixtures && fixtures.length > 0) {
-                let fixHtml = `<ul style="list-style-type:none; padding:0; margin:0;">`;
-                fixtures.forEach(f => {
-                    const d = new Date(f.date).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
-                    fixHtml += `<li style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1); font-size:0.85rem;"><strong>${d}</strong> - ${f.home_team} vs ${f.away_team} <span style="color:var(--arsenal-gold); font-size:0.7rem;">(${f.league})</span></li>`;
-                });
-                fixHtml += `</ul>`;
-                document.getElementById('fixtures-list').innerHTML = fixHtml;
-            }
-
-            const news = await loadData('news');
-            if (news && news.length > 0) {
-                let newsHtml = "";
-                let tickerHtml = "";
-                news.forEach(item => {
-                    const dateObj = new Date(item.pubDate);
-                    const dateStr = dateObj.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
-                    const timeStr = dateObj.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
-                    newsHtml += `<div class="news-item"><a href="${item.link}" target="_blank">${item.title}</a><div class="news-meta"><span>📰 ${item.author}</span><span>🕒 ${dateStr} • ${timeStr}</span></div></div>`;
-                    tickerHtml += `<a href="${item.link}" target="_blank" class="ticker-item">⚽ ${item.title} (${item.author})</a>`;
-                });
-                document.getElementById('news-list').innerHTML = newsHtml;
-                document.getElementById('news-ticker').innerHTML = tickerHtml;
-            }
-
-            const socialData = await loadData('social');
-            if (socialData && socialData.length > 0) {
-                let socialHtml = "";
-                socialData.forEach(item => {
-                    const dateObj = new Date(item.pubDate);
-                    const dateStr = dateObj.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
-                    const timeStr = dateObj.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
-                    socialHtml += `<div class="news-item" style="border-left-color: var(--arsenal-gold);"><a href="${item.link}" target="_blank">▶️ ${item.title}</a><div class="news-meta"><span>📺 ${item.author}</span><span>🕒 ${dateStr} • ${timeStr}</span></div></div>`;
-                });
-                document.getElementById('social-news').innerHTML = socialHtml;
-            } else {
-                document.getElementById('social-news').innerHTML = "<div style='color:#ccc; font-size:0.9rem;'>Could not load media feed.</div>";
-            }
-        }
-
-        async function checkLiveMatch() {
-            const data = await loadData('live');
-            if (!data || !data.events || data.events.length === 0) {
-                return;
-            }
-            let currentScore = "";
-            data.events.forEach(event => {
-                if (event.type.text === "Goal") currentScore += event.scoringPlay ? "1" : "0";
-            });
-            
-            if (lastScore !== "" && currentScore !== lastScore && currentScore.length > lastScore.length) {
-                if (document.getElementById('soundToggle').checked) goalSound.play().catch(e => console.log("Audio blocked:", e));
-                
-                if ("Notification" in window && Notification.permission === "granted") {
-                    new Notification("⚽ GOOOOOAAAALLLL!", { body: "Arsenal have scored! Check the Live tab for details." });
-                } else {
-                    alert("GOOOOOAAAALLLL!!!");
-                }
-            }
-            lastScore = currentScore;
-        }
-
-        initApp();
-        setInterval(checkLiveMatch, 60000);
-    </script>
-</body>
-</html>
+                    tableHtml += `<tr class="${isArsenal ? 'arsenal-row' : ''}"><td>${row.position}</td><td>${row.team.name}</td><td>${row.playedGames}</td><td>${row.wins}</td><td>
