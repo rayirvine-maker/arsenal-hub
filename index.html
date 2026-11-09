@@ -9,9 +9,8 @@
         :root {
             --arsenal-red: #EF0107;
             --arsenal-navy: #063672;
-            --arsenal-gold: #9C824A;
+            --arsenal-gold: #D4AF37; /* Brighter Gold */
             --bg-dark: #121212;
-            --card-bg: #1e1e1e;
         }
         body { 
             font-family: 'Montserrat', sans-serif; margin: 0; padding: 0; padding-bottom: 70px; 
@@ -20,14 +19,14 @@
         
         header { 
             background: linear-gradient(180deg, rgba(239,1,7,0.9) 0%, rgba(18,18,18,1) 100%);
-            padding: 20px; text-align: center; border-bottom: 2px solid var(--arsenal-gold); 
+            padding: 20px; text-align: center; border-bottom: 3px solid var(--arsenal-gold); 
             display: flex; flex-direction: column; align-items: center;
             position: sticky; top: 0; z-index: 900;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
         }
         header img { width: 65px; height: auto; margin-bottom: 8px; filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.5)); }
         header h1 { margin: 0; font-weight: 900; font-size: 1.6rem; color: white; text-transform: uppercase; letter-spacing: 2px; }
 
-        /* Faster Ticker Tape */
         .global-ticker { 
             width: 100%; overflow: hidden; background-color: #000; color: var(--arsenal-gold); 
             padding: 10px 0; border-bottom: 1px solid var(--arsenal-gold); font-weight: 600; font-size: 0.9rem; display: flex;
@@ -40,38 +39,40 @@
         .tab-content.active { display: block; animation: fadeIn 0.4s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* Highly Embossed 3D Cards */
         .card { 
-            background: var(--card-bg); padding: 20px; border-radius: 16px; margin-bottom: 20px; 
-            border: 1px solid #333;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            border-top: 4px solid var(--arsenal-red);
+            background: linear-gradient(145deg, #242424, #1a1a1a);
+            padding: 20px; 
+            border-radius: 16px; 
+            margin-bottom: 25px; 
+            border: 2px solid var(--arsenal-gold); /* Gold border */
+            box-shadow: 0 15px 35px rgba(0,0,0,0.9), inset 0 2px 0 rgba(255,255,255,0.1); /* Deep shadow and inner highlight */
+            border-top: 5px solid var(--arsenal-red);
         }
-        .card h2 { margin-top: 0; color: var(--arsenal-gold); font-size: 1.1rem; text-transform: uppercase; border-bottom: 1px solid #333; padding-bottom: 12px; font-weight: 800; letter-spacing: 1px;}
+        .card h2 { margin-top: 0; color: var(--arsenal-gold); font-size: 1.1rem; text-transform: uppercase; border-bottom: 1px solid #444; padding-bottom: 12px; font-weight: 800; letter-spacing: 1px;}
 
-        /* News Items */
         .news-item {
-            background: #252525;
+            background: #111;
             border-left: 4px solid var(--arsenal-red);
             padding: 16px;
             margin-bottom: 15px;
             border-radius: 8px;
             transition: transform 0.2s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
-        .news-item:hover { transform: scale(1.02); }
+        .news-item:hover { transform: scale(1.02); border-left-color: var(--arsenal-gold); }
         .news-item a { font-size: 1.05rem; font-weight: 700; color: #fff; text-decoration: none; display: block; margin-bottom: 12px; line-height: 1.4; }
         .news-item a:hover { color: var(--arsenal-red); }
         .news-meta {
             display: flex; justify-content: space-between; font-size: 0.75rem; color: #aaa; font-weight: 600; text-transform: uppercase;
         }
-        .news-meta span { background: #111; padding: 4px 8px; border-radius: 4px; border: 1px solid #333; }
+        .news-meta span { background: #222; padding: 4px 8px; border-radius: 4px; border: 1px solid #444; }
 
-        /* Countdown */
         #countdown { display: flex; justify-content: space-between; text-align: center; margin-top: 20px; }
-        .time-box { background: #111; color: white; padding: 15px 10px; border-radius: 12px; flex: 1; margin: 0 5px; border: 1px solid #333; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .time-box { background: #111; color: white; padding: 15px 10px; border-radius: 12px; flex: 1; margin: 0 5px; border: 1px solid #444; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
         .time-box span { display: block; font-size: 1.8rem; font-weight: 900; color: var(--arsenal-red); }
         .time-box small { font-size: 0.7rem; text-transform: uppercase; color: var(--arsenal-gold); font-weight: 700;}
 
-        /* Full League Table */
         .league-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem; }
         .league-table th { text-align: left; padding: 8px; border-bottom: 1px solid #444; color: #888; font-weight: 600; }
         .league-table td { padding: 10px 8px; border-bottom: 1px solid #333; }
@@ -181,7 +182,6 @@
         <div id="spotify" class="tab-content">
             <div class="card">
                 <h2>Arsenal Chants & Songs</h2>
-                <!-- New working Spotify Playlist -->
                 <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/1g8aCpG3pIzKnwcemzWh6Q?utm_source=generator" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
             </div>
         </div>
@@ -228,7 +228,6 @@
         let countdownInterval;
 
         async function initApp() {
-            // Fixtures
             const fixtures = await loadData('fixtures');
             if (fixtures && fixtures.length > 0) {
                 const next = fixtures[0];
@@ -256,7 +255,6 @@
                 document.getElementById('next-match-name').innerText = "No upcoming fixtures found.";
             }
 
-            // Full League Table
             const standings = await loadData('standings');
             if (standings && standings.standings[0].table) {
                 const table = standings.standings[0].table;
@@ -281,10 +279,11 @@
                 document.getElementById('home-table').innerHTML = "<div style='text-align:center; color:#888;'>Could not load table data.</div>";
             }
 
-            // News (Now 30 items)
             const news = await loadData('news');
             if (news && news.length > 0) {
                 let newsHtml = "";
+                let stadiumHtml = "";
+                let socialHtml = "";
                 let tickerHtml = "";
                 
                 news.forEach(item => {
@@ -303,15 +302,30 @@
                     `;
                     
                     newsHtml += itemHtml;
+                    
+                    // Simple filters so Stadium and Social aren't empty
+                    if (item.title.toLowerCase().includes('stadium') || item.title.toLowerCase().includes('emirates') || item.title.toLowerCase().includes('training') || item.title.toLowerCase().includes('academy')) {
+                        stadiumHtml += itemHtml;
+                    }
+                    if (item.title.toLowerCase().includes('player') || item.title.toLowerCase().includes('arteta') || item.title.toLowerCase().includes('squad') || item.title.toLowerCase().includes('contract')) {
+                        socialHtml += itemHtml;
+                    }
+
                     tickerHtml += `<span class="ticker-item">⚽ ${item.title} (${item.author})</span>`;
                 });
 
                 document.getElementById('news-list').innerHTML = newsHtml;
                 document.getElementById('news-ticker').innerHTML = tickerHtml;
-                document.getElementById('stadium-news').innerHTML = newsHtml; // Sharing the feed for now
-                document.getElementById('social-news').innerHTML = newsHtml; // Sharing the feed for now
+                
+                // Fill Stadium (fallback to general news if no keyword match)
+                document.getElementById('stadium-news').innerHTML = stadiumHtml !== "" ? stadiumHtml : newsHtml;
+                // Fill Social (fallback to general news if no keyword match)
+                document.getElementById('social-news').innerHTML = socialHtml !== "" ? socialHtml : newsHtml;
+
             } else {
                 document.getElementById('news-list').innerHTML = "<div style='color:#888;'>Could not load news.</div>";
+                document.getElementById('stadium-news').innerHTML = "<div style='color:#888;'>Could not load news.</div>";
+                document.getElementById('social-news').innerHTML = "<div style='color:#888;'>Could not load news.</div>";
             }
         }
 
