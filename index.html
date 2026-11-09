@@ -4,99 +4,104 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Joshua's Arsenal Hub</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --arsenal-red: #EF0107;
             --arsenal-navy: #063672;
             --arsenal-gold: #9C824A;
-            --bg-red: #d10006;
+            --bg-dark: #121212;
+            --card-bg: #1e1e1e;
         }
         body { 
             font-family: 'Montserrat', sans-serif; margin: 0; padding: 0; padding-bottom: 70px; 
-            background: linear-gradient(180deg, var(--arsenal-red) 0%, var(--bg-red) 100%);
-            background-attachment: fixed; color: #333; 
+            background-color: var(--bg-dark); color: #fff; 
         }
         
         /* Header & Crest */
         header { 
-            background: rgba(0,0,0,0.2); padding: 15px 20px; text-align: center; 
-            border-bottom: 3px solid var(--arsenal-gold); display: flex; flex-direction: column; align-items: center;
+            background: linear-gradient(180deg, rgba(239,1,7,0.9) 0%, rgba(18,18,18,1) 100%);
+            padding: 20px; text-align: center; border-bottom: 2px solid var(--arsenal-gold); 
+            display: flex; flex-direction: column; align-items: center;
+            position: sticky; top: 0; z-index: 900;
         }
-        header img { width: 70px; height: auto; margin-bottom: 5px; }
-        header h1 { margin: 0; font-weight: 900; font-size: 1.5rem; color: white; text-transform: uppercase; letter-spacing: 1px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+        header img { width: 65px; height: auto; margin-bottom: 8px; filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.5)); }
+        header h1 { margin: 0; font-weight: 900; font-size: 1.6rem; color: white; text-transform: uppercase; letter-spacing: 2px; }
 
         /* Global Ticker Tape */
         .global-ticker { 
-            width: 100%; overflow: hidden; background-color: #111; color: var(--arsenal-gold); 
-            padding: 12px 0; border-top: 2px solid var(--arsenal-gold); border-bottom: 2px solid var(--arsenal-gold); 
-            font-weight: 700; font-size: 1rem; display: flex;
+            width: 100%; overflow: hidden; background-color: #000; color: var(--arsenal-gold); 
+            padding: 10px 0; border-bottom: 1px solid var(--arsenal-gold); font-weight: 600; font-size: 0.9rem; display: flex;
         }
-        .ticker { display: inline-block; white-space: nowrap; padding-left: 100%; animation: ticker 20s linear infinite; }
+        .ticker { display: inline-block; white-space: nowrap; padding-left: 100%; animation: ticker 25s linear infinite; }
         @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
         .ticker-item { display: inline-block; padding: 0 20px; }
 
         /* Tabs */
-        .tab-content { display: none; padding: 15px; }
-        .tab-content.active { display: block; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .tab-content { display: none; padding: 20px; max-width: 800px; margin: 0 auto; }
+        .tab-content.active { display: block; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Main Cards */
+        /* HD Cards */
         .card { 
-            background: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; 
-            border: 1px solid #ddd;
-            box-shadow: 0 8px 15px rgba(0,0,0,0.3), inset 0 2px 0 rgba(255,255,255,1);
-            border-top: 6px solid var(--arsenal-red);
+            background: var(--card-bg); padding: 20px; border-radius: 16px; margin-bottom: 20px; 
+            border: 1px solid #333;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border-top: 4px solid var(--arsenal-red);
         }
-        .card h2 { margin-top: 0; color: var(--arsenal-red); font-size: 1.2rem; text-transform: uppercase; border-bottom: 2px solid #eee; padding-bottom: 10px; font-weight: 900;}
+        .card h2 { margin-top: 0; color: var(--arsenal-gold); font-size: 1.1rem; text-transform: uppercase; border-bottom: 1px solid #333; padding-bottom: 12px; font-weight: 800; letter-spacing: 1px;}
 
         /* News Items */
         .news-item {
-            background: #f9f9f9;
+            background: #252525;
             border-left: 4px solid var(--arsenal-red);
-            padding: 15px;
+            padding: 16px;
             margin-bottom: 15px;
-            border-radius: 4px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border-radius: 8px;
+            transition: transform 0.2s;
         }
-        .news-item a { font-size: 1.1rem; font-weight: 700; color: #111; text-decoration: none; display: block; margin-bottom: 10px; }
+        .news-item:hover { transform: scale(1.02); }
+        .news-item a { font-size: 1.05rem; font-weight: 700; color: #fff; text-decoration: none; display: block; margin-bottom: 12px; line-height: 1.4; }
+        .news-item a:hover { color: var(--arsenal-red); }
         .news-meta {
-            display: flex; justify-content: space-between; font-size: 0.8rem; color: #666; background: #eee; padding: 8px; border-radius: 4px;
+            display: flex; justify-content: space-between; font-size: 0.75rem; color: #aaa; font-weight: 600; text-transform: uppercase;
         }
-        .news-meta span { background: white; padding: 2px 6px; border-radius: 4px; font-weight: 700; }
+        .news-meta span { background: #111; padding: 4px 8px; border-radius: 4px; border: 1px solid #333; }
 
         /* Countdown */
-        #countdown { display: flex; justify-content: space-around; text-align: center; margin-top: 15px; }
-        .time-box { background: var(--arsenal-navy); color: white; padding: 10px; border-radius: 8px; min-width: 60px; box-shadow: inset 0 -3px 0 rgba(0,0,0,0.5); }
-        .time-box span { display: block; font-size: 1.5rem; font-weight: 900; color: var(--arsenal-gold); }
-        .time-box small { font-size: 0.7rem; text-transform: uppercase; }
+        #countdown { display: flex; justify-content: space-between; text-align: center; margin-top: 20px; }
+        .time-box { background: #111; color: white; padding: 15px 10px; border-radius: 12px; flex: 1; margin: 0 5px; border: 1px solid #333; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .time-box span { display: block; font-size: 1.8rem; font-weight: 900; color: var(--arsenal-red); }
+        .time-box small { font-size: 0.7rem; text-transform: uppercase; color: var(--arsenal-gold); font-weight: 700;}
 
         /* Settings Toggle */
-        .settings-bar { display: flex; justify-content: flex-end; align-items: center; padding: 10px 15px; background: rgba(255,255,255,0.9); border-bottom: 2px solid var(--arsenal-gold); }
-        .settings-bar label { font-weight: 700; margin-right: 10px; color: var(--arsenal-navy); font-size: 0.9rem; text-transform: uppercase;}
-        .switch { position: relative; display: inline-block; width: 40px; height: 20px; }
+        .settings-bar { display: flex; justify-content: flex-end; align-items: center; padding: 10px 20px; background: #1a1a1a; }
+        .settings-bar label { font-weight: 700; margin-right: 12px; color: #fff; font-size: 0.8rem; text-transform: uppercase;}
+        .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
         .switch input { opacity: 0; width: 0; height: 0; }
-        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 20px; }
-        .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 2px; bottom: 2px; background-color: white; transition: .4s; border-radius: 50%; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #444; transition: .4s; border-radius: 24px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
         input:checked + .slider { background-color: var(--arsenal-red); }
         input:checked + .slider:before { transform: translateX(20px); }
 
         /* Navigation */
         .bottom-nav { 
-            position: fixed; bottom: 0; left: 0; width: 100%; background: var(--arsenal-navy); 
-            display: flex; justify-content: space-around; padding: 12px 0; 
-            box-shadow: 0 -4px 10px rgba(0,0,0,0.3); z-index: 1000; border-top: 2px solid var(--arsenal-gold);
+            position: fixed; bottom: 0; left: 0; width: 100%; background: #000; 
+            display: flex; justify-content: space-around; padding: 15px 0; 
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.8); z-index: 1000; border-top: 1px solid #333;
         }
-        .nav-btn { background: none; border: none; color: #ddd; font-family: inherit; font-weight: 700; font-size: 0.75rem; cursor: pointer; text-transform: uppercase; transition: 0.2s;}
-        .nav-btn.active { color: var(--arsenal-gold); transform: scale(1.1); }
+        .nav-btn { background: none; border: none; color: #888; font-family: inherit; font-weight: 800; font-size: 0.7rem; cursor: pointer; text-transform: uppercase; transition: 0.2s; letter-spacing: 1px;}
+        .nav-btn.active { color: var(--arsenal-gold); transform: translateY(-2px); }
 
         /* Misc */
-        #splash { position: fixed; inset: 0; background: var(--arsenal-navy); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; transition: opacity 0.8s ease; }
-        #splash img { max-width: 85vw; max-height: 65vh; border-radius: 12px; border: 4px solid var(--arsenal-gold); box-shadow: 0 0 30px rgba(0,0,0,0.8);}
+        #splash { position: fixed; inset: 0; background: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; transition: opacity 0.8s ease; }
+        #splash img { max-width: 90vw; max-height: 65vh; border-radius: 16px; border: 2px solid var(--arsenal-gold); box-shadow: 0 0 50px rgba(239,1,7,0.3);}
         #splash.fade-out { opacity: 0; pointer-events: none; }
-        #enter-btn { margin-top: 25px; padding: 15px 30px; font-size: 1.1rem; font-family: 'Montserrat', sans-serif; font-weight: 900; background: var(--arsenal-red); color: white; border: 2px solid var(--arsenal-gold); border-radius: 30px; cursor: pointer; text-transform: uppercase; }
-        .loading { color: #666; font-style: italic; }
-        iframe { width: 100%; height: 250px; border-radius: 8px; border: none; margin-top: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);}
+        #enter-btn { margin-top: 30px; padding: 16px 36px; font-size: 1rem; font-family: 'Montserrat', sans-serif; font-weight: 900; background: var(--arsenal-red); color: white; border: 2px solid var(--arsenal-gold); border-radius: 40px; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; box-shadow: 0 0 20px rgba(239,1,7,0.5); transition: 0.2s;}
+        #enter-btn:hover { transform: scale(1.05); }
+        .loading { color: #888; font-style: italic; }
+        iframe { width: 100%; height: 250px; border-radius: 12px; border: none; margin-top: 10px; box-shadow: 0 8px 20px rgba(0,0,0,0.6);}
+        .pos-highlight { color: var(--arsenal-red); font-size: 3rem; font-weight: 900; line-height: 1; }
     </style>
 </head>
 <body>
@@ -109,8 +114,8 @@
     <div id="app-content" style="opacity: 0; transition: opacity 0.8s ease;">
         
         <header>
-            <!-- This now uses your Worker Proxy to bypass hotlink blocks -->
-            <img src="https://arsenal-hub-api.ray-irvine.workers.dev/api/crest" alt="Arsenal Crest">
+            <!-- The official PL CDN Crest, routed via Cloudflare proxy just in case -->
+            <img src="https://arsenal-hub-api.ray-irvine.workers.dev/api/crest" alt="Arsenal Crest" onerror="this.src='https://resources.premierleague.com/premierleague/badges/70/t3.png'">
             <h1>Joshua's Arsenal Hub</h1>
         </header>
 
@@ -129,7 +134,7 @@
         <div id="home" class="tab-content active">
             <div class="card">
                 <h2>Next Match Countdown</h2>
-                <div id="next-match-name" style="text-align:center; font-weight:900; font-size:1.2rem; margin-bottom:10px;">Loading...</div>
+                <div id="next-match-name" style="text-align:center; font-weight:800; font-size:1.2rem; margin-bottom:10px; color:#fff;">Loading...</div>
                 <div id="countdown">
                     <div class="time-box"><span id="days">0</span><small>Days</small></div>
                     <div class="time-box"><span id="hours">0</span><small>Hrs</small></div>
@@ -151,13 +156,13 @@
         </div>
 
         <div id="live" class="tab-content">
-            <div class="global-ticker" style="margin-bottom: 15px; border-radius: 6px;">
+            <div class="global-ticker" style="margin-bottom: 20px; border-radius: 8px; border: 1px solid var(--arsenal-gold);">
                 <div class="ticker" id="live-ticker">No live match currently in progress.</div>
             </div>
             <div class="card">
-                <h2>Match Highlights</h2>
-                <!-- Fixed YouTube Embed: Arsenal Official Highlights Playlist -->
-                <iframe src="https://www.youtube.com/embed/videoseries?list=PLBp1uY7_7r8h5B4v3N4w3K2x1Y0z9W8v7" allowfullscreen></iframe>
+                <h2>Match Highlights & Songs</h2>
+                <!-- Your requested YouTube Playlist -->
+                <iframe src="https://www.youtube.com/embed/videoseries?list=PLRdP_uqk1u7x-d7Dhxcq1sguAmWOnzQk6" allowfullscreen></iframe>
             </div>
         </div>
 
@@ -171,7 +176,7 @@
         <div id="social" class="tab-content">
             <div class="card">
                 <h2>Arsenal Social Feed</h2>
-                <p style="text-align:center; font-weight:700; color:#666;">Live updates from around the club</p>
+                <p style="text-align:center; font-weight:700; color:#888;">Live updates from around the club</p>
             </div>
         </div>
 
@@ -224,6 +229,7 @@
         let countdownInterval;
 
         async function initApp() {
+            // Countdown
             const fixtures = await loadData('fixtures');
             if (fixtures && fixtures.length > 0) {
                 const next = fixtures[0];
@@ -238,7 +244,7 @@
 
                     if (distance < 0) {
                         clearInterval(countdownInterval);
-                        document.getElementById('next-match-name').innerText = "Match is LIVE!";
+                        document.getElementById('next-match-name').innerText = "MATCH IS LIVE!";
                         return;
                     }
 
@@ -251,39 +257,40 @@
                 document.getElementById('next-match-name').innerText = "No upcoming fixtures found.";
             }
 
+            // Standings
             const standings = await loadData('standings');
             if (standings && standings.standings[0].table) {
                 const arsenal = standings.standings[0].table.find(t => t.team.name === 'Arsenal');
                 if (arsenal) {
                     document.getElementById('home-table').innerHTML = `
-                        <div style="text-align:center; font-size: 2rem; font-weight:900; color:var(--arsenal-red);">
-                            ${arsenal.position}<sup>${getOrdinal(arsenal.position)}</sup> Place
+                        <div style="text-align:center; padding: 10px;">
+                            <div class="pos-highlight">${arsenal.position}<sup style="font-size:1.2rem; color:#fff;">${getOrdinal(arsenal.position)}</sup></div>
+                            <div style="color:var(--arsenal-gold); font-weight:800; text-transform:uppercase; margin-top:10px;">Place</div>
+                            <div style="color:#aaa; margin-top:5px; font-size:0.9rem;">${arsenal.points} Points • ${arsenal.playedGames} Played</div>
                         </div>
-                        <div style="text-align:center; color:#666;">${arsenal.points} Points from ${arsenal.playedGames} games</div>
                     `;
                 }
             } else {
-                document.getElementById('home-table').innerHTML = "Could not load table data.";
+                document.getElementById('home-table').innerHTML = "<div style='text-align:center; color:#888;'>Could not load table data.</div>";
             }
 
+            // News
             const news = await loadData('news');
             if (news && news.length > 0) {
                 let newsHtml = "";
                 let tickerHtml = "";
                 
                 news.slice(0, 10).forEach(item => {
-                    // Formatting the date
                     const dateObj = new Date(item.pubDate);
                     const dateStr = dateObj.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
                     const timeStr = dateObj.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
                     
-                    // Creating the individual box for the news item
                     newsHtml += `
                         <div class="news-item">
                             <a href="${item.link}" target="_blank">${item.title}</a>
                             <div class="news-meta">
                                 <span>📰 ${item.author}</span>
-                                <span>🕒 ${dateStr} - ${timeStr}</span>
+                                <span>🕒 ${dateStr} • ${timeStr}</span>
                             </div>
                         </div>
                     `;
@@ -295,7 +302,7 @@
                 document.getElementById('news-ticker').innerHTML = tickerHtml;
                 document.getElementById('stadium-news').innerHTML = newsHtml; 
             } else {
-                document.getElementById('news-list').innerHTML = "Could not load news.";
+                document.getElementById('news-list').innerHTML = "<div style='color:#888;'>Could not load news.</div>";
             }
         }
 
