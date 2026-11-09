@@ -44,55 +44,86 @@
         #splash.fade-out { opacity: 0; pointer-events: none; }
         #enter-btn { margin-top: 25px; padding: 14px 30px; font-size: 0.9rem; font-family: 'Montserrat', sans-serif; font-weight: 900; background: var(--arsenal-navy); color: white; border: 2px solid var(--arsenal-gold); border-radius: 30px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 0 15px rgba(0,0,0,0.5); }
 
-        /* Header */
+        /* Header with Player Walls */
         header { 
-            padding: 15px 10px; 
-            text-align: center; 
+            padding: 15px 5px; 
             display: flex; 
             flex-direction: column; 
             align-items: center;
             border-bottom: 2px solid rgba(212, 175, 55, 0.5);
         }
-        header .main-crest { width: 60px; margin-bottom: 5px; filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.6)); }
-        header h1 { margin: 0 0 10px 0; font-weight: 900; font-size: 1.4rem; color: white; text-transform: uppercase; letter-spacing: 1px; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); }
-
-        /* Pure CSS Player Avatars - 100% Reliable */
-        .player-row {
+        
+        .header-row {
             display: flex;
             justify-content: center;
-            align-items: center;
-            margin-top: 10px;
-            padding-bottom: 5px;
+            align-items: flex-end;
+            width: 100%;
+            max-width: 1000px;
         }
-        .avatar {
-            width: 42px;
-            height: 42px;
-            background: var(--arsenal-red);
-            border: 2px solid var(--arsenal-gold);
-            border-radius: 50%;
+
+        .player-wall {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 900;
-            font-size: 0.8rem;
-            position: relative;
-            margin: 0 -6px; /* Overlap for a squad feel */
-            box-shadow: 0 4px 8px rgba(0,0,0,0.6);
+            align-items: flex-end;
+            flex: 1;
             z-index: 1;
         }
-        .avatar:hover { z-index: 10; transform: scale(1.1); transition: 0.2s; }
-        .avatar .num {
+        .player-wall.left { justify-content: flex-end; }
+        .player-wall.right { justify-content: flex-start; }
+        
+        .p-card {
+            position: relative;
+            width: 38px; 
+            margin: 0 -5px; /* Overlap */
+            transition: transform 0.3s;
+        }
+        .p-card:hover { transform: translateY(-5px); z-index: 10; }
+        
+        .p-card img {
+            width: 100%;
+            display: block;
+            filter: drop-shadow(0px 5px 8px rgba(0,0,0,0.9));
+            /* Fade the bottom so they blend into the red background */
+            mask-image: linear-gradient(to top, transparent 0%, black 25%);
+            -webkit-mask-image: linear-gradient(to top, transparent 0%, black 25%);
+        }
+        
+        .p-card span {
             position: absolute;
-            bottom: -4px;
-            right: -4px;
+            bottom: 0;
+            right: 8px;
             background: var(--arsenal-gold);
             color: black;
-            font-size: 0.55rem;
-            padding: 2px 5px;
-            border-radius: 10px;
-            border: 1px solid black;
+            font-size: 0.5rem;
             font-weight: 900;
+            padding: 1px 3px;
+            border-radius: 3px;
+            border: 1px solid black;
+            z-index: 10;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.8);
+        }
+
+        .center-logo {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 10px;
+            z-index: 20;
+        }
+        .center-logo img {
+            width: 55px;
+            margin-bottom: 5px;
+            filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.6));
+        }
+        .center-logo h1 {
+            margin: 0;
+            font-weight: 900;
+            font-size: 1.2rem;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.9);
+            text-align: center;
+            white-space: nowrap;
         }
 
         /* Ticker */
@@ -188,7 +219,10 @@
             .player-grid { grid-template-columns: 1fr; }
             .time-box span { font-size: 1.2rem; }
             .card { padding: 20px 0; }
-            .avatar { width: 35px; height: 35px; font-size: 0.7rem; margin: 0 -4px; }
+            .p-card { width: 28px; margin: 0 -4px; }
+            .center-logo h1 { font-size: 0.9rem; }
+            .center-logo img { width: 45px; }
+            .p-card span { right: 5px; padding: 0px 2px; font-size: 0.45rem; }
         }
     </style>
 </head>
@@ -203,18 +237,36 @@
     <div id="app-content" style="opacity: 0; transition: opacity 0.8s ease;">
         
         <header>
-            <img src="https://arsenal-hub-api.ray-irvine.workers.dev/api/crest" class="main-crest" alt="Arsenal Crest" onerror="this.src='https://resources.premierleague.com/premierleague/badges/70/t3.png'">
-            <h1>Joshua's Arsenal Hub</h1>
-            
-            <!-- Pure CSS Avatars (No images to break) -->
-            <div class="player-row">
-                <div class="avatar">BS<span class="num">7</span></div>
-                <div class="avatar">MØ<span class="num">8</span></div>
-                <div class="avatar">DR<span class="num">41</span></div>
-                <div class="avatar">KH<span class="num">29</span></div>
-                <div class="avatar">GM<span class="num">11</span></div>
-                <div class="avatar">WS<span class="num">2</span></div>
-                <div class="avatar">GM<span class="num">6</span></div>
+            <div class="header-row">
+                <!-- Left Wall (7 Players) -->
+                <div class="player-wall left">
+                    <!-- Raya, White, Saliba, Gabriel, Timber, Rice, Odegaard -->
+                    <div class="p-card"><img src="https://resources.premierleague.com/premierleague/photos/players/110x140/p217526.png" referrerpolicy="no-referrer"><span>22</span></div>
+                    <div class="p-card"><img src="https://resources.premierleague.com/premierleague/photos/players/110x140/p199248.png" referrerpolicy="no-referrer"><span>4</span></div>
+                    <div class="p-card"><img src="https://resources.premierleague.com/premierleague/photos/players/110x140/p243514.png" referrerpolicy="no-referrer"><span>2</span></div>
+                    <div class="p-card"><img src="https://resources.premierleague.com/premierleague/photos/players/110x140/p209516.png" referrerpolicy="no-referrer"><span>6</span></div>
+                    <div class="p-card"><img src="https://resources.premierleague.com/premierleague/photos/players/110x140/p233688.png" referrerpolicy="no-referrer"><span>12</span></div>
+                    <div class="p-card"><img src="https://resources.premierleague.com/premierleague/photos/players/110x140/p219924.png" referrerpolicy="no-referrer"><span>41</span></div>
+                    <div class="p-card"><img src="https://resources.premierleague.com/premierleague/photos/players/110x140/p165147.png" referrerpolicy="no-referrer"><span>8</span></div>
+                </div>
+
+                <!-- Center Logo -->
+                <div class="center-logo">
+                    <img src="https://arsenal-hub-api.ray-irvine.workers.dev/api/crest" alt="Arsenal Crest" onerror="this.src='https://resources.premierleague.com/premierleague/badges/70/t3.png'">
+                    <h1>Joshua's Arsenal Hub</h1>
+                </div>
+
+                <!-- Right Wall (7 Players) -->
+                <div class="player-wall right">
+                    <!-- Partey, Havertz, Saka, Martinelli, Trossard, Jesus, Nketiah -->
+                    <div class="p-card"><img src="https://resources.premierleague.com/premierleague/photos/players/110x140/p203623.png" referrerpolicy="no-referrer"><span>5</span></div>
+                    <div class="p-card"><img src="https://resources.premierleague.com/premierleague/photos/players/110x140/p190044.png" referrerpolicy="no-referrer"><span>29</span></div>
+                    <div class="p-card"><img src="https://resources.premierleague.com/premierleague/photos/players/110x140/p223340.png" referrerpolicy="no-referrer"><span>7</span></div>
+                    <div class="p-card"><img src="https://resources.premierleague.com/premierleague/photos/players/110x140/p240326.png" referrerpolicy="no-referrer"><span>11</span></div>
+                    <div class="p-card"><img src="https://resources.premierleague.com/premierleague/photos/players/110x140/p185024.png" referrerpolicy="no-referrer"><span>19</span></div>
+                    <div class="p-card"><img src="https://resources.premierleague.com/premierleague/photos/players/110x140/p181096.png" referrerpolicy="no-referrer"><span>9</span></div>
+                    <div class="p-card"><img src="https://resources.premierleague.com/premierleague/photos/players/110x140/p166832.png" referrerpolicy="no-referrer"><span>14</span></div>
+                </div>
             </div>
         </header>
 
