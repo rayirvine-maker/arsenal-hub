@@ -1,0 +1,15 @@
+{
+  "name": "Joshua's Arsenal Hub",
+  "short_name": "Arsenal Hub",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#121212",
+  "theme_color": "#EF0107",
+  "icons": [
+    {
+      "src": "https://resources.premierleague.com/premierleague/badges/512/t3.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
