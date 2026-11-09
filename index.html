@@ -231,8 +231,8 @@
         let countdownInterval;
 
         async function initApp() {
+            // 1. COUNTDOWN
             const fixtures = await loadData('fixtures');
-            
             if (fixtures && fixtures.length > 0 && fixtures[0].date) {
                 const next = fixtures[0];
                 document.getElementById('next-match-name').innerText = `${next.home_team} vs ${next.away_team} (${next.league})`;
@@ -267,14 +267,13 @@
                         document.getElementById('minutes').innerText = minutes.toString().padStart(2, '0');
                         document.getElementById('seconds').innerText = seconds.toString().padStart(2, '0');
                     }, 1000);
-                } else {
-                    document.getElementById('next-match-name').innerText = "Fixture date unavailable.";
                 }
             } else {
                 document.getElementById('next-match-name').innerText = "No upcoming fixtures found.";
                 document.getElementById('match-time-gmt').innerText = "Check back soon for the next match.";
             }
 
+            // 2. LEAGUE TABLE
             const standings = await loadData('standings');
             if (standings && standings.standings[0].table) {
                 const table = standings.standings[0].table;
@@ -295,10 +294,9 @@
                 });
                 tableHtml += `</table>`;
                 document.getElementById('home-table').innerHTML = tableHtml;
-            } else {
-                document.getElementById('home-table').innerHTML = "<div style='text-align:center; color:#888;'>Could not load table data.</div>";
             }
 
+            // 3. NEWS
             const news = await loadData('news');
             if (news && news.length > 0) {
                 let newsHtml = "";
@@ -323,10 +321,31 @@
                 });
 
                 document.getElementById('news-list').innerHTML = newsHtml;
-                document.getElementById('social-news').innerHTML = newsHtml;
                 document.getElementById('news-ticker').innerHTML = tickerHtml;
+            }
+
+            // 4. SOCIAL FEED
+            const socialData = await loadData('social');
+            if (socialData && socialData.length > 0) {
+                let socialHtml = "";
+                socialData.forEach(item => {
+                    const dateObj = new Date(item.pubDate);
+                    const dateStr = dateObj.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+                    const timeStr = dateObj.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+                    
+                    socialHtml += `
+                        <div class="news-item" style="border-left-color: #1DA1F2;">
+                            <a href="${item.link}" target="_blank">${item.title}</a>
+                            <div class="news-meta">
+                                <span>🐦 ${item.author}</span>
+                                <span>🕒 ${dateStr} • ${timeStr}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+                document.getElementById('social-news').innerHTML = socialHtml;
             } else {
-                document.getElementById('news-list').innerHTML = "<div style='color:#888;'>Could not load news.</div>";
+                document.getElementById('social-news').innerHTML = "<div style='color:#888;'>Could not load social updates.</div>";
             }
         }
 
