@@ -60,14 +60,12 @@
         }
         .card h2 { margin-top: 0; color: var(--arsenal-gold); font-size: 1rem; text-transform: uppercase; border-bottom: 1px solid #444; padding-bottom: 10px; font-weight: 800; letter-spacing: 1px;}
 
-        /* Brighter Table Font */
         .league-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.85rem; }
         .league-table th { text-align: left; padding: 6px; border-bottom: 1px solid #444; color: #aaa; font-weight: 600; }
         .league-table td { padding: 8px 6px; border-bottom: 1px solid #333; color: #e0e0e0; font-weight: 500; }
         .league-table tr:hover { background: rgba(255,255,255,0.05); }
         .arsenal-row td { background: rgba(239, 1, 7, 0.2); font-weight: 800; color: #fff; border-left: 3px solid var(--arsenal-red); }
 
-        /* Lineup Styles */
         .lineup-match { margin-bottom: 15px; border-bottom: 1px dashed #444; padding-bottom: 10px; }
         .lineup-match h3 { font-size: 0.9rem; color: #fff; margin: 0 0 5px 0; }
         .lineup-formation { font-size: 0.75rem; color: var(--arsenal-gold); margin-bottom: 8px; font-weight: bold; }
@@ -114,9 +112,8 @@
         .loading { color: #888; font-style: italic; font-size: 0.9rem;}
         iframe { width: 100%; height: 250px; border-radius: 8px; border: none; margin-top: 10px; }
 
-        /* MOBILE SPECIFIC TWEAKS */
         @media (max-width: 600px) {
-            .player-grid { grid-template-columns: 1fr; } /* Single column on phone */
+            .player-grid { grid-template-columns: 1fr; }
             header h1 { font-size: 1.2rem; }
             .time-box span { font-size: 1.1rem; }
             .card { padding: 12px; }
@@ -337,6 +334,7 @@
                 document.getElementById('news-ticker').innerHTML = tickerHtml;
             }
 
+            // FIX: Added Error Fallback for Social Feed
             const socialData = await loadData('social');
             if (socialData && socialData.length > 0) {
                 let socialHtml = "";
@@ -347,6 +345,9 @@
                     socialHtml += `<div class="news-item" style="border-left-color: #1DA1F2;"><a href="${item.link}" target="_blank">${item.title}</a><div class="news-meta"><span>🐦 ${item.author}</span><span>🕒 ${dateStr} • ${timeStr}</span></div></div>`;
                 });
                 document.getElementById('social-news').innerHTML = socialHtml;
+            } else {
+                // If it fails or returns nothing, show this message instead of spinning
+                document.getElementById('social-news').innerHTML = "<div style='color:#888; font-size:0.9rem;'>Live social feeds are currently unavailable. Tap below to view directly on X.</div><a href='https://x.com/Arsenal' target='_blank' style='display:inline-block; margin-top:10px; background:var(--arsenal-red); color:#fff; padding:8px 16px; border-radius:4px; text-decoration:none; font-weight:bold;'>Open @Arsenal on X</a>";
             }
         }
 
