@@ -11,6 +11,7 @@
         :root {
             --arsenal-red: #EF0107;
             --arsenal-gold: #D4AF37;
+            --arsenal-navy: #063672;
         }
         
         /* Stronger Red to Stadium Morphed Background */
@@ -41,7 +42,7 @@
         #splash .splash-crest { width: 90px; margin-bottom: 15px; filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.6)); }
         #splash .splash-photo { max-width: 85vw; max-height: 50vh; border-radius: 12px; border: 3px solid var(--arsenal-gold); box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
         #splash.fade-out { opacity: 0; pointer-events: none; }
-        #enter-btn { margin-top: 25px; padding: 14px 30px; font-size: 0.9rem; font-family: 'Montserrat', sans-serif; font-weight: 900; background: #063672; color: white; border: 2px solid var(--arsenal-gold); border-radius: 30px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 0 15px rgba(0,0,0,0.5); }
+        #enter-btn { margin-top: 25px; padding: 14px 30px; font-size: 0.9rem; font-family: 'Montserrat', sans-serif; font-weight: 900; background: var(--arsenal-navy); color: white; border: 2px solid var(--arsenal-gold); border-radius: 30px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 0 15px rgba(0,0,0,0.5); }
 
         /* Header */
         header { 
@@ -53,38 +54,45 @@
             border-bottom: 2px solid rgba(212, 175, 55, 0.5);
         }
         header .main-crest { width: 60px; margin-bottom: 5px; filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.6)); }
-        header h1 { margin: 0 0 15px 0; font-weight: 900; font-size: 1.4rem; color: white; text-transform: uppercase; letter-spacing: 1px; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); }
+        header h1 { margin: 0 0 10px 0; font-weight: 900; font-size: 1.4rem; color: white; text-transform: uppercase; letter-spacing: 1px; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); }
 
-        /* Player Row (Avatars) */
+        /* Pure CSS Player Avatars - 100% Reliable */
         .player-row {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
-            max-width: 100%;
+            margin-top: 10px;
+            padding-bottom: 5px;
         }
-        .avatar-card {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background: rgba(0,0,0,0.4);
-            border: 1px solid var(--arsenal-gold);
-            border-radius: 8px;
-            padding: 4px;
-            width: 45px;
-        }
-        .avatar-card img {
-            width: 35px;
-            height: 35px;
+        .avatar {
+            width: 42px;
+            height: 42px;
+            background: var(--arsenal-red);
+            border: 2px solid var(--arsenal-gold);
             border-radius: 50%;
-            border: 1px solid white;
-        }
-        .avatar-card span {
-            font-size: 0.65rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
             font-weight: 900;
-            color: var(--arsenal-gold);
-            margin-top: 2px;
+            font-size: 0.8rem;
+            position: relative;
+            margin: 0 -6px; /* Overlap for a squad feel */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.6);
+            z-index: 1;
+        }
+        .avatar:hover { z-index: 10; transform: scale(1.1); transition: 0.2s; }
+        .avatar .num {
+            position: absolute;
+            bottom: -4px;
+            right: -4px;
+            background: var(--arsenal-gold);
+            color: black;
+            font-size: 0.55rem;
+            padding: 2px 5px;
+            border-radius: 10px;
+            border: 1px solid black;
+            font-weight: 900;
         }
 
         /* Ticker */
@@ -180,8 +188,7 @@
             .player-grid { grid-template-columns: 1fr; }
             .time-box span { font-size: 1.2rem; }
             .card { padding: 20px 0; }
-            .avatar-card { width: 38px; }
-            .avatar-card img { width: 30px; height: 30px; }
+            .avatar { width: 35px; height: 35px; font-size: 0.7rem; margin: 0 -4px; }
         }
     </style>
 </head>
@@ -199,15 +206,15 @@
             <img src="https://arsenal-hub-api.ray-irvine.workers.dev/api/crest" class="main-crest" alt="Arsenal Crest" onerror="this.src='https://resources.premierleague.com/premierleague/badges/70/t3.png'">
             <h1>Joshua's Arsenal Hub</h1>
             
-            <!-- Reliable Player Avatars -->
+            <!-- Pure CSS Avatars (No images to break) -->
             <div class="player-row">
-                <div class="avatar-card"><img src="https://ui-avatars.com/api/?name=Bukayo+Saka&background=EF0107&color=fff&bold=true"><span>7</span></div>
-                <div class="avatar-card"><img src="https://ui-avatars.com/api/?name=Odegaard&background=EF0107&color=fff&bold=true"><span>8</span></div>
-                <div class="avatar-card"><img src="https://ui-avatars.com/api/?name=Declan+Rice&background=EF0107&color=fff&bold=true"><span>41</span></div>
-                <div class="avatar-card"><img src="https://ui-avatars.com/api/?name=Kai+Havertz&background=EF0107&color=fff&bold=true"><span>29</span></div>
-                <div class="avatar-card"><img src="https://ui-avatars.com/api/?name=Martinelli&background=EF0107&color=fff&bold=true"><span>11</span></div>
-                <div class="avatar-card"><img src="https://ui-avatars.com/api/?name=Saliba&background=EF0107&color=fff&bold=true"><span>2</span></div>
-                <div class="avatar-card"><img src="https://ui-avatars.com/api/?name=Gabriel&background=EF0107&color=fff&bold=true"><span>6</span></div>
+                <div class="avatar">BS<span class="num">7</span></div>
+                <div class="avatar">MØ<span class="num">8</span></div>
+                <div class="avatar">DR<span class="num">41</span></div>
+                <div class="avatar">KH<span class="num">29</span></div>
+                <div class="avatar">GM<span class="num">11</span></div>
+                <div class="avatar">WS<span class="num">2</span></div>
+                <div class="avatar">GM<span class="num">6</span></div>
             </div>
         </header>
 
