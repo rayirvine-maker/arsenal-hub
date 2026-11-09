@@ -174,6 +174,7 @@
             .center-logo img { width: 45px; }
             .p-card span { right: -4px; padding: 0px 2px; font-size: 0.45rem; }
             .goal-frame { height: 160px; }
+            .goal-zone { gap: 1px; }
         }
     </style>
 </head>
@@ -267,7 +268,7 @@
             </div>
         </div>
 
-        <!-- NEW PENALTY GAME TAB -->
+        <!-- PENALTY GAME TAB -->
         <div id="game" class="tab-content">
             <div class="card" style="border-bottom:none;">
                 <h2>Penalty Shootout</h2>
@@ -284,11 +285,9 @@
                         <div class="goal-zone" onclick="shoot(8)"></div>
                         <div class="goal-zone" onclick="shoot(9)"></div>
                         
-                        <!-- Goalkeeper emoji -->
                         <div class="keeper" id="keeper">🧍‍♂️</div>
                     </div>
                     
-                    <!-- Ball emoji -->
                     <div class="ball" id="ball">⚽</div>
                     
                     <div class="game-message" id="game-msg">Tap the net to shoot!</div>
@@ -335,17 +334,10 @@
         let isAnimating = false;
         const maxShots = 5;
 
-        // Exact coordinates for the ball to land in the 9 zones
         const zoneCoords = {
-            1: { x: '-80px', y: '-140px' }, // Top Left
-            2: { x: '0px',   y: '-150px' }, // Top Center
-            3: { x: '80px',  y: '-140px' }, // Top Right
-            4: { x: '-80px', y: '-90px'  }, // Mid Left
-            5: { x: '0px',   y: '-100px' }, // Mid Center
-            6: { x: '80px',  y: '-90px'  }, // Mid Right
-            7: { x: '-80px', y: '-40px'  }, // Bottom Left
-            8: { x: '0px',   y: '-50px'  }, // Bottom Center
-            9: { x: '80px',  y: '-40px'  }  // Bottom Right
+            1: { x: '-80px', y: '-140px' }, 2: { x: '0px', y: '-150px' }, 3: { x: '80px', y: '-140px' },
+            4: { x: '-80px', y: '-90px' },  5: { x: '0px', y: '-100px' }, 6: { x: '80px', y: '-90px' },
+            7: { x: '-80px', y: '-40px' },  8: { x: '0px', y: '-50px' },  9: { x: '80px', y: '-40px' }
         };
 
         function shoot(zone) {
@@ -357,15 +349,11 @@
             const msg = document.getElementById('game-msg');
             
             msg.innerText = "";
-            
-            // 1. Move the ball to the chosen zone
             const coords = zoneCoords[zone];
             ball.style.transform = `translateX(calc(-50% + ${coords.x})) translateY(${coords.y}) scale(0.6)`;
             
-            // 2. Keeper picks a random zone to dive to
             const keeperZone = Math.floor(Math.random() * 9) + 1;
             
-            // Map keeper dive to a physical movement
             setTimeout(() => {
                 if (keeperZone === zone) {
                     // SAVE
@@ -375,14 +363,12 @@
                     msg.style.color = "#fff";
                 } else {
                     // GOAL
-                    // Keeper dives the wrong way
                     const kCoords = zoneCoords[keeperZone];
                     keeper.style.transform = `translateX(calc(-50% + ${kCoords.x})) translateY(${kCoords.y}) scale(1.5) rotate(${keeperZone < 5 ? '-45deg' : '45deg'})`;
                     msg.innerText = "GOAL!";
                     msg.style.color = "var(--arsenal-gold)";
                     goalsScored++;
                     
-                    // Play sound
                     if (document.getElementById('soundToggle').checked) {
                         goalSound.play().catch(e => console.log("Audio blocked"));
                     }
@@ -391,7 +377,6 @@
                 shotsTaken++;
                 document.getElementById('game-score').innerText = `Shots: ${shotsTaken}/${maxShots} | Goals: ${goalsScored}`;
                 
-                // Reset for next shot
                 setTimeout(() => {
                     ball.style.transform = `translateX(-50%) translateY(0) scale(1)`;
                     keeper.style.transform = `translateX(-50%) translateY(0) scale(1) rotate(0deg)`;
@@ -404,8 +389,7 @@
                         document.getElementById('btn-reset').style.display = "inline-block";
                     }
                 }, 1500);
-                
-            }, 400); // Keeper reacts slightly after ball is hit
+            }, 400);
         }
 
         function resetGame() {
@@ -487,4 +471,92 @@
                 let tableHtml = `<table class="league-table"><tr><th>Pos</th><th>Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>Pts</th></tr>`;
                 table.forEach(row => {
                     const isArsenal = row.team.name.includes('Arsenal');
-                    tableHtml += `<tr class="${isArsenal ? 'arsenal-row' : ''}"><td>${row.position}</td><td>${row.team.name}</td><td>${row.playedGames}</td><td>${row.wins}</td><td>
+                    tableHtml += `<tr class="${isArsenal ? 'arsenal-row' : ''}"><td>${row.position}</td><td>${row.team.name}</td><td>${row.playedGames}</td><td>${row.wins}</td><td>${row.draws}</td><td>${row.losses}</td><td>${row.points}</td></tr>`;
+                });
+                tableHtml += `</table>`;
+                document.getElementById('home-table').innerHTML = tableHtml;
+            }
+
+            const lineups = await loadData('lineups');
+            if (lineups && lineups.length > 0) {
+                let lineupsHtml = "";
+                lineups.forEach(match => {
+                    const dateStr = new Date(match.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+                    lineupsHtml += `<div class="lineup-match"><h3>${match.matchName} <span style="color:#aaa; font-size:0.7rem;">(${dateStr})</span></h3><div class="lineup-formation">Formation: ${match.formation}</div><div class="player-grid">`;
+                    match.starters.forEach(p => {
+                        lineupsHtml += `<div class="player-item"><span class="player-pos">${p.position}</span> ${p.name}</div>`;
+                    });
+                    lineupsHtml += `</div></div>`;
+                });
+                document.getElementById('lineups-container').innerHTML = lineupsHtml;
+            } else {
+                document.getElementById('lineups-container').innerHTML = "<div style='color:#ccc; font-size:0.9rem;'>Lineup data unavailable.</div>";
+            }
+
+            if (fixtures && fixtures.length > 0) {
+                let fixHtml = `<ul style="list-style-type:none; padding:0; margin:0;">`;
+                fixtures.forEach(f => {
+                    const d = new Date(f.date).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+                    fixHtml += `<li style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1); font-size:0.85rem;"><strong>${d}</strong> - ${f.home_team} vs ${f.away_team} <span style="color:var(--arsenal-gold); font-size:0.7rem;">(${f.league})</span></li>`;
+                });
+                fixHtml += `</ul>`;
+                document.getElementById('fixtures-list').innerHTML = fixHtml;
+            }
+
+            const news = await loadData('news');
+            if (news && news.length > 0) {
+                let newsHtml = "";
+                let tickerHtml = "";
+                news.forEach(item => {
+                    const dateObj = new Date(item.pubDate);
+                    const dateStr = dateObj.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+                    const timeStr = dateObj.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+                    newsHtml += `<div class="news-item"><a href="${item.link}" target="_blank">${item.title}</a><div class="news-meta"><span>📰 ${item.author}</span><span>🕒 ${dateStr} • ${timeStr}</span></div></div>`;
+                    tickerHtml += `<a href="${item.link}" target="_blank" class="ticker-item">⚽ ${item.title} (${item.author})</a>`;
+                });
+                document.getElementById('news-list').innerHTML = newsHtml;
+                document.getElementById('news-ticker').innerHTML = tickerHtml;
+            }
+
+            const socialData = await loadData('social');
+            if (socialData && socialData.length > 0) {
+                let socialHtml = "";
+                socialData.forEach(item => {
+                    const dateObj = new Date(item.pubDate);
+                    const dateStr = dateObj.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+                    const timeStr = dateObj.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+                    socialHtml += `<div class="news-item" style="border-left-color: var(--arsenal-gold);"><a href="${item.link}" target="_blank">▶️ ${item.title}</a><div class="news-meta"><span>📺 ${item.author}</span><span>🕒 ${dateStr} • ${timeStr}</span></div></div>`;
+                });
+                document.getElementById('social-news').innerHTML = socialHtml;
+            } else {
+                document.getElementById('social-news').innerHTML = "<div style='color:#ccc; font-size:0.9rem;'>Could not load media feed.</div>";
+            }
+        }
+
+        async function checkLiveMatch() {
+            const data = await loadData('live');
+            if (!data || !data.events || data.events.length === 0) {
+                return;
+            }
+            let currentScore = "";
+            data.events.forEach(event => {
+                if (event.type.text === "Goal") currentScore += event.scoringPlay ? "1" : "0";
+            });
+            
+            if (lastScore !== "" && currentScore !== lastScore && currentScore.length > lastScore.length) {
+                if (document.getElementById('soundToggle').checked) goalSound.play().catch(e => console.log("Audio blocked:", e));
+                
+                if ("Notification" in window && Notification.permission === "granted") {
+                    new Notification("⚽ GOOOOOAAAALLLL!", { body: "Arsenal have scored! Check the Live tab for details." });
+                } else {
+                    alert("GOOOOOAAAALLLL!!!");
+                }
+            }
+            lastScore = currentScore;
+        }
+
+        initApp();
+        setInterval(checkLiveMatch, 60000);
+    </script>
+</body>
+</html>
