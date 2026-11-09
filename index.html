@@ -26,33 +26,36 @@
             -webkit-tap-highlight-color: transparent;
         }
         
-        /* NEW DELUXE HEADER */
+        /* DELUXE HEADER */
         header { 
-            background: linear-gradient(180deg, rgba(239,1,7,0.95) 0%, rgba(18,18,18,0.9) 100%);
+            background: linear-gradient(180deg, rgba(239,1,7,1) 0%, rgba(18,18,18,0.95) 100%);
             padding: 10px 5px; text-align: center; border-bottom: 4px solid var(--arsenal-gold); 
             position: sticky; top: 0; z-index: 900;
             box-shadow: 0 10px 30px rgba(0,0,0,0.95);
             backdrop-filter: blur(10px);
+            overflow: hidden; /* Keeps players inside the header bounds */
         }
         
         .header-top {
-            display: flex; justify-content: space-between; align-items: center; max-width: 800px; margin: 0 auto; padding: 0 10px;
+            display: flex; justify-content: center; align-items: center; max-width: 800px; margin: 0 auto; gap: 10px;
         }
         
-        .player-row { display: flex; gap: 5px; }
+        .player-row { display: flex; gap: 5px; align-items: flex-end; }
         
+        /* CSS blend mode removes the background and morphs edges into red */
         .player-img { 
-            width: 45px; height: 55px; 
-            border-radius: 8px; 
-            border: 2px solid var(--arsenal-gold);
-            object-fit: cover;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.6);
-            background: #000;
+            width: 45px; height: 60px; 
+            object-fit: contain;
+            mix-blend-mode: multiply; /* Melts white background into red */
+            filter: contrast(1.2) drop-shadow(0 4px 4px rgba(0,0,0,0.6));
+            margin-bottom: -5px;
         }
+        /* Slight zoom for legends */
+        .player-img.legend { transform: scale(1.15); margin-bottom: -2px;}
 
-        .crest-container { display: flex; flex-direction: column; align-items: center; }
-        .crest-container img { width: 50px; height: auto; filter: drop-shadow(0 0 10px rgba(212,175,55,0.6)); }
-        .crest-container h1 { margin: 5px 0 0 0; font-weight: 900; font-size: 1.1rem; color: white; text-transform: uppercase; letter-spacing: 1px; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); }
+        .crest-container { display: flex; flex-direction: column; align-items: center; z-index: 10; }
+        .crest-container img { width: 55px; height: auto; filter: drop-shadow(0 0 10px rgba(212,175,55,0.8)); }
+        .crest-container h1 { margin: 5px 0 0 0; font-weight: 900; font-size: 1.1rem; color: white; text-transform: uppercase; letter-spacing: 1px; text-shadow: 2px 2px 4px rgba(0,0,0,0.9); }
 
         .global-ticker { 
             width: 100%; overflow: hidden; background-color: rgba(0, 0, 0, 0.95); color: var(--arsenal-gold); 
@@ -67,11 +70,10 @@
         .tab-content.active { display: block; animation: fadeIn 0.4s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* SMOOTHER CARDS WITH MORE GOLD */
         .card { 
             background: linear-gradient(145deg, rgba(40,40,40,0.98), rgba(15,15,15,0.98));
             padding: 18px; 
-            border-radius: 24px; /* Smoother corners */
+            border-radius: 24px; 
             margin-bottom: 20px; 
             border: 2px solid var(--arsenal-gold);
             border-top: 6px solid var(--arsenal-red);
@@ -129,7 +131,6 @@
         .nav-btn { background: none; border: none; color: #888; font-family: inherit; font-weight: 800; font-size: 0.65rem; cursor: pointer; text-transform: uppercase; transition: 0.2s; letter-spacing: 0.5px;}
         .nav-btn.active { color: var(--arsenal-gold); transform: translateY(-2px); }
 
-        /* SPLASH SCREEN */
         #splash { 
             position: fixed; inset: 0; background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%); 
             display: flex; flex-direction: column; align-items: center; justify-content: center; 
@@ -163,8 +164,9 @@
 
         @media (max-width: 600px) {
             .player-grid { grid-template-columns: 1fr; }
-            .crest-container h1 { font-size: 0.9rem; }
-            .player-img { width: 35px; height: 45px; }
+            .crest-container h1 { font-size: 0.85rem; }
+            .player-img { width: 30px; height: 45px; }
+            .crest-container img { width: 45px; }
             .time-box span { font-size: 1.1rem; }
             .card { padding: 15px; border-radius: 16px; }
         }
@@ -181,12 +183,12 @@
 
     <div id="app-content" style="opacity: 0; transition: opacity 0.8s ease;">
         
-        <!-- DELUXE HEADER WITH PLAYERS -->
+        <!-- DELUXE HEADER WITH PLAYERS & MORPHED BACKGROUNDS -->
         <header>
             <div class="header-top">
-                <!-- Left Side: Henry & Rice -->
+                <!-- Left Side: Henry (Legend) & Rice -->
                 <div class="player-row">
-                    <img src="https://resources.premierleague.com/premierleague/photos/players/110x140/p3736.png" class="player-img" alt="Thierry Henry" title="Thierry Henry #14">
+                    <img src="https://resources.premierleague.com/premierleague/photos/players/110x140/p3736.png" class="player-img legend" alt="Thierry Henry" title="Thierry Henry #14">
                     <img src="https://resources.premierleague.com/premierleague/photos/players/110x140/p215174.png" class="player-img" alt="Declan Rice" title="Declan Rice">
                 </div>
                 
