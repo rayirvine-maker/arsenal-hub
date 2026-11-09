@@ -149,16 +149,17 @@
             btn.classList.add('active');
         }
 
-        // 3. DYNAMIC PLAYERS (Exact filenames from your screenshot)
+        // 3. DYNAMIC PLAYERS 
+        // We removed the number badges so the full sticker is visible!
         const playerData = [
-            { file: '24_29_Kai_Havertz.png', num: '29' },
-            { file: '26_10_Dennis_Bergkamp.png', num: '10' },
-            { file: '28_6_Tony_Adams.png', num: '6' },
-            { file: '29_8_Ian_Wright.png', num: '8' },
-            { file: '30_7_Robert_Pires.png', num: '7' },
-            { file: '32_23_Sol_Campbell.png', num: '23' },
-            { file: '33_1_David_Seaman.png', num: '1' },
-            { file: '34_7_Liam_Brady.png', num: '7' }
+            { file: '24_29_Kai_Havertz.png' },
+            { file: '26_10_Dennis_Bergkamp.png' },
+            { file: '28_6_Tony_Adams.png' },
+            { file: '29_8_Ian_Wright.png' },
+            { file: '30_7_Robert_Pires.png' },
+            { file: '32_23_Sol_Campbell.png' },
+            { file: '33_1_David_Seaman.png' },
+            { file: '34_7_Liam_Brady.png' }
         ];
 
         function loadPlayers() {
@@ -173,7 +174,6 @@
             const buildCard = (p) => `
                 <div class="p-card">
                     <img src="${p.file}" onerror="this.style.display='none';">
-                    <span>${p.num}</span>
                 </div>
             `;
 
