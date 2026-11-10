@@ -8,57 +8,16 @@
     <meta name="theme-color" content="#EF0107">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <style>
-        /* Extra styles for the Social Tiles and Gallery */
-        .social-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 15px;
-        }
-        .social-tile {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            border-radius: 16px;
-            text-decoration: none;
-            color: white;
-            font-weight: 900;
-            font-size: 1.1rem;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            transition: transform 0.2s;
-        }
-        .social-tile:hover { transform: scale(1.05); }
-        .social-tile span { font-size: 2rem; margin-bottom: 8px; }
-        
-        .tile-youtube { background: #FF0000; }
-        .tile-instagram { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
-        .tile-x { background: #000; border: 1px solid #333; }
-        .tile-tiktok { background: #010101; border: 1px solid #333; }
-
-        .photo-gallery {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-top: 15px;
-        }
-        .photo-gallery img {
-            width: 100%;
-            height: 140px;
-            object-fit: cover;
-            border-radius: 8px;
-            border: 2px solid var(--arsenal-gold);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-        }
-    </style>
 </head>
 <body>
 
-    <!-- Splash screen removed entirely -->
+    <div id="splash">
+        <img src="https://arsenal-hub-api.ray-irvine.workers.dev/api/crest" class="splash-crest" alt="Arsenal Crest" onerror="this.src='https://resources.premierleague.com/premierleague/badges/70/t3.png'">
+        <img src="joshua-hero.jpg.webp" class="splash-photo" alt="Joshua in Arsenal kit">
+        <button id="enter-btn">Tap to Enter ⚽</button>
+    </div>
 
-    <div id="app-content" style="opacity: 1;"> <!-- Made visible by default -->
+    <div id="app-content" style="opacity: 0; transition: opacity 0.8s ease;">
         
         <header>
             <div class="header-row">
@@ -126,36 +85,16 @@
             </div>
         </div>
 
-        <!-- THE MEDIA HUB -->
         <div id="social" class="tab-content">
             <div class="card" style="border-bottom:none;">
-                <h2>Arsenal Media Hub</h2>
-                
-                <!-- Social Tiles -->
-                <div class="social-grid">
-                    <a href="https://www.youtube.com/@Arsenal" target="_blank" class="social-tile tile-youtube">
-                        <span>▶️</span> YouTube
-                    </a>
-                    <a href="https://www.instagram.com/arsenal/" target="_blank" class="social-tile tile-instagram">
-                        <span>📸</span> Instagram
-                    </a>
-                    <a href="https://x.com/Arsenal" target="_blank" class="social-tile tile-x">
-                        <span>𝕏</span> Twitter / X
-                    </a>
-                    <a href="https://www.tiktok.com/@arsenal" target="_blank" class="social-tile tile-tiktok">
-                        <span>🎵</span> TikTok
-                    </a>
+                <h2>Arsenal Social Feed</h2>
+                <p style="color: #ccc; margin-bottom: 15px;">Follow the Gunners:</p>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <a href="https://www.youtube.com/@Arsenal" target="_blank" style="flex: 1; min-width: 120px; text-align: center; background: #FF0000; color: white; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: bold;">YouTube</a>
+                    <a href="https://www.instagram.com/arsenal/" target="_blank" style="flex: 1; min-width: 120px; text-align: center; background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color: white; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: bold;">Instagram</a>
+                    <a href="https://x.com/Arsenal" target="_blank" style="flex: 1; min-width: 120px; text-align: center; background: #000; color: white; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: bold; border: 1px solid #333;">Twitter / X</a>
+                    <a href="https://www.tiktok.com/@arsenal" target="_blank" style="flex: 1; min-width: 120px; text-align: center; background: #010101; color: white; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: bold; border: 1px solid #333;">TikTok</a>
                 </div>
-
-                <!-- Real Emirates & Highbury Photo Gallery -->
-                <h2 style="margin-top: 35px;">Stadium Gallery</h2>
-                <div class="photo-gallery">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Emirates_Stadium_Arsenal.jpg/800px-Emirates_Stadium_Arsenal.jpg" alt="Emirates Outside">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Emirates_Stadium_inside.jpg/800px-Emirates_Stadium_inside.jpg" alt="Emirates Inside">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Highbury_Stadium.jpg/800px-Highbury_Stadium.jpg" alt="Highbury Stadium">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Highbury_Marble_Halls.jpg/800px-Highbury_Marble_Halls.jpg" alt="Highbury Marble Halls">
-                </div>
-
             </div>
         </div>
 
@@ -201,7 +140,13 @@
     </div>
 
     <script>
-        // 1. TABS
+        // 1. SPLASH SCREEN (Fixed to trigger instantly)
+        document.getElementById('enter-btn').addEventListener('click', () => {
+            document.getElementById('splash').style.display = 'none';
+            document.getElementById('app-content').style.opacity = '1';
+        });
+
+        // 2. TABS
         function switchTab(tabId, btn) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
@@ -209,7 +154,7 @@
             btn.classList.add('active');
         }
 
-        // 2. DYNAMIC PLAYERS
+        // 3. DYNAMIC PLAYERS
         const playerData = [
             { file: '24_29_Kai_Havertz.png' },
             { file: '26_10_Dennis_Bergkamp.png' },
@@ -241,7 +186,7 @@
         }
         loadPlayers();
 
-        // 3. PENALTY GAME LOGIC
+        // 4. PENALTY GAME LOGIC
         let shotsTaken = 0;
         let goalsScored = 0;
         let isAnimating = false;
@@ -314,8 +259,7 @@
             document.getElementById('btn-reset').style.display = "none";
         }
 
-        // 4. DATA FETCHING
-        let lastScore = "";
+        // 5. DATA FETCHING
         async function loadData(endpoint) {
             const API_BASE = 'https://arsenal-hub-api.ray-irvine.workers.dev'; 
             try {
@@ -415,27 +359,7 @@
             }
         }
 
-        async function checkLiveMatch() {
-            const data = await loadData('live');
-            if (!data || !data.events || data.events.length === 0) return;
-            let currentScore = "";
-            data.events.forEach(event => {
-                if (event.type.text === "Goal") currentScore += event.scoringPlay ? "1" : "0";
-            });
-            
-            if (lastScore !== "" && currentScore !== lastScore && currentScore.length > lastScore.length) {
-                if (document.getElementById('soundToggle').checked) goalSound.play().catch(e => console.log("Audio blocked:", e));
-                if ("Notification" in window && Notification.permission === "granted") {
-                    new Notification("⚽ GOOOOOAAAALLLL!", { body: "Arsenal have scored! Check the Live tab for details." });
-                } else {
-                    alert("GOOOOOAAAALLLL!!!");
-                }
-            }
-            lastScore = currentScore;
-        }
-
         initApp();
-        setInterval(checkLiveMatch, 60000);
     </script>
 </body>
 </html>
