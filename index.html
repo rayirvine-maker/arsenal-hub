@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Extra styles just for the new Social Tiles */
+        /* Extra styles for the Social Tiles and Gallery */
         .social-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -46,10 +46,11 @@
         }
         .photo-gallery img {
             width: 100%;
-            height: 120px;
+            height: 140px;
             object-fit: cover;
             border-radius: 8px;
-            border: 1px solid var(--arsenal-gold);
+            border: 2px solid var(--arsenal-gold);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
     </style>
 </head>
@@ -129,7 +130,7 @@
             </div>
         </div>
 
-        <!-- THE NEW MEDIA HUB -->
+        <!-- THE MEDIA HUB -->
         <div id="social" class="tab-content">
             <div class="card" style="border-bottom:none;">
                 <h2>Arsenal Media Hub</h2>
@@ -150,14 +151,13 @@
                     </a>
                 </div>
 
-                <!-- Podcast Player -->
-                <h2 style="margin-top: 35px;">Official Arsenal Podcast</h2>
-                <iframe style="border-radius:12px" src="https://open.spotify.com/embed/show/1XjT8k5k4rR4y2j5e8U4Q1?utm_source=generator&theme=0" height="200" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-
-                <!-- Photo Gallery (FIXED) -->
-                <h2 style="margin-top: 35px;">Emirates Stadium Gallery</h2>
-                <div class="photo-gallery" id="photo-gallery">
-                    <!-- Photos will load here -->
+                <!-- Real Emirates & Highbury Photo Gallery -->
+                <h2 style="margin-top: 35px;">Stadium Gallery</h2>
+                <div class="photo-gallery">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Emirates_Stadium_Arsenal.jpg/800px-Emirates_Stadium_Arsenal.jpg" alt="Emirates Outside">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Emirates_Stadium_inside.jpg/800px-Emirates_Stadium_inside.jpg" alt="Emirates Inside">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Highbury_Stadium.jpg/800px-Highbury_Stadium.jpg" alt="Highbury Stadium">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Highbury_Marble_Halls.jpg/800px-Highbury_Marble_Halls.jpg" alt="Highbury Marble Halls">
                 </div>
 
             </div>
@@ -252,25 +252,7 @@
         }
         loadPlayers();
 
-        // 4. FIXED PHOTO GALLERY (Using a reliable football data API)
-        function loadGallery() {
-            const gallery = document.getElementById('photo-gallery');
-            // Using a free, reliable sports API that provides venue photos
-            const imgUrls = [
-                'https://sports.bzzoiro.com/img/venue/77/', // Example venue ID
-                'https://sports.bzzoiro.com/img/venue/78/',
-                'https://sports.bzzoiro.com/img/venue/79/',
-                'https://sports.bzzoiro.com/img/venue/80/'
-            ];
-            
-            imgUrls.forEach((url) => {
-                // If the image fails, we hide it instead of showing a broken icon
-                gallery.innerHTML += `<img src="${url}" alt="Arsenal Photo" onerror="this.style.display='none';">`;
-            });
-        }
-        loadGallery();
-
-        // 5. PENALTY GAME LOGIC
+        // 4. PENALTY GAME LOGIC
         let shotsTaken = 0;
         let goalsScored = 0;
         let isAnimating = false;
@@ -343,7 +325,7 @@
             document.getElementById('btn-reset').style.display = "none";
         }
 
-        // 6. DATA FETCHING
+        // 5. DATA FETCHING
         let lastScore = "";
         async function loadData(endpoint) {
             const API_BASE = 'https://arsenal-hub-api.ray-irvine.workers.dev'; 
