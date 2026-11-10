@@ -69,6 +69,13 @@
         .news-item a { font-size: 0.95rem; font-weight: 700; color: #fff; text-decoration: none; display: block; margin-bottom: 10px; }
         .news-meta { display: flex; justify-content: space-between; font-size: 0.65rem; color: #bbb; }
         .news-meta span { background: rgba(0,0,0,0.8); padding: 3px 6px; border-radius: 4px; }
+        
+        .lineup-match { margin-bottom: 20px; }
+        .lineup-match h3 { font-size: 0.95rem; color: #fff; margin: 0 0 5px 0; }
+        .lineup-formation { font-size: 0.75rem; color: var(--arsenal-gold); margin-bottom: 10px; font-weight: bold; }
+        .player-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .player-item { background: rgba(0,0,0,0.5); padding: 6px 10px; border-radius: 4px; font-size: 0.8rem; display: flex; align-items: center; gap: 8px; border: 1px solid rgba(255,255,255,0.1);}
+        .player-pos { color: var(--arsenal-gold); font-weight: 800; font-size: 0.7rem; min-width: 25px; text-align: center; border-right: 1px solid rgba(255,255,255,0.2); padding-right: 6px;}
 
         .settings-bar { display: flex; justify-content: flex-end; align-items: center; padding: 15px 20px; background: rgba(0,0,0,0.6); border-bottom: 1px solid rgba(212, 175, 55, 0.3); }
         .settings-bar label { font-weight: 700; margin-right: 10px; font-size: 0.75rem; }
@@ -86,19 +93,16 @@
         .loading { color: #ff4444; font-style: italic; font-size: 0.9rem; }
         iframe { width: 100%; height: 300px; border-radius: 8px; border: none; margin-top: 10px; }
 
-        .game-container { display: flex; flex-direction: column; align-items: center; background: var(--pitch-green); border-radius: 12px; padding: 20px 10px; }
-        .goal-frame { width: 100%; max-width: 320px; height: 200px; border: 8px solid #fff; border-bottom: none; position: relative; display: grid; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: 1fr 1fr 1fr; gap: 2px; background-image: linear-gradient(45deg, transparent 45%, #fff 45%, #fff 55%, transparent 55%), linear-gradient(-45deg, transparent 45%, #fff 45%, #fff 55%, transparent 55%); background-size: 20px 20px; }
-        .goal-zone { cursor: pointer; }
-        .keeper { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); font-size: 3rem; transition: all 0.3s ease-out; z-index: 3; }
-        .ball { font-size: 1.5rem; position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); transition: all 0.4s ease-in; z-index: 4; }
-        .game-message { font-size: 1.5rem; font-weight: 900; margin-top: 15px; height: 30px; }
-        .game-score { font-size: 1rem; font-weight: 700; margin-top: 5px; color: var(--arsenal-gold); }
-        .btn-reset { margin-top: 15px; padding: 10px 20px; background: var(--arsenal-red); color: white; border: 2px solid var(--arsenal-gold); border-radius: 20px; display: none; }
-
-        @media (max-width: 600px) {
-            .p-card { width: 32px; height: 48px; margin: 0 2px; }
-            .center-logo h1 { font-size: 0.9rem; white-space: normal; max-width: 100px; }
-        }
+        /* NEW CANVAS GAME STYLES */
+        .game-wrapper { display: flex; flex-direction: column; align-items: center; background: #111; border-radius: 12px; padding: 10px; border: 2px solid var(--arsenal-gold); }
+        canvas { width: 100%; max-width: 400px; height: 300px; background: var(--pitch-green); border-radius: 8px; cursor: crosshair; touch-action: none; }
+        .game-controls { display: flex; width: 100%; max-width: 400px; justify-content: space-between; margin-top: 15px; gap: 10px; }
+        .game-btn { flex: 1; padding: 15px; font-family: inherit; font-weight: 900; background: var(--arsenal-red); color: white; border: 2px solid var(--arsenal-gold); border-radius: 8px; font-size: 1rem; cursor: pointer; text-transform: uppercase; user-select: none; }
+        .game-btn:active { background: #b30005; transform: scale(0.98); }
+        .power-bar-container { flex: 1; background: #333; border-radius: 8px; border: 2px solid #444; overflow: hidden; position: relative; display: flex; align-items: center; justify-content: center;}
+        .power-bar { position: absolute; left: 0; top: 0; bottom: 0; width: 0%; background: linear-gradient(90deg, #4caf50, #ffeb3b, #f44336); transition: width 0.05s; }
+        .power-text { position: relative; z-index: 2; font-weight: 900; font-size: 0.9rem; text-shadow: 1px 1px 2px black; }
+        .game-msg { font-size: 1.2rem; font-weight: 900; margin-top: 10px; height: 25px; color: var(--arsenal-gold); text-align: center;}
     </style>
 </head>
 <body>
@@ -145,6 +149,11 @@
                 <h2>Premier League Table</h2>
                 <div id="home-table" class="loading">Loading table...</div>
             </div>
+
+            <div class="card">
+                <h2>Last 3 Match Lineups</h2>
+                <div id="lineups-container" class="loading">Loading lineups...</div>
+            </div>
             
             <div class="card">
                 <h2>Next 5 Fixtures</h2>
@@ -184,20 +193,20 @@
             </div>
         </div>
 
+        <!-- NEW CANVAS GAME TAB -->
         <div id="game" class="tab-content">
             <div class="card" style="border-bottom:none;">
                 <h2>Penalty Shootout</h2>
-                <div class="game-container">
-                    <div class="goal-frame" id="goal-frame">
-                        <div class="goal-zone" onclick="shoot(1)"></div><div class="goal-zone" onclick="shoot(2)"></div><div class="goal-zone" onclick="shoot(3)"></div>
-                        <div class="goal-zone" onclick="shoot(4)"></div><div class="goal-zone" onclick="shoot(5)"></div><div class="goal-zone" onclick="shoot(6)"></div>
-                        <div class="goal-zone" onclick="shoot(7)"></div><div class="goal-zone" onclick="shoot(8)"></div><div class="goal-zone" onclick="shoot(9)"></div>
-                        <div class="keeper" id="keeper">🧍‍♂️</div>
+                <div class="game-wrapper">
+                    <canvas id="pitch" width="400" height="300"></canvas>
+                    <div class="game-msg" id="game-msg">Tap the screen to aim, hold to power up!</div>
+                    <div class="game-controls">
+                        <div class="power-bar-container">
+                            <div class="power-bar" id="power-bar"></div>
+                            <span class="power-text" id="power-text">0%</span>
+                        </div>
+                        <button class="game-btn" id="shoot-btn">Hold & Release</button>
                     </div>
-                    <div class="ball" id="ball">⚽</div>
-                    <div class="game-message" id="game-msg">Tap the net to shoot!</div>
-                    <div class="game-score" id="game-score">Shots: 0/5 | Goals: 0</div>
-                    <button class="btn-reset" id="btn-reset" onclick="resetGame()">Play Again</button>
                 </div>
             </div>
         </div>
@@ -221,7 +230,7 @@
             btn.classList.add('active');
         }
 
-        // 2. DYNAMIC PLAYERS (No numbers, clean layout)
+        // 2. PLAYERS
         const playerData = [
             '24_29_Kai_Havertz.png', '26_10_Dennis_Bergkamp.png', '28_6_Tony_Adams.png',
             '29_8_Ian_Wright.png', '30_7_Robert_Pires.png', '32_23_Sol_Campbell.png',
@@ -242,67 +251,7 @@
         }
         loadPlayers();
 
-        // 3. PENALTY GAME LOGIC
-        let shotsTaken = 0, goalsScored = 0, isAnimating = false;
-        const maxShots = 5;
-        const goalSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3'); 
-
-        const zoneCoords = {
-            1: { x: '-80px', y: '-140px' }, 2: { x: '0px', y: '-150px' }, 3: { x: '80px', y: '-140px' },
-            4: { x: '-80px', y: '-90px' },  5: { x: '0px', y: '-100px' }, 6: { x: '80px', y: '-90px' },
-            7: { x: '-80px', y: '-40px' },  8: { x: '0px', y: '-50px' },  9: { x: '80px', y: '-40px' }
-        };
-
-        function shoot(zone) {
-            if (isAnimating || shotsTaken >= maxShots) return;
-            isAnimating = true;
-            
-            const ball = document.getElementById('ball');
-            const keeper = document.getElementById('keeper');
-            const msg = document.getElementById('game-msg');
-            
-            msg.innerText = "";
-            const coords = zoneCoords[zone];
-            ball.style.transform = `translateX(calc(-50% + ${coords.x})) translateY(${coords.y}) scale(0.6)`;
-            
-            const keeperZone = Math.floor(Math.random() * 9) + 1;
-            
-            setTimeout(() => {
-                if (keeperZone === zone) {
-                    keeper.style.transform = `translateX(calc(-50% + ${zoneCoords[keeperZone].x})) translateY(${zoneCoords[keeperZone].y}) scale(1.5)`;
-                    msg.innerText = "SAVED!";
-                } else {
-                    keeper.style.transform = `translateX(calc(-50% + ${zoneCoords[keeperZone].x})) translateY(${zoneCoords[keeperZone].y}) scale(1.5) rotate(${keeperZone < 5 ? '-45deg' : '45deg'})`;
-                    msg.innerText = "GOAL!";
-                    msg.style.color = "var(--arsenal-gold)";
-                    goalsScored++;
-                    if (document.getElementById('soundToggle').checked) goalSound.play().catch(e => {});
-                }
-                
-                shotsTaken++;
-                document.getElementById('game-score').innerText = `Shots: ${shotsTaken}/${maxShots} | Goals: ${goalsScored}`;
-                
-                setTimeout(() => {
-                    ball.style.transform = `translateX(-50%) translateY(0) scale(1)`;
-                    keeper.style.transform = `translateX(-50%) translateY(0) scale(1) rotate(0deg)`;
-                    msg.innerText = "";
-                    isAnimating = false;
-                    if (shotsTaken >= maxShots) {
-                        msg.innerText = goalsScored >= 3 ? "ARSENAL WIN!" : "YOU LOST!";
-                        document.getElementById('btn-reset').style.display = "inline-block";
-                    }
-                }, 1500);
-            }, 400);
-        }
-
-        function resetGame() {
-            shotsTaken = 0; goalsScored = 0; isAnimating = false;
-            document.getElementById('game-score').innerText = `Shots: 0/5 | Goals: 0`;
-            document.getElementById('game-msg').innerText = "Tap the net to shoot!";
-            document.getElementById('btn-reset').style.display = "none";
-        }
-
-        // 4. DATA FETCHING (WITH ERROR FALLBACKS)
+        // 3. DATA FETCHING
         async function loadData(endpoint) {
             const API_BASE = 'https://arsenal-hub-api.ray-irvine.workers.dev'; 
             try {
@@ -310,12 +259,11 @@
                 if (!res.ok) throw new Error("Failed");
                 return await res.json();
             } catch (err) {
-                return null; // Return null on failure
+                return null;
             }
         }
 
         async function initApp() {
-            // --- FIXTURES ---
             const fixtures = await loadData('fixtures');
             if (fixtures && fixtures.length > 0) {
                 const next = fixtures[0];
@@ -330,11 +278,15 @@
                         document.getElementById('seconds').innerText = Math.floor((distance % (1000 * 60)) / 1000);
                     }
                 }, 1000);
-            } else {
-                document.getElementById('next-match-name').innerText = "Could not load fixtures.";
+
+                let fixHtml = `<ul style="list-style-type:none; padding:0; margin:0;">`;
+                fixtures.forEach(f => {
+                    const d = new Date(f.date).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+                    fixHtml += `<li style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1); font-size:0.85rem;"><strong>${d}</strong> - ${f.home_team} vs ${f.away_team}</li>`;
+                });
+                document.getElementById('fixtures-list').innerHTML = fixHtml + `</ul>`;
             }
 
-            // --- STANDINGS ---
             const standings = await loadData('standings');
             if (standings && standings.standings) {
                 const table = standings.standings[0].table;
@@ -344,11 +296,22 @@
                     html += `<tr class="${isArs ? 'arsenal-row' : ''}"><td>${r.position}</td><td>${r.team.name}</td><td>${r.points}</td></tr>`;
                 });
                 document.getElementById('home-table').innerHTML = html + `</table>`;
-            } else {
-                document.getElementById('home-table').innerHTML = "<span style='color:red;'>Could not load table.</span>";
             }
 
-            // --- NEWS ---
+            const lineups = await loadData('lineups');
+            if (lineups && lineups.length > 0) {
+                let lineupsHtml = "";
+                lineups.forEach(match => {
+                    const dateStr = new Date(match.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+                    lineupsHtml += `<div class="lineup-match"><h3>${match.matchName} <span style="color:#aaa; font-size:0.7rem;">(${dateStr})</span></h3><div class="lineup-formation">Formation: ${match.formation}</div><div class="player-grid">`;
+                    match.starters.forEach(p => {
+                        lineupsHtml += `<div class="player-item"><span class="player-pos">${p.position}</span> ${p.name}</div>`;
+                    });
+                    lineupsHtml += `</div></div>`;
+                });
+                document.getElementById('lineups-container').innerHTML = lineupsHtml;
+            }
+
             const news = await loadData('news');
             if (news && news.length > 0) {
                 let html = "";
@@ -356,11 +319,216 @@
                     html += `<div class="news-item"><a href="${n.link}" target="_blank">${n.title}</a><div class="news-meta"><span>${n.author}</span></div></div>`;
                 });
                 document.getElementById('news-list').innerHTML = html;
-            } else {
-                document.getElementById('news-list').innerHTML = "<span style='color:red;'>Could not load news.</span>";
             }
         }
 
+        // 4. PENALTY CANVAS GAME
+        const canvas = document.getElementById('pitch');
+        const ctx = canvas.getContext('2d');
+        const msgEl = document.getElementById('game-msg');
+        const powerBar = document.getElementById('power-bar');
+        const powerText = document.getElementById('power-text');
+        const shootBtn = document.getElementById('shoot-btn');
+        const goalSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3'); 
+
+        // Game State
+        let gameState = 'aim'; // aim, powering, shooting, result
+        let aimX = 200;
+        let power = 0;
+        let isCharging = false;
+        let shotsTaken = 0;
+        let goalsScored = 0;
+        const maxShots = 5;
+
+        // Objects
+        const goal = { x: 50, y: 50, w: 300, h: 100 };
+        const keeper = { x: 200, y: 100, w: 30, h: 40, diveX: 200, diving: false };
+        const ball = { x: 200, y: 250, r: 8, targetX: 200, targetY: 100, flying: false };
+
+        // Input Logic
+        function startCharge(e) {
+            if (gameState !== 'aim' && gameState !== 'result') return;
+            if (gameState === 'result' && shotsTaken >= maxShots) { resetGame(); return; }
+            
+            e.preventDefault();
+            isCharging = true;
+            power = 0;
+            gameState = 'powering';
+            msgEl.innerText = "Set Power!";
+        }
+
+        function releaseCharge(e) {
+            if (!isCharging) return;
+            e.preventDefault();
+            isCharging = false;
+            
+            if (gameState === 'powering') {
+                // Execute Shot
+                gameState = 'shooting';
+                ball.flying = true;
+                ball.targetX = aimX;
+                
+                // Power determines where it lands in the goal (higher power = higher up)
+                ball.targetY = 130 - (power * 0.8); 
+                
+                // Keeper AI dives randomly
+                const diveDirection = Math.floor(Math.random() * 3); // 0=left, 1=center, 2=right
+                if (diveDirection === 0) keeper.diveX = 100;
+                if (diveDirection === 1) keeper.diveX = 200;
+                if (diveDirection === 2) keeper.diveX = 300;
+                keeper.diving = true;
+            }
+        }
+
+        // Track mouse/touch for aiming
+        canvas.addEventListener('mousemove', (e) => {
+            if (gameState === 'aim') {
+                const rect = canvas.getBoundingClientRect();
+                aimX = e.clientX - rect.left;
+            }
+        });
+        canvas.addEventListener('touchmove', (e) => {
+            if (gameState === 'aim') {
+                const rect = canvas.getBoundingClientRect();
+                aimX = e.touches[0].clientX - rect.left;
+            }
+        });
+
+        shootBtn.addEventListener('mousedown', startCharge);
+        shootBtn.addEventListener('touchstart', startCharge);
+        window.addEventListener('mouseup', releaseCharge);
+        window.addEventListener('touchend', releaseCharge);
+
+        // Game Loop
+        function update() {
+            if (isCharging) {
+                power += 2;
+                if (power > 100) power = 0; // Loop power bar
+                powerBar.style.width = power + '%';
+                powerText.innerText = power + '%';
+            }
+
+            if (ball.flying) {
+                ball.x += (ball.targetX - ball.x) * 0.1;
+                ball.y += (ball.targetY - ball.y) * 0.1;
+
+                if (Math.abs(ball.x - ball.targetX) < 2 && Math.abs(ball.y - ball.targetY) < 2) {
+                    ball.flying = false;
+                    resolveShot();
+                }
+            }
+
+            if (keeper.diving && keeper.x !== keeper.diveX) {
+                keeper.x += (keeper.diveX - keeper.x) * 0.15;
+            }
+        }
+
+        function resolveShot() {
+            const distToKeeper = Math.abs(ball.x - keeper.x);
+            const isSaved = distToKeeper < 35 && ball.y > 50; // If ball is close to keeper
+            
+            if (isSaved) {
+                msgEl.innerText = "SAVED!";
+                msgEl.style.color = "#fff";
+            } else {
+                msgEl.innerText = "GOOOOOAL!";
+                msgEl.style.color = "var(--arsenal-gold)";
+                goalsScored++;
+                if (document.getElementById('soundToggle').checked) goalSound.play().catch(e => {});
+            }
+            
+            shotsTaken++;
+            gameState = 'result';
+            
+            setTimeout(() => {
+                if (shotsTaken >= maxShots) {
+                    msgEl.innerText = goalsScored >= 3 ? "ARSENAL WIN! TAP TO RESET" : "YOU LOST! TAP TO RESET";
+                    msgEl.style.color = goalsScored >= 3 ? "var(--arsenal-gold)" : "red";
+                } else {
+                    resetShot();
+                }
+            }, 1500);
+        }
+
+        function resetShot() {
+            ball.x = 200; ball.y = 250;
+            keeper.x = 200; keeper.diving = false; keeper.diveX = 200;
+            power = 0;
+            powerBar.style.width = '0%';
+            powerText.innerText = '0%';
+            msgEl.innerText = `Shots: ${shotsTaken}/${maxShots} | Goals: ${goalsScored}`;
+            gameState = 'aim';
+        }
+
+        function resetGame() {
+            shotsTaken = 0; goalsScored = 0;
+            resetShot();
+            msgEl.innerText = "Tap the screen to aim, hold to power up!";
+        }
+
+        // Drawing
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw Pitch Lines
+            ctx.strokeStyle = "rgba(255,255,255,0.3)";
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(200, 300, 100, Math.PI, 0);
+            ctx.stroke();
+
+            // Draw Goal Net
+            ctx.fillStyle = "rgba(255,255,255,0.1)";
+            ctx.fillRect(goal.x, goal.y, goal.w, goal.h);
+            ctx.strokeStyle = "#fff";
+            ctx.lineWidth = 4;
+            ctx.strokeRect(goal.x, goal.y, goal.w, goal.h);
+            
+            // Draw Net Pattern
+            ctx.strokeStyle = "rgba(255,255,255,0.2)";
+            ctx.lineWidth = 1;
+            for(let i=0; i<goal.w; i+=15) { ctx.beginPath(); ctx.moveTo(goal.x + i, goal.y); ctx.lineTo(goal.x + i, goal.y + goal.h); ctx.stroke(); }
+            for(let i=0; i<goal.h; i+=15) { ctx.beginPath(); ctx.moveTo(goal.x, goal.y + i); ctx.lineTo(goal.x + goal.w, goal.y + i); ctx.stroke(); }
+
+            // Draw Keeper (Simple rectangle body)
+            ctx.fillStyle = "#00ff00"; // Keeper green
+            ctx.fillRect(keeper.x - 15, keeper.y, 30, 40);
+            ctx.fillStyle = "#ffcc00"; // Head
+            ctx.beginPath(); ctx.arc(keeper.x, keeper.y, 10, 0, Math.PI * 2); ctx.fill();
+
+            // Draw Aim Reticle
+            if (gameState === 'aim' || gameState === 'powering') {
+                ctx.strokeStyle = "var(--arsenal-gold)";
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.arc(aimX, 100, 15, 0, Math.PI * 2);
+                ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(aimX - 20, 100); ctx.lineTo(aimX + 20, 100); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(aimX, 80); ctx.lineTo(aimX, 120); ctx.stroke();
+            }
+
+            // Draw Ball
+            ctx.fillStyle = "#fff";
+            ctx.beginPath();
+            ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = "#000";
+            ctx.lineWidth = 1;
+            ctx.stroke();
+        }
+
+        function gameLoop() {
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Start game when tab is opened
+        document.querySelector('button[onclick="switchTab(\'game\', this)"]').addEventListener('click', () => {
+            setTimeout(() => { resetGame(); }, 100);
+        });
+
+        gameLoop();
         initApp();
     </script>
 </body>
