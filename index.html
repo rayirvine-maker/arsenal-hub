@@ -546,4 +546,19 @@
             ctx.stroke();
             ctx.fillStyle = "#000";
             ctx.beginPath(); ctx.arc(0, -3, 3, 0, Math.PI * 2); ctx.fill();
-            ctx.beginPath(); ctx.arc(-4, 4, 3, 
+            ctx.beginPath(); ctx.arc(-4, 4, 3, 0, Math.PI * 2); ctx.fill();
+            ctx.beginPath(); ctx.arc(4, 4, 3, 0, Math.PI * 2); ctx.fill();
+            ctx.restore();
+        }
+
+        function gameLoop() {
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        gameLoop();
+        initApp();
+    </script>
+</body>
+</html>
