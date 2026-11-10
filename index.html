@@ -85,10 +85,19 @@
             </div>
         </div>
 
+        <!-- UPDATED SOCIAL TAB -->
         <div id="social" class="tab-content">
             <div class="card" style="border-bottom:none;">
-                <h2>Arsenal Media & Interviews</h2>
-                <div id="social-news" class="loading">Loading videos...</div>
+                <h2>Official Arsenal Media</h2>
+                <p style="color: #ccc; margin-bottom: 15px;">Watch the latest videos from the official Arsenal YouTube channel.</p>
+                <iframe src="https://www.youtube.com/embed/videoseries?list=UUcpryVRk_VDudG8SHXgWcG0w" allowfullscreen></iframe>
+                
+                <h2 style="margin-top: 30px;">Follow The Gunners</h2>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <a href="https://x.com/Arsenal" target="_blank" style="flex: 1; min-width: 120px; text-align: center; background: #000; color: white; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: bold; border: 1px solid #333;">X (Twitter)</a>
+                    <a href="https://www.instagram.com/arsenal/" target="_blank" style="flex: 1; min-width: 120px; text-align: center; background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color: white; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: bold;">Instagram</a>
+                    <a href="https://www.tiktok.com/@arsenal" target="_blank" style="flex: 1; min-width: 120px; text-align: center; background: #010101; color: white; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: bold; border: 1px solid #333;">TikTok</a>
+                </div>
             </div>
         </div>
 
@@ -149,8 +158,7 @@
             btn.classList.add('active');
         }
 
-        // 3. DYNAMIC PLAYERS 
-        // We removed the number badges so the full sticker is visible!
+        // 3. DYNAMIC PLAYERS (No numbers, clean sticker cards)
         const playerData = [
             { file: '24_29_Kai_Havertz.png' },
             { file: '26_10_Dennis_Bergkamp.png' },
@@ -354,20 +362,8 @@
                 document.getElementById('news-list').innerHTML = newsHtml;
                 document.getElementById('news-ticker').innerHTML = tickerHtml;
             }
-
-            const socialData = await loadData('social');
-            if (socialData && socialData.length > 0) {
-                let socialHtml = "";
-                socialData.forEach(item => {
-                    const dateObj = new Date(item.pubDate);
-                    const dateStr = dateObj.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
-                    const timeStr = dateObj.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
-                    socialHtml += `<div class="news-item" style="border-left-color: var(--arsenal-gold);"><a href="${item.link}" target="_blank">▶️ ${item.title}</a><div class="news-meta"><span>📺 ${item.author}</span><span>🕒 ${dateStr} • ${timeStr}</span></div></div>`;
-                });
-                document.getElementById('social-news').innerHTML = socialHtml;
-            } else {
-                document.getElementById('social-news').innerHTML = "<div style='color:#ccc; font-size:0.9rem;'>Could not load media feed.</div>";
-            }
+            
+            // We removed the broken /api/social fetch because the HTML now embeds the YouTube channel directly.
         }
 
         async function checkLiveMatch() {
