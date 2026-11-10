@@ -454,4 +454,15 @@
                     const dateObj = new Date(item.pubDate);
                     const dateStr = dateObj.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
                     const timeStr = dateObj.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
-                    newsHtml += `<div class="news-item"><a href="${item.link}" target="_blank">${item.title}</a><div class="news-meta"><span>📰 ${item.author}</span><span>🕒 ${dateStr} • ${timeStr}</span></
+                    newsHtml += `<div class="news-item"><a href="${item.link}" target="_blank">${item.title}</a><div class="news-meta"><span>📰 ${item.author}</span><span>🕒 ${dateStr} • ${timeStr}</span></div></div>`;
+                    tickerHtml += `<a href="${item.link}" target="_blank" class="ticker-item">⚽ ${item.title} (${item.author})</a>`;
+                });
+                document.getElementById('news-list').innerHTML = newsHtml;
+                document.getElementById('news-ticker').innerHTML = tickerHtml;
+            }
+        }
+
+        initApp();
+    </script>
+</body>
+</html>
