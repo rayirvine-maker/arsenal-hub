@@ -12,7 +12,6 @@
         :root {
             --arsenal-red: #EF0107;
             --arsenal-gold: #D4AF37;
-            --arsenal-navy: #063672;
             --pitch-green: #2e7d32;
         }
         
@@ -26,65 +25,53 @@
             -webkit-tap-highlight-color: transparent; overflow-x: hidden;
         }
 
-        /* HEADER & PLAYER WALLS */
         header { padding: 15px 5px; display: flex; flex-direction: column; align-items: center; border-bottom: 2px solid rgba(212, 175, 55, 0.5); }
         .header-row { display: flex; justify-content: center; align-items: center; width: 100%; max-width: 1000px; }
         .player-wall { display: flex; align-items: center; flex: 1; z-index: 1; }
         .player-wall.left { justify-content: flex-end; padding-right: 10px; }
         .player-wall.right { justify-content: flex-start; padding-left: 10px; }
 
-        /* PLAYER CARDS */
         .p-card { 
             position: relative; width: 45px; height: 65px; border-radius: 6px;
             border: 1px solid var(--arsenal-gold); background: rgba(239, 1, 7, 0.9);
             overflow: hidden; transition: transform 0.3s; margin: 0 3px; 
             box-shadow: 0 4px 6px rgba(0,0,0,0.6);
         }
-        .p-card:hover { transform: translateY(-5px) scale(1.1); z-index: 10; border-color: #fff; }
         .p-card img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
 
         .center-logo { display: flex; flex-direction: column; align-items: center; z-index: 20; }
-        .center-logo img { width: 60px; margin-bottom: 5px; filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.6)); }
-        .center-logo h1 { margin: 0; font-weight: 900; font-size: 1.3rem; color: white; text-transform: uppercase; letter-spacing: 1px; text-shadow: 2px 2px 4px rgba(0,0,0,0.9); text-align: center; white-space: nowrap; }
+        .center-logo img { width: 60px; margin-bottom: 5px; }
+        .center-logo h1 { margin: 0; font-weight: 900; font-size: 1.3rem; text-transform: uppercase; text-align: center; white-space: nowrap; }
 
-        /* TICKER */
         .global-ticker { width: 100%; overflow: hidden; background-color: rgba(0, 0, 0, 0.6); color: var(--arsenal-gold); padding: 8px 0; font-weight: 600; font-size: 0.8rem; display: flex; border-bottom: 1px solid rgba(212, 175, 55, 0.3); }
         .ticker { display: inline-block; white-space: nowrap; animation: ticker 300s linear infinite; }
         @keyframes ticker { 0% { transform: translateX(100vw); } 100% { transform: translateX(-100%); } }
         a.ticker-item { display: inline-block; padding: 0 20px; color: var(--arsenal-gold); text-decoration: none; }
-        a.ticker-item:hover { color: #fff; text-decoration: underline; }
 
-        /* TABS & CARDS */
         .tab-content { display: none; padding: 10px 20px; max-width: 800px; margin: 0 auto; }
-        .tab-content.active { display: block; animation: fadeIn 0.4s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .tab-content.active { display: block; }
 
-        .card { background: none !important; box-shadow: none !important; padding: 25px 0; border: none !important; border-bottom: 1px solid rgba(212, 175, 55, 0.4) !important; }
-        .card:last-child { border-bottom: none !important; }
-        .card h2 { margin-top: 0; color: var(--arsenal-gold); font-size: 1.1rem; text-transform: uppercase; font-weight: 900; letter-spacing: 1px; text-shadow: 2px 2px 4px rgba(0,0,0,0.9); margin-bottom: 15px; }
+        .card { padding: 25px 0; border-bottom: 1px solid rgba(212, 175, 55, 0.4); }
+        .card:last-child { border-bottom: none; }
+        .card h2 { margin-top: 0; color: var(--arsenal-gold); font-size: 1.1rem; text-transform: uppercase; font-weight: 900; margin-bottom: 15px; }
 
-        /* TABLE */
         .league-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-        .league-table th { text-align: left; padding: 8px 6px; border-bottom: 1px solid rgba(255,255,255,0.3); color: #ddd; font-weight: 600; }
-        .league-table td { padding: 10px 6px; border-bottom: 1px solid rgba(255,255,255,0.1); color: #fff; font-weight: 500; text-shadow: 1px 1px 2px black;}
-        .arsenal-row td { background: rgba(239, 1, 7, 0.5); font-weight: 900; color: var(--arsenal-gold); border-left: 3px solid var(--arsenal-gold); text-shadow: 1px 1px 2px black;}
+        .league-table th { text-align: left; padding: 8px 6px; border-bottom: 1px solid rgba(255,255,255,0.3); color: #ddd; }
+        .league-table td { padding: 10px 6px; border-bottom: 1px solid rgba(255,255,255,0.1); color: #fff; }
+        .arsenal-row td { background: rgba(239, 1, 7, 0.5); font-weight: 900; color: var(--arsenal-gold); border-left: 3px solid var(--arsenal-gold); }
 
-        /* COUNTDOWN */
         #countdown { display: flex; justify-content: space-between; text-align: center; margin-top: 15px; }
         .time-box { background: rgba(0, 0, 0, 0.6); color: white; padding: 12px 5px; border-radius: 8px; flex: 1; margin: 0 4px; border: 1px solid rgba(212, 175, 55, 0.5); }
-        .time-box span { display: block; font-size: 1.5rem; font-weight: 900; color: #fff; text-shadow: 0 0 10px rgba(239,1,7,0.8); }
-        .time-box small { font-size: 0.6rem; text-transform: uppercase; color: var(--arsenal-gold); font-weight: 700;}
+        .time-box span { display: block; font-size: 1.5rem; font-weight: 900; color: #fff; }
+        .time-box small { font-size: 0.6rem; text-transform: uppercase; color: var(--arsenal-gold); }
 
-        /* NEWS */
-        .news-item { background: rgba(0, 0, 0, 0.6); border-left: 4px solid var(--arsenal-red); padding: 12px; margin-bottom: 12px; border-radius: 4px; border-top: 1px solid rgba(255,255,255,0.05); border-right: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .news-item a { font-size: 0.95rem; font-weight: 700; color: #fff; text-decoration: none; display: block; margin-bottom: 10px; line-height: 1.3; }
-        .news-item a:hover { color: var(--arsenal-gold); }
-        .news-meta { display: flex; justify-content: space-between; font-size: 0.65rem; color: #bbb; font-weight: 600; text-transform: uppercase; flex-wrap: wrap; gap: 5px;}
+        .news-item { background: rgba(0, 0, 0, 0.6); border-left: 4px solid var(--arsenal-red); padding: 12px; margin-bottom: 12px; border-radius: 4px; }
+        .news-item a { font-size: 0.95rem; font-weight: 700; color: #fff; text-decoration: none; display: block; margin-bottom: 10px; }
+        .news-meta { display: flex; justify-content: space-between; font-size: 0.65rem; color: #bbb; }
         .news-meta span { background: rgba(0,0,0,0.8); padding: 3px 6px; border-radius: 4px; }
 
-        /* SETTINGS */
         .settings-bar { display: flex; justify-content: flex-end; align-items: center; padding: 15px 20px; background: rgba(0,0,0,0.6); border-bottom: 1px solid rgba(212, 175, 55, 0.3); }
-        .settings-bar label { font-weight: 700; margin-right: 10px; color: #fff; font-size: 0.75rem; text-transform: uppercase;}
+        .settings-bar label { font-weight: 700; margin-right: 10px; font-size: 0.75rem; }
         .switch { position: relative; display: inline-block; width: 40px; height: 22px; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #444; transition: .4s; border-radius: 22px; }
@@ -92,41 +79,31 @@
         input:checked + .slider { background-color: var(--arsenal-red); }
         input:checked + .slider:before { transform: translateX(18px); }
 
-        /* BOTTOM NAV */
-        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(0,0,0,0.98); display: flex; justify-content: space-around; padding: 12px 0; box-shadow: 0 -5px 20px rgba(0,0,0,0.9); z-index: 1000; border-top: 2px solid var(--arsenal-red); backdrop-filter: blur(10px); }
-        .nav-btn { background: none; border: none; color: #888; font-family: inherit; font-weight: 800; font-size: 0.65rem; cursor: pointer; text-transform: uppercase; transition: 0.2s; letter-spacing: 0.5px;}
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(0,0,0,0.98); display: flex; justify-content: space-around; padding: 12px 0; z-index: 1000; border-top: 2px solid var(--arsenal-red); }
+        .nav-btn { background: none; border: none; color: #888; font-weight: 800; font-size: 0.65rem; cursor: pointer; text-transform: uppercase; }
         .nav-btn.active { color: var(--arsenal-gold); transform: translateY(-2px); }
 
-        .loading { color: #ccc; font-style: italic; font-size: 0.9rem; text-shadow: 1px 1px 2px black;}
-        iframe { width: 100%; height: 300px; border-radius: 8px; border: none; margin-top: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.8);}
+        .loading { color: #ff4444; font-style: italic; font-size: 0.9rem; }
+        iframe { width: 100%; height: 300px; border-radius: 8px; border: none; margin-top: 10px; }
 
-        /* PENALTY GAME */
-        .game-container { display: flex; flex-direction: column; align-items: center; background: var(--pitch-green); border-radius: 12px; padding: 20px 10px; margin-top: 10px; box-shadow: inset 0 0 50px rgba(0,0,0,0.5); position: relative; overflow: hidden; }
-        .goal-frame { width: 100%; max-width: 320px; height: 200px; border: 8px solid #fff; border-bottom: none; position: relative; display: grid; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: 1fr 1fr 1fr; gap: 2px; background: rgba(255,255,255,0.1); background-image: linear-gradient(45deg, transparent 45%, #fff 45%, #fff 55%, transparent 55%), linear-gradient(-45deg, transparent 45%, #fff 45%, #fff 55%, transparent 55%); background-size: 20px 20px; z-index: 2; }
-        .goal-zone { cursor: pointer; transition: background 0.2s; }
-        .goal-zone:hover, .goal-zone:active { background: rgba(212, 175, 55, 0.4); }
-        .keeper { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); font-size: 3rem; line-height: 1; transition: all 0.3s ease-out; z-index: 3; }
+        .game-container { display: flex; flex-direction: column; align-items: center; background: var(--pitch-green); border-radius: 12px; padding: 20px 10px; }
+        .goal-frame { width: 100%; max-width: 320px; height: 200px; border: 8px solid #fff; border-bottom: none; position: relative; display: grid; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: 1fr 1fr 1fr; gap: 2px; background-image: linear-gradient(45deg, transparent 45%, #fff 45%, #fff 55%, transparent 55%), linear-gradient(-45deg, transparent 45%, #fff 45%, #fff 55%, transparent 55%); background-size: 20px 20px; }
+        .goal-zone { cursor: pointer; }
+        .keeper { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); font-size: 3rem; transition: all 0.3s ease-out; z-index: 3; }
         .ball { font-size: 1.5rem; position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); transition: all 0.4s ease-in; z-index: 4; }
-        .game-message { font-size: 1.5rem; font-weight: 900; text-transform: uppercase; margin-top: 15px; text-shadow: 2px 2px 4px black; height: 30px; text-align: center; }
+        .game-message { font-size: 1.5rem; font-weight: 900; margin-top: 15px; height: 30px; }
         .game-score { font-size: 1rem; font-weight: 700; margin-top: 5px; color: var(--arsenal-gold); }
-        .btn-reset { margin-top: 15px; padding: 10px 20px; font-family: inherit; font-weight: 900; background: var(--arsenal-red); color: white; border: 2px solid var(--arsenal-gold); border-radius: 20px; cursor: pointer; display: none; }
+        .btn-reset { margin-top: 15px; padding: 10px 20px; background: var(--arsenal-red); color: white; border: 2px solid var(--arsenal-gold); border-radius: 20px; display: none; }
 
         @media (max-width: 600px) {
-            .player-grid { grid-template-columns: 1fr; }
-            .time-box span { font-size: 1.2rem; }
-            .card { padding: 20px 0; }
             .p-card { width: 32px; height: 48px; margin: 0 2px; }
             .center-logo h1 { font-size: 0.9rem; white-space: normal; max-width: 100px; }
-            .center-logo img { width: 45px; }
-            .goal-frame { height: 160px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Splash screen removed entirely -->
-
-    <div id="app-content" style="opacity: 1;">
+    <div id="app-content">
         
         <header>
             <div class="header-row">
@@ -170,11 +147,6 @@
             </div>
             
             <div class="card">
-                <h2>Last 3 Match Lineups</h2>
-                <div id="lineups-container" class="loading">Loading recent lineups...</div>
-            </div>
-            
-            <div class="card">
                 <h2>Next 5 Fixtures</h2>
                 <div id="fixtures-list" class="loading">Loading fixtures...</div>
             </div>
@@ -189,7 +161,7 @@
 
         <div id="live" class="tab-content">
             <div class="card" style="border-bottom:none;">
-                <h2>Match Highlights & Songs</h2>
+                <h2>Match Highlights</h2>
                 <iframe src="https://www.youtube.com/embed/videoseries?list=PLRdP_uqk1u7x-d7Dhxcq1sguAmWOnzQk6" allowfullscreen></iframe>
             </div>
         </div>
@@ -201,15 +173,14 @@
                     <a href="https://www.youtube.com/@Arsenal" target="_blank" style="flex: 1; min-width: 120px; text-align: center; background: #FF0000; color: white; padding: 15px; border-radius: 8px; text-decoration: none; font-weight: bold;">YouTube</a>
                     <a href="https://www.instagram.com/arsenal/" target="_blank" style="flex: 1; min-width: 120px; text-align: center; background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color: white; padding: 15px; border-radius: 8px; text-decoration: none; font-weight: bold;">Instagram</a>
                     <a href="https://x.com/Arsenal" target="_blank" style="flex: 1; min-width: 120px; text-align: center; background: #000; color: white; padding: 15px; border-radius: 8px; text-decoration: none; font-weight: bold; border: 1px solid #333;">X (Twitter)</a>
-                    <a href="https://www.tiktok.com/@arsenal" target="_blank" style="flex: 1; min-width: 120px; text-align: center; background: #010101; color: white; padding: 15px; border-radius: 8px; text-decoration: none; font-weight: bold; border: 1px solid #333;">TikTok</a>
                 </div>
             </div>
         </div>
 
         <div id="spotify" class="tab-content">
             <div class="card" style="border-bottom:none;">
-                <h2>Arsenal Chants & Songs</h2>
-                <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/1g8aCpG3pIzKnwcemzWh6Q?utm_source=generator" height="300" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                <h2>Arsenal Chants</h2>
+                <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/1g8aCpG3pIzKnwcemzWh6Q?utm_source=generator" height="300" frameBorder="0" allowfullscreen="" loading="lazy"></iframe>
             </div>
         </div>
 
@@ -218,15 +189,9 @@
                 <h2>Penalty Shootout</h2>
                 <div class="game-container">
                     <div class="goal-frame" id="goal-frame">
-                        <div class="goal-zone" onclick="shoot(1)"></div>
-                        <div class="goal-zone" onclick="shoot(2)"></div>
-                        <div class="goal-zone" onclick="shoot(3)"></div>
-                        <div class="goal-zone" onclick="shoot(4)"></div>
-                        <div class="goal-zone" onclick="shoot(5)"></div>
-                        <div class="goal-zone" onclick="shoot(6)"></div>
-                        <div class="goal-zone" onclick="shoot(7)"></div>
-                        <div class="goal-zone" onclick="shoot(8)"></div>
-                        <div class="goal-zone" onclick="shoot(9)"></div>
+                        <div class="goal-zone" onclick="shoot(1)"></div><div class="goal-zone" onclick="shoot(2)"></div><div class="goal-zone" onclick="shoot(3)"></div>
+                        <div class="goal-zone" onclick="shoot(4)"></div><div class="goal-zone" onclick="shoot(5)"></div><div class="goal-zone" onclick="shoot(6)"></div>
+                        <div class="goal-zone" onclick="shoot(7)"></div><div class="goal-zone" onclick="shoot(8)"></div><div class="goal-zone" onclick="shoot(9)"></div>
                         <div class="keeper" id="keeper">🧍‍♂️</div>
                     </div>
                     <div class="ball" id="ball">⚽</div>
@@ -256,16 +221,11 @@
             btn.classList.add('active');
         }
 
-        // 2. DYNAMIC PLAYERS
+        // 2. DYNAMIC PLAYERS (No numbers, clean layout)
         const playerData = [
-            { file: '24_29_Kai_Havertz.png' },
-            { file: '26_10_Dennis_Bergkamp.png' },
-            { file: '28_6_Tony_Adams.png' },
-            { file: '29_8_Ian_Wright.png' },
-            { file: '30_7_Robert_Pires.png' },
-            { file: '32_23_Sol_Campbell.png' },
-            { file: '33_1_David_Seaman.png' },
-            { file: '34_7_Liam_Brady.png' }
+            '24_29_Kai_Havertz.png', '26_10_Dennis_Bergkamp.png', '28_6_Tony_Adams.png',
+            '29_8_Ian_Wright.png', '30_7_Robert_Pires.png', '32_23_Sol_Campbell.png',
+            '33_1_David_Seaman.png', '34_7_Liam_Brady.png'
         ];
 
         function loadPlayers() {
@@ -276,22 +236,14 @@
             const leftWall = document.getElementById('wall-left');
             const rightWall = document.getElementById('wall-right');
             leftWall.innerHTML = ''; rightWall.innerHTML = '';
-            
-            const buildCard = (p) => `
-                <div class="p-card">
-                    <img src="${p.file}" onerror="this.style.display='none';">
-                </div>
-            `;
 
-            displayPlayers.slice(0, 7).forEach(p => { leftWall.innerHTML += buildCard(p); });
-            displayPlayers.slice(7, 14).forEach(p => { rightWall.innerHTML += buildCard(p); });
+            displayPlayers.slice(0, 7).forEach(p => { leftWall.innerHTML += `<div class="p-card"><img src="${p}" onerror="this.style.display='none';"></div>`; });
+            displayPlayers.slice(7, 14).forEach(p => { rightWall.innerHTML += `<div class="p-card"><img src="${p}" onerror="this.style.display='none';"></div>`; });
         }
         loadPlayers();
 
         // 3. PENALTY GAME LOGIC
-        let shotsTaken = 0;
-        let goalsScored = 0;
-        let isAnimating = false;
+        let shotsTaken = 0, goalsScored = 0, isAnimating = false;
         const maxShots = 5;
         const goalSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3'); 
 
@@ -317,20 +269,14 @@
             
             setTimeout(() => {
                 if (keeperZone === zone) {
-                    const kCoords = zoneCoords[keeperZone];
-                    keeper.style.transform = `translateX(calc(-50% + ${kCoords.x})) translateY(${kCoords.y}) scale(1.5)`;
+                    keeper.style.transform = `translateX(calc(-50% + ${zoneCoords[keeperZone].x})) translateY(${zoneCoords[keeperZone].y}) scale(1.5)`;
                     msg.innerText = "SAVED!";
-                    msg.style.color = "#fff";
                 } else {
-                    const kCoords = zoneCoords[keeperZone];
-                    keeper.style.transform = `translateX(calc(-50% + ${kCoords.x})) translateY(${kCoords.y}) scale(1.5) rotate(${keeperZone < 5 ? '-45deg' : '45deg'})`;
+                    keeper.style.transform = `translateX(calc(-50% + ${zoneCoords[keeperZone].x})) translateY(${zoneCoords[keeperZone].y}) scale(1.5) rotate(${keeperZone < 5 ? '-45deg' : '45deg'})`;
                     msg.innerText = "GOAL!";
                     msg.style.color = "var(--arsenal-gold)";
                     goalsScored++;
-                    
-                    if (document.getElementById('soundToggle').checked) {
-                        goalSound.play().catch(e => console.log("Audio blocked"));
-                    }
+                    if (document.getElementById('soundToggle').checked) goalSound.play().catch(e => {});
                 }
                 
                 shotsTaken++;
@@ -341,10 +287,8 @@
                     keeper.style.transform = `translateX(-50%) translateY(0) scale(1) rotate(0deg)`;
                     msg.innerText = "";
                     isAnimating = false;
-                    
                     if (shotsTaken >= maxShots) {
                         msg.innerText = goalsScored >= 3 ? "ARSENAL WIN!" : "YOU LOST!";
-                        msg.style.color = goalsScored >= 3 ? "var(--arsenal-gold)" : "var(--arsenal-red)";
                         document.getElementById('btn-reset').style.display = "inline-block";
                     }
                 }, 1500);
@@ -352,113 +296,68 @@
         }
 
         function resetGame() {
-            shotsTaken = 0;
-            goalsScored = 0;
-            isAnimating = false;
+            shotsTaken = 0; goalsScored = 0; isAnimating = false;
             document.getElementById('game-score').innerText = `Shots: 0/5 | Goals: 0`;
             document.getElementById('game-msg').innerText = "Tap the net to shoot!";
-            document.getElementById('game-msg').style.color = "#fff";
             document.getElementById('btn-reset').style.display = "none";
         }
 
-        // 4. DATA FETCHING
-        let lastScore = "";
+        // 4. DATA FETCHING (WITH ERROR FALLBACKS)
         async function loadData(endpoint) {
             const API_BASE = 'https://arsenal-hub-api.ray-irvine.workers.dev'; 
             try {
                 const res = await fetch(`${API_BASE}/api/${endpoint}`);
-                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                if (!res.ok) throw new Error("Failed");
                 return await res.json();
             } catch (err) {
-                console.error(`Error loading ${endpoint}:`, err);
-                return null;
+                return null; // Return null on failure
             }
         }
 
-        let countdownInterval;
         async function initApp() {
+            // --- FIXTURES ---
             const fixtures = await loadData('fixtures');
-            if (fixtures && fixtures.length > 0 && fixtures[0].date) {
-                const next = fixtures[0];
-                document.getElementById('next-match-name').innerText = `${next.home_team} vs ${next.away_team} (${next.league})`;
-                const matchDate = new Date(next.date).getTime();
-                
-                if (!isNaN(matchDate)) {
-                    const matchDateObj = new Date(next.date);
-                    const gmtTimeString = matchDateObj.toLocaleTimeString('en-GB', { timeZone: 'UTC', hour: '2-digit', minute: '2-digit' });
-                    const gmtDateString = matchDateObj.toLocaleDateString('en-GB', { timeZone: 'UTC', weekday: 'short', day: 'numeric', month: 'short' });
-                    document.getElementById('match-time-gmt').innerText = `Kick-off: ${gmtDateString} at ${gmtTimeString} GMT`;
-
-                    if (countdownInterval) clearInterval(countdownInterval);
-                    countdownInterval = setInterval(() => {
-                        const now = new Date().getTime();
-                        const distance = matchDate - now;
-                        if (distance < 0) {
-                            clearInterval(countdownInterval);
-                            document.getElementById('next-match-name').innerText = "MATCH IS LIVE!";
-                            return;
-                        }
-                        document.getElementById('days').innerText = Math.floor(distance / (1000 * 60 * 60 * 24));
-                        document.getElementById('hours').innerText = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
-                        document.getElementById('minutes').innerText = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
-                        document.getElementById('seconds').innerText = Math.floor((distance % (1000 * 60)) / 1000).toString().padStart(2, '0');
-                    }, 1000);
-                }
-            } else {
-                document.getElementById('next-match-name').innerText = "No upcoming fixtures found.";
-            }
-
-            const standings = await loadData('standings');
-            if (standings && standings.standings[0].table) {
-                const table = standings.standings[0].table;
-                let tableHtml = `<table class="league-table"><tr><th>Pos</th><th>Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>Pts</th></tr>`;
-                table.forEach(row => {
-                    const isArsenal = row.team.name.includes('Arsenal');
-                    tableHtml += `<tr class="${isArsenal ? 'arsenal-row' : ''}"><td>${row.position}</td><td>${row.team.name}</td><td>${row.playedGames}</td><td>${row.wins}</td><td>${row.draws}</td><td>${row.losses}</td><td>${row.points}</td></tr>`;
-                });
-                tableHtml += `</table>`;
-                document.getElementById('home-table').innerHTML = tableHtml;
-            }
-
-            const lineups = await loadData('lineups');
-            if (lineups && lineups.length > 0) {
-                let lineupsHtml = "";
-                lineups.forEach(match => {
-                    const dateStr = new Date(match.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
-                    lineupsHtml += `<div class="lineup-match"><h3>${match.matchName} <span style="color:#aaa; font-size:0.7rem;">(${dateStr})</span></h3><div class="lineup-formation">Formation: ${match.formation}</div><div class="player-grid">`;
-                    match.starters.forEach(p => {
-                        lineupsHtml += `<div class="player-item"><span class="player-pos">${p.position}</span> ${p.name}</div>`;
-                    });
-                    lineupsHtml += `</div></div>`;
-                });
-                document.getElementById('lineups-container').innerHTML = lineupsHtml;
-            } else {
-                document.getElementById('lineups-container').innerHTML = "<div style='color:#ccc; font-size:0.9rem;'>Lineup data unavailable.</div>";
-            }
-
             if (fixtures && fixtures.length > 0) {
-                let fixHtml = `<ul style="list-style-type:none; padding:0; margin:0;">`;
-                fixtures.forEach(f => {
-                    const d = new Date(f.date).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
-                    fixHtml += `<li style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1); font-size:0.85rem;"><strong>${d}</strong> - ${f.home_team} vs ${f.away_team} <span style="color:var(--arsenal-gold); font-size:0.7rem;">(${f.league})</span></li>`;
-                });
-                fixHtml += `</ul>`;
-                document.getElementById('fixtures-list').innerHTML = fixHtml;
+                const next = fixtures[0];
+                document.getElementById('next-match-name').innerText = `${next.home_team} vs ${next.away_team}`;
+                const matchDate = new Date(next.date).getTime();
+                setInterval(() => {
+                    const distance = matchDate - new Date().getTime();
+                    if (distance > 0) {
+                        document.getElementById('days').innerText = Math.floor(distance / (1000 * 60 * 60 * 24));
+                        document.getElementById('hours').innerText = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                        document.getElementById('minutes').innerText = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                        document.getElementById('seconds').innerText = Math.floor((distance % (1000 * 60)) / 1000);
+                    }
+                }, 1000);
+            } else {
+                document.getElementById('next-match-name').innerText = "Could not load fixtures.";
             }
 
+            // --- STANDINGS ---
+            const standings = await loadData('standings');
+            if (standings && standings.standings) {
+                const table = standings.standings[0].table;
+                let html = `<table class="league-table"><tr><th>Pos</th><th>Team</th><th>Pts</th></tr>`;
+                table.forEach(r => {
+                    const isArs = r.team.name.includes('Arsenal');
+                    html += `<tr class="${isArs ? 'arsenal-row' : ''}"><td>${r.position}</td><td>${r.team.name}</td><td>${r.points}</td></tr>`;
+                });
+                document.getElementById('home-table').innerHTML = html + `</table>`;
+            } else {
+                document.getElementById('home-table').innerHTML = "<span style='color:red;'>Could not load table.</span>";
+            }
+
+            // --- NEWS ---
             const news = await loadData('news');
             if (news && news.length > 0) {
-                let newsHtml = "";
-                let tickerHtml = "";
-                news.forEach(item => {
-                    const dateObj = new Date(item.pubDate);
-                    const dateStr = dateObj.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
-                    const timeStr = dateObj.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
-                    newsHtml += `<div class="news-item"><a href="${item.link}" target="_blank">${item.title}</a><div class="news-meta"><span>📰 ${item.author}</span><span>🕒 ${dateStr} • ${timeStr}</span></div></div>`;
-                    tickerHtml += `<a href="${item.link}" target="_blank" class="ticker-item">⚽ ${item.title} (${item.author})</a>`;
+                let html = "";
+                news.slice(0, 5).forEach(n => {
+                    html += `<div class="news-item"><a href="${n.link}" target="_blank">${n.title}</a><div class="news-meta"><span>${n.author}</span></div></div>`;
                 });
-                document.getElementById('news-list').innerHTML = newsHtml;
-                document.getElementById('news-ticker').innerHTML = tickerHtml;
+                document.getElementById('news-list').innerHTML = html;
+            } else {
+                document.getElementById('news-list').innerHTML = "<span style='color:red;'>Could not load news.</span>";
             }
         }
 
