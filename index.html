@@ -43,10 +43,23 @@
         .center-logo img { width: 60px; margin-bottom: 5px; }
         .center-logo h1 { margin: 0; font-weight: 900; font-size: 1.3rem; text-transform: uppercase; text-align: center; white-space: nowrap; }
 
-        .global-ticker { width: 100%; overflow: hidden; background-color: rgba(0, 0, 0, 0.6); color: var(--arsenal-gold); padding: 8px 0; font-weight: 600; font-size: 0.8rem; display: flex; border-bottom: 1px solid rgba(212, 175, 55, 0.3); }
-        .ticker { display: inline-block; white-space: nowrap; animation: ticker 300s linear infinite; }
-        @keyframes ticker { 0% { transform: translateX(100vw); } 100% { transform: translateX(-100%); } }
-        a.ticker-item { display: inline-block; padding: 0 20px; color: var(--arsenal-gold); text-decoration: none; }
+        /* FIXED TICKER TAPE */
+        .global-ticker { 
+            width: 100%; overflow: hidden; background-color: rgba(0, 0, 0, 0.6); color: var(--arsenal-gold); 
+            padding: 8px 0; font-weight: 600; font-size: 0.8rem; display: flex; border-bottom: 1px solid rgba(212, 175, 55, 0.3); 
+            white-space: nowrap;
+        }
+        .ticker { 
+            display: inline-block; 
+            padding-left: 100%;
+            animation: ticker 60s linear infinite; 
+        }
+        @keyframes ticker { 
+            0% { transform: translateX(0); } 
+            100% { transform: translateX(-100%); } 
+        }
+        .ticker-item { display: inline-block; padding: 0 30px; color: var(--arsenal-gold); text-decoration: none; }
+        .ticker-item:hover { color: #fff; }
 
         .tab-content { display: none; padding: 10px 20px; max-width: 800px; margin: 0 auto; }
         .tab-content.active { display: block; }
@@ -93,7 +106,7 @@
         .loading { color: #ff4444; font-style: italic; font-size: 0.9rem; }
         iframe { width: 100%; height: 300px; border-radius: 8px; border: none; margin-top: 10px; }
 
-        /* NEW SLINGSHOT GAME STYLES */
+        /* SLINGSHOT GAME STYLES */
         .game-wrapper { display: flex; flex-direction: column; align-items: center; background: #111; border-radius: 12px; padding: 10px; border: 2px solid var(--arsenal-gold); }
         canvas { width: 100%; max-width: 400px; height: 350px; background: var(--pitch-green); border-radius: 8px; cursor: crosshair; touch-action: none; }
         .game-msg { font-size: 1.3rem; font-weight: 900; margin-top: 10px; height: 30px; color: var(--arsenal-gold); text-align: center; text-shadow: 2px 2px 4px black;}
@@ -120,8 +133,11 @@
             </div>
         </header>
 
+        <!-- FIXED TICKER -->
         <div class="global-ticker">
-            <div class="ticker" id="news-ticker">Loading latest Arsenal headlines...</div>
+            <div class="ticker" id="news-ticker">
+                <span class="ticker-item">⚽ Loading latest Arsenal headlines...</span>
+            </div>
         </div>
 
         <div class="settings-bar">
@@ -193,7 +209,6 @@
             </div>
         </div>
 
-        <!-- NEW SLINGSHOT GAME TAB -->
         <div id="game" class="tab-content">
             <div class="card" style="border-bottom:none;">
                 <h2>Penalty Shootout</h2>
@@ -222,8 +237,6 @@
             document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
             btn.classList.add('active');
-            
-            // Reset game when opening tab
             if(tabId === 'game') resetGame();
         }
 
@@ -312,10 +325,17 @@
             const news = await loadData('news');
             if (news && news.length > 0) {
                 let html = "";
-                news.slice(0, 5).forEach(n => {
+                let tickerHtml = "";
+                news.forEach(n => {
                     html += `<div class="news-item"><a href="${n.link}" target="_blank">${n.title}</a><div class="news-meta"><span>${n.author}</span></div></div>`;
+                    tickerHtml += `<span class="ticker-item">⚽ ${n.title} (${n.author})</span>`;
                 });
                 document.getElementById('news-list').innerHTML = html;
+                document.getElementById('news-ticker').innerHTML = tickerHtml;
+            } else {
+                // Fallback if API fails
+                document.getElementById('news-list').innerHTML = "<span style='color:red;'>Could not load news.</span>";
+                document.getElementById('news-ticker').innerHTML = "<span class='ticker-item'>⚽ Arsenal FC | Up The Gunners | COYG</span>";
             }
         }
 
@@ -326,25 +346,19 @@
         const scoreEl = document.getElementById('game-score');
         const goalSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3'); 
 
-        // Game State
-        let gameState = 'aim'; // aim, shooting, result
+        let gameState = 'aim'; 
         let shotsTaken = 0;
         let goalsScored = 0;
         const maxShots = 5;
 
-        // Ball physics
         const ball = { x: 200, y: 280, startX: 200, startY: 280, r: 12, vx: 0, vy: 0, flying: false, scale: 1 };
-        
-        // Drag mechanics
         let isDragging = false;
         let dragX = 0;
         let dragY = 0;
 
-        // Goal & Keeper
         const goal = { x: 50, y: 60, w: 300, h: 100 };
         const keeper = { x: 200, y: 120, w: 30, h: 40, targetX: 200, diving: false };
 
-        // Input Handlers
         function getMousePos(e) {
             const rect = canvas.getBoundingClientRect();
             const clientX = e.touches ? e.touches[0].clientX : e.clientX;
@@ -356,8 +370,6 @@
             if (gameState !== 'aim') return;
             e.preventDefault();
             const pos = getMousePos(e);
-            
-            // Check if touching near the ball
             const dist = Math.hypot(pos.x - ball.x, pos.y - ball.y);
             if (dist < 50) {
                 isDragging = true;
@@ -374,7 +386,6 @@
             dragX = pos.x;
             dragY = pos.y;
             
-            // Limit pull back distance (power)
             const dx = ball.startX - dragX;
             const dy = ball.startY - dragY;
             const dist = Math.hypot(dx, dy);
@@ -390,7 +401,6 @@
             e.preventDefault();
             isDragging = false;
             
-            // Calculate velocity based on drag distance
             const dx = ball.startX - dragX;
             const dy = ball.startY - dragY;
             const power = Math.hypot(dx, dy);
@@ -399,12 +409,9 @@
             
             gameState = 'shooting';
             ball.flying = true;
-            
-            // Velocity scaling
             ball.vx = dx * 0.15;
             ball.vy = dy * 0.15;
 
-            // Keeper dives randomly
             const diveDir = Math.floor(Math.random() * 3);
             if (diveDir === 0) keeper.targetX = 100;
             if (diveDir === 1) keeper.targetX = 200;
@@ -415,34 +422,26 @@
         canvas.addEventListener('mousedown', handleDown);
         canvas.addEventListener('mousemove', handleMove);
         window.addEventListener('mouseup', handleUp);
-
         canvas.addEventListener('touchstart', handleDown);
         canvas.addEventListener('touchmove', handleMove);
         window.addEventListener('touchend', handleUp);
 
-        // Game Loop
         function update() {
             if (ball.flying) {
                 ball.x += ball.vx;
                 ball.y += ball.vy;
-                
-                // Simulate ball shrinking as it goes into distance
                 ball.scale -= 0.005;
                 if (ball.scale < 0.5) ball.scale = 0.5;
 
-                // Hit the goal line
                 if (ball.y <= goal.y + goal.h) {
                     ball.flying = false;
                     resolveShot();
                 }
-                
-                // Missed the goal entirely
                 if (ball.x < 0 || ball.x > canvas.width || ball.y < 0) {
                     ball.flying = false;
                     resolveShot(true);
                 }
             }
-            
             if (keeper.diving && keeper.x !== keeper.targetX) {
                 keeper.x += (keeper.targetX - keeper.x) * 0.2;
             }
@@ -494,57 +493,47 @@
             resetShot();
         }
 
-        // Drawing
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            // Draw Pitch
             ctx.strokeStyle = "rgba(255,255,255,0.3)";
             ctx.lineWidth = 2;
             ctx.beginPath();
             ctx.arc(200, 350, 120, Math.PI, 0);
             ctx.stroke();
-            // Penalty box
             ctx.strokeRect(50, 60, 300, 150);
 
-            // Draw Goal Net
             ctx.fillStyle = "rgba(255,255,255,0.1)";
             ctx.fillRect(goal.x, goal.y, goal.w, goal.h);
             ctx.strokeStyle = "#fff";
             ctx.lineWidth = 4;
             ctx.strokeRect(goal.x, goal.y, goal.w, goal.h);
             
-            // Draw Net Pattern
             ctx.strokeStyle = "rgba(255,255,255,0.2)";
             ctx.lineWidth = 1;
             for(let i=0; i<goal.w; i+=15) { ctx.beginPath(); ctx.moveTo(goal.x + i, goal.y); ctx.lineTo(goal.x + i, goal.y + goal.h); ctx.stroke(); }
             for(let i=0; i<goal.h; i+=15) { ctx.beginPath(); ctx.moveTo(goal.x, goal.y + i); ctx.lineTo(goal.x + goal.w, goal.y + i); ctx.stroke(); }
 
-            // Draw Keeper
             ctx.fillStyle = "#00ff00"; 
             ctx.fillRect(keeper.x - 15, keeper.y, 30, 40);
             ctx.fillStyle = "#ffcc00"; 
             ctx.beginPath(); ctx.arc(keeper.x, keeper.y, 10, 0, Math.PI * 2); ctx.fill();
 
-            // Draw Aiming Line
             if (isDragging) {
                 ctx.strokeStyle = "rgba(212, 175, 55, 0.8)";
                 ctx.lineWidth = 3;
                 ctx.setLineDash([5, 5]);
                 ctx.beginPath();
                 ctx.moveTo(ball.x, ball.y);
-                // Show trajectory (opposite of drag)
                 ctx.lineTo(ball.x + (ball.x - dragX), ball.y + (ball.y - dragY));
                 ctx.stroke();
                 ctx.setLineDash([]);
                 
-                // Draw power circle
                 const power = Math.hypot(ball.x - dragX, ball.y - dragY);
                 ctx.fillStyle = "rgba(212, 175, 55, 0.3)";
                 ctx.beginPath(); ctx.arc(ball.x, ball.y, power, 0, Math.PI * 2); ctx.fill();
             }
 
-            // Draw Ball
             ctx.save();
             ctx.translate(ball.x, ball.y);
             ctx.scale(ball.scale, ball.scale);
@@ -555,22 +544,6 @@
             ctx.strokeStyle = "#000";
             ctx.lineWidth = 1;
             ctx.stroke();
-            // Black pentagons
             ctx.fillStyle = "#000";
             ctx.beginPath(); ctx.arc(0, -3, 3, 0, Math.PI * 2); ctx.fill();
-            ctx.beginPath(); ctx.arc(-4, 4, 3, 0, Math.PI * 2); ctx.fill();
-            ctx.beginPath(); ctx.arc(4, 4, 3, 0, Math.PI * 2); ctx.fill();
-            ctx.restore();
-        }
-
-        function gameLoop() {
-            update();
-            draw();
-            requestAnimationFrame(gameLoop);
-        }
-
-        gameLoop();
-        initApp();
-    </script>
-</body>
-</html>
+            ctx.beginPath(); ctx.arc(-4, 4, 3, 
