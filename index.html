@@ -12,7 +12,6 @@
         :root {
             --arsenal-red: #EF0107;
             --arsenal-gold: #D4AF37;
-            --pitch-green: #2e7d32;
         }
         
         body { 
@@ -43,7 +42,7 @@
         .center-logo img { width: 60px; margin-bottom: 5px; }
         .center-logo h1 { margin: 0; font-weight: 900; font-size: 1.3rem; text-transform: uppercase; text-align: center; white-space: nowrap; }
 
-        /* FIXED TICKER TAPE */
+        /* SLOWED DOWN TICKER TAPE */
         .global-ticker { 
             width: 100%; overflow: hidden; background-color: rgba(0, 0, 0, 0.6); color: var(--arsenal-gold); 
             padding: 8px 0; font-weight: 600; font-size: 0.8rem; display: flex; border-bottom: 1px solid rgba(212, 175, 55, 0.3); 
@@ -52,7 +51,7 @@
         .ticker { 
             display: inline-block; 
             padding-left: 100%;
-            animation: ticker 60s linear infinite; 
+            animation: ticker 200s linear infinite; 
         }
         @keyframes ticker { 
             0% { transform: translateX(0); } 
@@ -60,6 +59,7 @@
         }
         .ticker-item { display: inline-block; padding: 0 30px; color: var(--arsenal-gold); text-decoration: none; }
         .ticker-item:hover { color: #fff; }
+        .global-ticker:hover .ticker { animation-play-state: paused; }
 
         .tab-content { display: none; padding: 10px 20px; max-width: 800px; margin: 0 auto; }
         .tab-content.active { display: block; }
@@ -106,11 +106,16 @@
         .loading { color: #ff4444; font-style: italic; font-size: 0.9rem; }
         iframe { width: 100%; height: 300px; border-radius: 8px; border: none; margin-top: 10px; }
 
-        /* SLINGSHOT GAME STYLES */
-        .game-wrapper { display: flex; flex-direction: column; align-items: center; background: #111; border-radius: 12px; padding: 10px; border: 2px solid var(--arsenal-gold); }
-        canvas { width: 100%; max-width: 400px; height: 350px; background: var(--pitch-green); border-radius: 8px; cursor: crosshair; touch-action: none; }
-        .game-msg { font-size: 1.3rem; font-weight: 900; margin-top: 10px; height: 30px; color: var(--arsenal-gold); text-align: center; text-shadow: 2px 2px 4px black;}
-        .game-score { font-size: 0.9rem; font-weight: 700; color: #fff; margin-bottom: 5px; }
+        /* TRIVIA QUIZ STYLES */
+        .quiz-container { background: rgba(0,0,0,0.6); border-radius: 12px; padding: 20px; border: 1px solid var(--arsenal-gold); }
+        .quiz-question { font-size: 1.1rem; font-weight: 800; margin-bottom: 15px; line-height: 1.4; }
+        .quiz-option { display: block; width: 100%; background: #333; color: #fff; border: 1px solid #555; padding: 12px; margin-bottom: 10px; border-radius: 8px; font-size: 0.95rem; text-align: left; cursor: pointer; font-family: inherit; transition: background 0.2s; }
+        .quiz-option:hover { background: #444; }
+        .quiz-option.correct { background: var(--pitch-green); border-color: #4caf50; }
+        .quiz-option.wrong { background: #b00020; border-color: #f44336; }
+        .quiz-option:disabled { cursor: default; }
+        .quiz-result { text-align: center; font-size: 1.5rem; font-weight: 900; color: var(--arsenal-gold); display: none; margin-top: 20px; }
+        .quiz-btn { background: var(--arsenal-red); color: white; border: 2px solid var(--arsenal-gold); padding: 12px 24px; border-radius: 8px; font-weight: 900; font-size: 1rem; cursor: pointer; display: none; margin: 20px auto 0 auto; }
 
         @media (max-width: 600px) {
             .p-card { width: 32px; height: 48px; margin: 0 2px; }
@@ -133,7 +138,6 @@
             </div>
         </header>
 
-        <!-- FIXED TICKER -->
         <div class="global-ticker">
             <div class="ticker" id="news-ticker">
                 <span class="ticker-item">⚽ Loading latest Arsenal headlines...</span>
@@ -209,13 +213,16 @@
             </div>
         </div>
 
+        <!-- REPLACED GAME WITH QUIZ -->
         <div id="game" class="tab-content">
             <div class="card" style="border-bottom:none;">
-                <h2>Penalty Shootout</h2>
-                <div class="game-wrapper">
-                    <div class="game-score" id="game-score">Shots: 0/5 | Goals: 0</div>
-                    <canvas id="pitch" width="400" height="350"></canvas>
-                    <div class="game-msg" id="game-msg">Drag the ball back and release to shoot!</div>
+                <h2>Arsenal Trivia Quiz</h2>
+                <div class="quiz-container">
+                    <div id="quiz-content">
+                        <!-- Questions will load here -->
+                    </div>
+                    <div class="quiz-result" id="quiz-result"></div>
+                    <button class="quiz-btn" id="quiz-restart" onclick="startQuiz()">Play Again</button>
                 </div>
             </div>
         </div>
@@ -226,7 +233,7 @@
             <button class="nav-btn" onclick="switchTab('live', this)">Live</button>
             <button class="nav-btn" onclick="switchTab('social', this)">Social</button>
             <button class="nav-btn" onclick="switchTab('spotify', this)">Spotify</button>
-            <button class="nav-btn" onclick="switchTab('game', this)">Game</button>
+            <button class="nav-btn" onclick="switchTab('game', this)">Puzzles</button>
         </div>
     </div>
 
@@ -237,7 +244,7 @@
             document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
             btn.classList.add('active');
-            if(tabId === 'game') resetGame();
+            if(tabId === 'game') startQuiz();
         }
 
         // 2. PLAYERS
@@ -261,7 +268,93 @@
         }
         loadPlayers();
 
-        // 3. DATA FETCHING
+        // 3. ARSENAL QUIZ LOGIC
+        const quizData = [
+            { q: "Who is Arsenal's all-time top goalscorer?", options: ["Ian Wright", "Thierry Henry", "Dennis Bergkamp", "Robin van Persie"], ans: 1 },
+            { q: "In which year did Arsenal move from Highbury to the Emirates Stadium?", options: ["2004", "2006", "2008", "2010"], ans: 1 },
+            { q: "Which team did Arsenal beat to win the 2017 FA Cup Final?", options: ["Chelsea", "Manchester United", "Liverpool", "Tottenham"], ans: 0 },
+            { q: "How many Premier League titles have Arsenal won?", options: ["1", "2", "3", "5"], ans: 2 },
+            { q: "Who was the manager during the 'Invincibles' 2003-04 season?", options: ["George Graham", "Unai Emery", "Arsène Wenger", "Mikel Arteta"], ans: 2 },
+            { q: "Which player scored a hat-trick in Arsenal's 5-3 win over Chelsea in 2011?", options: ["Theo Walcott", "Robin van Persie", "Cesc Fàbregas", "Emmanuel Adebayor"], ans: 0 },
+            { q: "What is the name of Arsenal's famous cannon logo?", options: ["The Gunner", "The Cannon", "The Arsenal", "Victoria Concordia Crescit"], ans: 1 },
+            { q: "Who is Arsenal's most expensive signing of all time?", options: ["Nicolas Pépé", "Declan Rice", "Kai Havertz", "Alexis Sánchez"], ans: 1 },
+            { q: "Which stadium was Arsenal's home before the Emirates?", options: ["White Hart Lane", "Highbury", "Wembley", "Vicarage Road"], ans: 1 },
+            { q: "Who is the current manager of Arsenal?", options: ["Unai Emery", "Mikel Arteta", "Arsène Wenger", "Freddie Ljungberg"], ans: 1 }
+        ];
+
+        let currentQ = 0;
+        let score = 0;
+        let answered = false;
+
+        function startQuiz() {
+            currentQ = 0;
+            score = 0;
+            answered = false;
+            document.getElementById('quiz-result').style.display = 'none';
+            document.getElementById('quiz-restart').style.display = 'none';
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const quizContent = document.getElementById('quiz-content');
+            quizContent.innerHTML = ''; // Clear previous
+            
+            if (currentQ >= quizData.length) {
+                showResult();
+                return;
+            }
+
+            const qData = quizData[currentQ];
+            quizContent.innerHTML = `<div class="quiz-question">${currentQ + 1}. ${qData.q}</div>`;
+
+            qData.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'quiz-option';
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(index, btn);
+                quizContent.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(selectedIndex, btn) {
+            if (answered) return;
+            answered = true;
+            
+            const qData = quizData[currentQ];
+            const options = document.querySelectorAll('.quiz-option');
+            
+            options.forEach(opt => opt.disabled = true);
+
+            if (selectedIndex === qData.ans) {
+                btn.classList.add('correct');
+                score++;
+            } else {
+                btn.classList.add('wrong');
+                options[qData.ans].classList.add('correct');
+            }
+
+            setTimeout(() => {
+                currentQ++;
+                answered = false;
+                renderQuestion();
+            }, 1000);
+        }
+
+        function showResult() {
+            document.getElementById('quiz-content').innerHTML = '';
+            const resultEl = document.getElementById('quiz-result');
+            resultEl.style.display = 'block';
+            resultEl.innerText = `You scored ${score} out of 10!`;
+            
+            if (score === 10) resultEl.innerText += " 🏆 Top Fan!";
+            else if (score >= 7) resultEl.innerText += " 👏 Great Job!";
+            else if (score >= 4) resultEl.innerText += " Not bad, keep trying!";
+            else resultEl.innerText += " Need more practice!";
+
+            document.getElementById('quiz-restart').style.display = 'block';
+        }
+
+        // 4. DATA FETCHING
         async function loadData(endpoint) {
             const API_BASE = 'https://arsenal-hub-api.ray-irvine.workers.dev'; 
             try {
@@ -333,231 +426,11 @@
                 document.getElementById('news-list').innerHTML = html;
                 document.getElementById('news-ticker').innerHTML = tickerHtml;
             } else {
-                // Fallback if API fails
                 document.getElementById('news-list').innerHTML = "<span style='color:red;'>Could not load news.</span>";
                 document.getElementById('news-ticker').innerHTML = "<span class='ticker-item'>⚽ Arsenal FC | Up The Gunners | COYG</span>";
             }
         }
 
-        // 4. SLINGSHOT PENALTY GAME
-        const canvas = document.getElementById('pitch');
-        const ctx = canvas.getContext('2d');
-        const msgEl = document.getElementById('game-msg');
-        const scoreEl = document.getElementById('game-score');
-        const goalSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3'); 
-
-        let gameState = 'aim'; 
-        let shotsTaken = 0;
-        let goalsScored = 0;
-        const maxShots = 5;
-
-        const ball = { x: 200, y: 280, startX: 200, startY: 280, r: 12, vx: 0, vy: 0, flying: false, scale: 1 };
-        let isDragging = false;
-        let dragX = 0;
-        let dragY = 0;
-
-        const goal = { x: 50, y: 60, w: 300, h: 100 };
-        const keeper = { x: 200, y: 120, w: 30, h: 40, targetX: 200, diving: false };
-
-        function getMousePos(e) {
-            const rect = canvas.getBoundingClientRect();
-            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-            return { x: clientX - rect.left, y: clientY - rect.top };
-        }
-
-        function handleDown(e) {
-            if (gameState !== 'aim') return;
-            e.preventDefault();
-            const pos = getMousePos(e);
-            const dist = Math.hypot(pos.x - ball.x, pos.y - ball.y);
-            if (dist < 50) {
-                isDragging = true;
-                dragX = pos.x;
-                dragY = pos.y;
-                msgEl.innerText = "Aim and release!";
-            }
-        }
-
-        function handleMove(e) {
-            if (!isDragging) return;
-            e.preventDefault();
-            const pos = getMousePos(e);
-            dragX = pos.x;
-            dragY = pos.y;
-            
-            const dx = ball.startX - dragX;
-            const dy = ball.startY - dragY;
-            const dist = Math.hypot(dx, dy);
-            if (dist > 100) {
-                const angle = Math.atan2(dy, dx);
-                dragX = ball.startX - Math.cos(angle) * 100;
-                dragY = ball.startY - Math.sin(angle) * 100;
-            }
-        }
-
-        function handleUp(e) {
-            if (!isDragging) return;
-            e.preventDefault();
-            isDragging = false;
-            
-            const dx = ball.startX - dragX;
-            const dy = ball.startY - dragY;
-            const power = Math.hypot(dx, dy);
-            
-            if (power < 10) { msgEl.innerText = "Too soft! Drag back further."; return; }
-            
-            gameState = 'shooting';
-            ball.flying = true;
-            ball.vx = dx * 0.15;
-            ball.vy = dy * 0.15;
-
-            const diveDir = Math.floor(Math.random() * 3);
-            if (diveDir === 0) keeper.targetX = 100;
-            if (diveDir === 1) keeper.targetX = 200;
-            if (diveDir === 2) keeper.targetX = 300;
-            keeper.diving = true;
-        }
-
-        canvas.addEventListener('mousedown', handleDown);
-        canvas.addEventListener('mousemove', handleMove);
-        window.addEventListener('mouseup', handleUp);
-        canvas.addEventListener('touchstart', handleDown);
-        canvas.addEventListener('touchmove', handleMove);
-        window.addEventListener('touchend', handleUp);
-
-        function update() {
-            if (ball.flying) {
-                ball.x += ball.vx;
-                ball.y += ball.vy;
-                ball.scale -= 0.005;
-                if (ball.scale < 0.5) ball.scale = 0.5;
-
-                if (ball.y <= goal.y + goal.h) {
-                    ball.flying = false;
-                    resolveShot();
-                }
-                if (ball.x < 0 || ball.x > canvas.width || ball.y < 0) {
-                    ball.flying = false;
-                    resolveShot(true);
-                }
-            }
-            if (keeper.diving && keeper.x !== keeper.targetX) {
-                keeper.x += (keeper.targetX - keeper.x) * 0.2;
-            }
-        }
-
-        function resolveShot(missed = false) {
-            const distToKeeper = Math.abs(ball.x - keeper.x);
-            const isSaved = distToKeeper < 40 && !missed && ball.x > goal.x && ball.x < goal.x + goal.w;
-            
-            if (missed) {
-                msgEl.innerText = "MISSED THE GOAL!";
-                msgEl.style.color = "red";
-            } else if (isSaved) {
-                msgEl.innerText = "SAVED BY THE KEEPER!";
-                msgEl.style.color = "#fff";
-            } else {
-                msgEl.innerText = "GOOOOOAL!";
-                msgEl.style.color = "var(--arsenal-gold)";
-                goalsScored++;
-                if (document.getElementById('soundToggle').checked) goalSound.play().catch(e => {});
-            }
-            
-            shotsTaken++;
-            scoreEl.innerText = `Shots: ${shotsTaken}/${maxShots} | Goals: ${goalsScored}`;
-            gameState = 'result';
-            
-            setTimeout(() => {
-                if (shotsTaken >= maxShots) {
-                    msgEl.innerText = goalsScored >= 3 ? "ARSENAL WIN! TAP TO RESET" : "YOU LOST! TAP TO RESET";
-                    msgEl.style.color = goalsScored >= 3 ? "var(--arsenal-gold)" : "red";
-                } else {
-                    resetShot();
-                }
-            }, 1500);
-        }
-
-        function resetShot() {
-            ball.x = ball.startX; ball.y = ball.startY;
-            ball.vx = 0; ball.vy = 0; ball.scale = 1; ball.flying = false;
-            keeper.x = 200; keeper.diving = false; keeper.targetX = 200;
-            gameState = 'aim';
-            msgEl.innerText = "Drag the ball back and release to shoot!";
-            msgEl.style.color = "var(--arsenal-gold)";
-        }
-
-        function resetGame() {
-            shotsTaken = 0; goalsScored = 0;
-            scoreEl.innerText = `Shots: 0/5 | Goals: 0`;
-            resetShot();
-        }
-
-        function draw() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            ctx.strokeStyle = "rgba(255,255,255,0.3)";
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.arc(200, 350, 120, Math.PI, 0);
-            ctx.stroke();
-            ctx.strokeRect(50, 60, 300, 150);
-
-            ctx.fillStyle = "rgba(255,255,255,0.1)";
-            ctx.fillRect(goal.x, goal.y, goal.w, goal.h);
-            ctx.strokeStyle = "#fff";
-            ctx.lineWidth = 4;
-            ctx.strokeRect(goal.x, goal.y, goal.w, goal.h);
-            
-            ctx.strokeStyle = "rgba(255,255,255,0.2)";
-            ctx.lineWidth = 1;
-            for(let i=0; i<goal.w; i+=15) { ctx.beginPath(); ctx.moveTo(goal.x + i, goal.y); ctx.lineTo(goal.x + i, goal.y + goal.h); ctx.stroke(); }
-            for(let i=0; i<goal.h; i+=15) { ctx.beginPath(); ctx.moveTo(goal.x, goal.y + i); ctx.lineTo(goal.x + goal.w, goal.y + i); ctx.stroke(); }
-
-            ctx.fillStyle = "#00ff00"; 
-            ctx.fillRect(keeper.x - 15, keeper.y, 30, 40);
-            ctx.fillStyle = "#ffcc00"; 
-            ctx.beginPath(); ctx.arc(keeper.x, keeper.y, 10, 0, Math.PI * 2); ctx.fill();
-
-            if (isDragging) {
-                ctx.strokeStyle = "rgba(212, 175, 55, 0.8)";
-                ctx.lineWidth = 3;
-                ctx.setLineDash([5, 5]);
-                ctx.beginPath();
-                ctx.moveTo(ball.x, ball.y);
-                ctx.lineTo(ball.x + (ball.x - dragX), ball.y + (ball.y - dragY));
-                ctx.stroke();
-                ctx.setLineDash([]);
-                
-                const power = Math.hypot(ball.x - dragX, ball.y - dragY);
-                ctx.fillStyle = "rgba(212, 175, 55, 0.3)";
-                ctx.beginPath(); ctx.arc(ball.x, ball.y, power, 0, Math.PI * 2); ctx.fill();
-            }
-
-            ctx.save();
-            ctx.translate(ball.x, ball.y);
-            ctx.scale(ball.scale, ball.scale);
-            ctx.fillStyle = "#fff";
-            ctx.beginPath();
-            ctx.arc(0, 0, ball.r, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.strokeStyle = "#000";
-            ctx.lineWidth = 1;
-            ctx.stroke();
-            ctx.fillStyle = "#000";
-            ctx.beginPath(); ctx.arc(0, -3, 3, 0, Math.PI * 2); ctx.fill();
-            ctx.beginPath(); ctx.arc(-4, 4, 3, 0, Math.PI * 2); ctx.fill();
-            ctx.beginPath(); ctx.arc(4, 4, 3, 0, Math.PI * 2); ctx.fill();
-            ctx.restore();
-        }
-
-        function gameLoop() {
-            update();
-            draw();
-            requestAnimationFrame(gameLoop);
-        }
-
-        gameLoop();
         initApp();
     </script>
 </body>
