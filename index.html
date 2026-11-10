@@ -85,21 +85,26 @@
             </div>
         </div>
 
-        <!-- UPDATED SOCIAL TAB -->
+        <!-- FIXED SOCIAL TAB -->
         <div id="social" class="tab-content">
             <div class="card" style="border-bottom:none;">
                 <h2>Official Arsenal Media</h2>
-                <p style="color: #ccc; margin-bottom: 15px;">Watch the latest Arsenal highlights and videos.</p>
                 
-                <!-- Embedded Highlights Playlist (Reliable) -->
-                <iframe src="https://www.youtube.com/embed/videoseries?list=PLBp1uY7_7r8h5B4v3N4w3K2x1Y0z9W8v7" allowfullscreen></iframe>
-                
+                <!-- Beautiful YouTube Button -->
+                <a href="https://www.youtube.com/@Arsenal" target="_blank" style="display: flex; align-items: center; justify-content: center; background: #FF0000; color: white; padding: 20px; border-radius: 12px; text-decoration: none; font-weight: 900; font-size: 1.2rem; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(255,0,0,0.4);">
+                    <svg width="30" height="30" viewBox="0 0 24 24" fill="white" style="margin-right: 10px;"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+                    Watch Arsenal on YouTube
+                </a>
+
                 <h2 style="margin-top: 30px;">Follow The Gunners</h2>
-                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;">
                     <a href="https://x.com/Arsenal" target="_blank" style="flex: 1; min-width: 120px; text-align: center; background: #000; color: white; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: bold; border: 1px solid #333;">X (Twitter)</a>
                     <a href="https://www.instagram.com/arsenal/" target="_blank" style="flex: 1; min-width: 120px; text-align: center; background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color: white; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: bold;">Instagram</a>
                     <a href="https://www.tiktok.com/@arsenal" target="_blank" style="flex: 1; min-width: 120px; text-align: center; background: #010101; color: white; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: bold; border: 1px solid #333;">TikTok</a>
                 </div>
+
+                <h2 style="margin-top: 30px;">Latest Media Updates</h2>
+                <div id="social-news" class="loading">Loading media updates...</div>
             </div>
         </div>
 
@@ -363,6 +368,20 @@
                 });
                 document.getElementById('news-list').innerHTML = newsHtml;
                 document.getElementById('news-ticker').innerHTML = tickerHtml;
+            }
+
+            // Social Feed (Uses the YouTube API feed from the worker)
+            const socialData = await loadData('social');
+            if (socialData && socialData.length > 0) {
+                let socialHtml = "";
+                socialData.forEach(item => {
+                    const dateObj = new Date(item.pubDate);
+                    const dateStr = dateObj.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+                    socialHtml += `<div class="news-item" style="border-left-color: #FF0000;"><a href="${item.link}" target="_blank">▶️ ${item.title}</a><div class="news-meta"><span>📺 ${item.author}</span><span>🕒 ${dateStr}</span></div></div>`;
+                });
+                document.getElementById('social-news').innerHTML = socialHtml;
+            } else {
+                document.getElementById('social-news').innerHTML = "<div style='color:#ccc; font-size:0.9rem;'>Could not load recent media.</div>";
             }
         }
 
