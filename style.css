@@ -139,3 +139,18 @@ iframe { width: 100%; height: 300px; border-radius: 8px; border: none; margin-to
     .center-logo img { width: 45px; }
     .goal-frame { height: 160px; }
 }
+/* Fix for the new static gallery */
+.photo-gallery {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 15px;
+}
+.photo-gallery img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid var(--arsenal-gold);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+}
